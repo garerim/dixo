@@ -269,3 +269,26 @@ export interface GetConversationRequest {
 export type SendMessageResponse = ApiResponse<PrivateMessage>;
 export type GetConversationResponse = ApiResponse<PrivateMessage[]>;
 export type MarkMessagesReadResponse = ApiResponse<void>;
+
+// =============================================================================
+// Messages de partie (chat)
+// =============================================================================
+
+/** Un message dans le chat d'une partie */
+export interface GameMessage {
+  id: string;
+  gameId: string;
+  userId: string;
+  userPseudo: string;
+  userAvatarUrl: string | null;
+  content: string;
+  createdAt: string;
+}
+
+/** Requête pour envoyer un message dans une partie */
+export interface SendGameMessageRequest {
+  content: string;
+}
+
+export type SendGameMessageResponse = ApiResponse<GameMessage>;
+export type GetGameMessagesResponse = ApiResponse<GameMessage[]>;

@@ -120,6 +120,15 @@ export interface MessageRow {
   created_at: string;
 }
 
+/** Ligne de la table `game_messages` */
+export interface GameMessageRow {
+  id: string;
+  game_id: string;
+  user_id: string;
+  content: string;
+  created_at: string;
+}
+
 /** Types générés pour la base Supabase */
 export interface Database {
   public: {
@@ -158,6 +167,11 @@ export interface Database {
         Row: MessageRow;
         Insert: Omit<MessageRow, "id" | "created_at">;
         Update: Partial<MessageRow>;
+      };
+      game_messages: {
+        Row: GameMessageRow;
+        Insert: Omit<GameMessageRow, "id" | "created_at">;
+        Update: Partial<GameMessageRow>;
       };
     };
   };

@@ -12,6 +12,7 @@ export type {
   MatchmakingQueueRow,
   FriendshipRow,
   MessageRow,
+  GameMessageRow,
   FriendshipStatus,
   Database,
 } from "./database";
@@ -58,4 +59,8 @@ export type {
   SendMessageResponse,
   GetConversationResponse,
   MarkMessagesReadResponse,
+  GameMessage,
+  SendGameMessageRequest,
+  SendGameMessageResponse,
+  GetGameMessagesResponse,
 } from "./api";

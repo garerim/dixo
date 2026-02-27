@@ -19,6 +19,9 @@ import type {
   PlaceBidResponse,
   CallChallengeResponse,
   SurrenderResponse,
+  SendGameMessageRequest,
+  SendGameMessageResponse,
+  GetGameMessagesResponse,
   ApiResponse,
 } from "@/types/api";
 import type { GameMode } from "@/core/game-engine";
@@ -122,6 +125,25 @@ export const gameClient = {
   /** Récupère l'état du jeu */
   getGameState(gameId: string): Promise<GameStateResponse> {
     return fetchApi(`/${gameId}`, {
+      method: "GET",
+    });
+  },
+
+  /** Envoie un message dans le chat de la partie */
+  sendMessage(gameId: string, data: SendGameMessageRequest): Promise<SendGameMessageResponse> {
+    return fetchApi(`/${gameId}/messages`, {
+      method: "POST",
+      body: JSON.stringify(data),
+    });
+  },
+
+  /** Récupère les messages du chat de la partie */
+  getMessages(gameId: string, limit?: number, before?: string): Promise<GetGameMessagesResponse> {
+    const params = new URLSearchParams();
+    if (limit) params.set("limit", limit.toString());
+    if (before) params.set("before", before);
+    const query = params.toString() ? `?${params}` : "";
+    return fetchApi(`/${gameId}/messages${query}`, {
       method: "GET",
     });
   },

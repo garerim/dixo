@@ -2,7 +2,7 @@
 
 import { use, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { Dice5, ArrowLeft, Loader2, Flag } from "lucide-react";
+import { Dice5, ArrowLeft, Loader2, Flag, MessageSquare } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import {
@@ -16,12 +16,14 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { useState } from "react";
 import { useAuth } from "@/components/providers/auth-provider";
 import { useGame } from "@/features/game/hooks/use-game";
 import { LobbyView } from "@/features/game/components/lobby-view";
 import { BiddingView } from "@/features/game/components/bidding-view";
 import { ResultView } from "@/features/game/components/result-view";
 import { GameOverView } from "@/features/game/components/game-over-view";
+import { GameChat } from "@/features/game/components/game-chat";
 
 export default function GamePage({
   params,
@@ -31,6 +33,7 @@ export default function GamePage({
   const { id: gameId } = use(params);
   const { user, isLoading: authLoading } = useAuth();
   const router = useRouter();
+  const [showMobileChat, setShowMobileChat] = useState(false);
 
   // Rediriger si pas connecté
   useEffect(() => {
@@ -64,7 +67,19 @@ export default function GamePage({
           <Loader2 className="size-8 animate-spin text-muted-foreground" />
         </div>
       ) : (
-        <GameContent gameId={gameId} playerId={playerId} router={router} />
+        <>
+          <GameContent gameId={gameId} playerId={playerId} router={router} />
+          {/* ── Chat mobile ── */}
+          <MobileChatButton
+            gameId={gameId}
+            onClick={() => setShowMobileChat(true)}
+          />
+          <MobileChatOverlay
+            gameId={gameId}
+            open={showMobileChat}
+            onClose={() => setShowMobileChat(false)}
+          />
+        </>
       )}
     </div>
   );
@@ -159,41 +174,92 @@ function GameContent({
   })();
 
   return (
-    <>
-      {/* ── Bouton Abandonner (flottant en bas) ── */}
-      {canSurrender && (
-        <div className="flex justify-end px-4 pt-2">
-          <AlertDialog>
-            <AlertDialogTrigger asChild>
-              <Button variant="destructive" size="sm" className="gap-1.5">
-                <Flag className="size-3.5" />
-                Abandonner
-              </Button>
-            </AlertDialogTrigger>
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle>Abandonner la partie ?</AlertDialogTitle>
-                <AlertDialogDescription>
-                  Vous serez éliminé et votre adversaire gagnera la partie.
-                  {gameState.gameMode === "RANKED" &&
-                    " Votre ELO sera impacté."}
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter>
-                <AlertDialogCancel>Annuler</AlertDialogCancel>
-                <AlertDialogAction
-                  onClick={handleSurrender}
-                  className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-                >
-                  Confirmer l&apos;abandon
-                </AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
-        </div>
-      )}
+    <div className="flex flex-1 gap-4 p-4">
+      {/* ── Contenu principal ── */}
+      <div className="flex flex-1 flex-col">
+        {/* ── Bouton Abandonner (flottant en haut) ── */}
+        {canSurrender && (
+          <div className="mb-2 flex justify-end">
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button variant="destructive" size="sm" className="gap-1.5">
+                  <Flag className="size-3.5" />
+                  Abandonner
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Abandonner la partie ?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    Vous serez éliminé et votre adversaire gagnera la partie.
+                    {gameState.gameMode === "RANKED" &&
+                      " Votre ELO sera impacté."}
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Annuler</AlertDialogCancel>
+                  <AlertDialogAction
+                    onClick={handleSurrender}
+                    className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                  >
+                    Confirmer l&apos;abandon
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+          </div>
+        )}
 
-      {content}
-    </>
+        {content}
+      </div>
+
+      {/* ── Chat (sur le côté desktop) ── */}
+      <div className="hidden lg:block">
+        <GameChat gameId={gameId} />
+      </div>
+    </div>
+  );
+}
+
+// ─── Chat mobile (flottant en bas) ───
+function MobileChatButton({
+  gameId,
+  onClick,
+}: {
+  gameId: string;
+  onClick: () => void;
+}) {
+  return (
+    <button
+      onClick={onClick}
+      className="fixed bottom-4 right-4 z-50 flex items-center gap-2 rounded-full bg-primary px-4 py-3 shadow-lg transition-all hover:scale-105 lg:hidden"
+    >
+      <MessageSquare className="size-5 text-primary-foreground" />
+      <span className="font-medium text-primary-foreground">Chat</span>
+    </button>
+  );
+}
+
+function MobileChatOverlay({
+  gameId,
+  open,
+  onClose,
+}: {
+  gameId: string;
+  open: boolean;
+  onClose: () => void;
+}) {
+  if (!open) return null;
+
+  return (
+    <div className="fixed inset-0 z-50 lg:hidden">
+      <div
+        className="absolute inset-0 bg-black/50"
+        onClick={onClose}
+      />
+      <div className="absolute bottom-0 left-0 right-0 max-h-[70vh]">
+        <GameChat gameId={gameId} />
+      </div>
+    </div>
   );
 }
