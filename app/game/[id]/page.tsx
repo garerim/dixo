@@ -24,6 +24,13 @@ import { BiddingView } from "@/features/game/components/bidding-view";
 import { ResultView } from "@/features/game/components/result-view";
 import { GameOverView } from "@/features/game/components/game-over-view";
 import { GameChat } from "@/features/game/components/game-chat";
+import {
+  Drawer,
+  DrawerContent,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer";
 
 export default function GamePage({
   params,
@@ -33,7 +40,6 @@ export default function GamePage({
   const { id: gameId } = use(params);
   const { user, isLoading: authLoading } = useAuth();
   const router = useRouter();
-  const [showMobileChat, setShowMobileChat] = useState(false);
 
   // Rediriger si pas connecté
   useEffect(() => {
@@ -70,15 +76,7 @@ export default function GamePage({
         <>
           <GameContent gameId={gameId} playerId={playerId} router={router} />
           {/* ── Chat mobile ── */}
-          <MobileChatButton
-            gameId={gameId}
-            onClick={() => setShowMobileChat(true)}
-          />
-          <MobileChatOverlay
-            gameId={gameId}
-            open={showMobileChat}
-            onClose={() => setShowMobileChat(false)}
-          />
+          <MobileChatDrawer gameId={gameId} />
         </>
       )}
     </div>
@@ -221,45 +219,31 @@ function GameContent({
   );
 }
 
-// ─── Chat mobile (flottant en bas) ───
-function MobileChatButton({
-  gameId,
-  onClick,
-}: {
-  gameId: string;
-  onClick: () => void;
-}) {
-  return (
-    <button
-      onClick={onClick}
-      className="fixed bottom-4 right-4 z-50 flex items-center gap-2 rounded-full bg-primary px-4 py-3 shadow-lg transition-all hover:scale-105 lg:hidden"
-    >
-      <MessageSquare className="size-5 text-primary-foreground" />
-      <span className="font-medium text-primary-foreground">Chat</span>
-    </button>
-  );
-}
-
-function MobileChatOverlay({
-  gameId,
-  open,
-  onClose,
-}: {
-  gameId: string;
-  open: boolean;
-  onClose: () => void;
-}) {
-  if (!open) return null;
+// ─── Chat mobile avec Drawer ───
+function MobileChatDrawer({ gameId }: { gameId: string }) {
+  const [open, setOpen] = useState(false);
 
   return (
-    <div className="fixed inset-0 z-50 lg:hidden">
-      <div
-        className="absolute inset-0 bg-black/50"
-        onClick={onClose}
-      />
-      <div className="absolute bottom-0 left-0 right-0 max-h-[70vh]">
-        <GameChat gameId={gameId} />
-      </div>
-    </div>
+    <Drawer open={open} onOpenChange={setOpen}>
+      <DrawerTrigger asChild>
+        <button className="fixed bottom-4 right-4 z-50 flex items-center gap-2 rounded-full bg-primary px-4 py-3 shadow-lg transition-all hover:scale-105 lg:hidden">
+          <MessageSquare className="size-5 text-primary-foreground" />
+          <span className="font-medium text-primary-foreground">Chat</span>
+        </button>
+      </DrawerTrigger>
+      <DrawerContent className="max-h-[80vh] flex flex-col">
+        <DrawerHeader className="flex-shrink-0">
+          <DrawerTitle>Chat</DrawerTitle>
+        </DrawerHeader>
+        <div className="flex-1 overflow-hidden min-h-0">
+          <GameChat 
+            gameId={open ? gameId : null} 
+            className="border-0 shadow-none rounded-none h-full" 
+            hideHeader={true}
+            fullHeight={true}
+          />
+        </div>
+      </DrawerContent>
+    </Drawer>
   );
 }

@@ -20,14 +20,16 @@ import { useAuth } from "@/components/providers/auth-provider";
 import type { GameMessage } from "@/types/api";
 
 interface GameChatProps {
-  gameId: string;
+  gameId: string | null;
   className?: string;
+  hideHeader?: boolean;
+  fullHeight?: boolean;
 }
 
-export function GameChat({ gameId, className }: GameChatProps) {
+export function GameChat({ gameId, className, hideHeader = false, fullHeight = false }: GameChatProps) {
   const { user } = useAuth();
   const [messageContent, setMessageContent] = useState("");
-  const { messages, isLoading, actions } = useGameChat(gameId);
+  const { messages, isLoading, actions } = useGameChat(gameId ?? null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const [isCollapsed, setIsCollapsed] = useState(false);
 
@@ -60,25 +62,27 @@ export function GameChat({ gameId, className }: GameChatProps) {
   }
 
   return (
-    <Card className={`flex h-[300px] flex-col ${className}`}>
-      <CardHeader className="flex flex-row items-center justify-between border-b pb-3">
-        <CardTitle className="flex items-center gap-2 text-base">
-          <MessageSquare className="size-4" />
-          Chat
-        </CardTitle>
-        <Button
-          variant="ghost"
-          size="icon"
-          className="h-6 w-6"
-          onClick={() => setIsCollapsed(true)}
-        >
-          ×
-        </Button>
-      </CardHeader>
-      <CardContent className="flex flex-1 flex-col gap-2 p-0">
+    <Card className={`flex ${fullHeight ? 'h-full' : 'h-[300px]'} flex-col overflow-hidden ${className}`}>
+      {!hideHeader && (
+        <CardHeader className="flex flex-row items-center justify-between border-b pb-3 flex-shrink-0">
+          <CardTitle className="flex items-center gap-2 text-base">
+            <MessageSquare className="size-4" />
+            Chat
+          </CardTitle>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-6 w-6"
+            onClick={() => setIsCollapsed(true)}
+          >
+            ×
+          </Button>
+        </CardHeader>
+      )}
+      <CardContent className="flex flex-1 flex-col gap-2 p-0 overflow-hidden min-h-0">
         <div
           ref={scrollRef}
-          className="flex-1 overflow-y-auto px-4 py-3"
+          className="flex-1 overflow-y-auto px-4 py-3 min-h-0"
         >
           {isLoading && messages.length === 0 ? (
             <p className="py-4 text-center text-sm text-muted-foreground">
@@ -103,8 +107,8 @@ export function GameChat({ gameId, className }: GameChatProps) {
                         {msg.userPseudo.slice(0, 2)}
                       </AvatarFallback>
                     </Avatar>
-                    <div className={`flex flex-1 flex-col gap-1 ${isOwn ? "items-end" : ""}`}>
-                      <div className="flex items-center gap-2">
+                    <div className={`flex flex-col gap-1 ${isOwn ? "items-end" : "items-start"} max-w-[75%]`}>
+                      <div className={`flex items-center gap-2 ${isOwn ? "flex-row-reverse" : ""}`}>
                         <span className="text-xs font-medium text-muted-foreground">
                           {msg.userPseudo}
                         </span>
@@ -116,7 +120,7 @@ export function GameChat({ gameId, className }: GameChatProps) {
                         </span>
                       </div>
                       <div
-                        className={`rounded-lg px-3 py-2 text-sm ${
+                        className={`rounded-lg px-3 py-2 text-sm break-words ${
                           isOwn
                             ? "bg-primary text-primary-foreground"
                             : "bg-muted"
@@ -131,7 +135,7 @@ export function GameChat({ gameId, className }: GameChatProps) {
             </div>
           )}
         </div>
-        <div className="border-t p-3">
+        <div className="border-t p-3 flex-shrink-0">
           <div className="flex gap-2">
             <Input
               placeholder="Tapez un message..."

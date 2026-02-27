@@ -1,7 +1,7 @@
 // =============================================================================
 // FEATURE — Hook useGameChat
 // =============================================================================
-// Gère le chat en temps réel dans une partie avec polling.
+// Gère le chat en temps réel dans une partie avec Supabase Realtime.
 // =============================================================================
 
 "use client";
@@ -10,6 +10,8 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import { toast } from "sonner";
 import type { GameMessage } from "@/types/api";
 import { gameClient } from "../api/game-client";
+import { getSupabaseBrowserClient } from "@/lib/supabase/client";
+import { useAuth } from "@/components/providers/auth-provider";
 
 interface UseGameChatReturn {
   messages: GameMessage[];
@@ -21,14 +23,12 @@ interface UseGameChatReturn {
   };
 }
 
-const POLL_INTERVAL_MS = 2000; // Polling toutes les 2 secondes
-
 export function useGameChat(gameId: string | null): UseGameChatReturn {
+  const { user } = useAuth();
   const [messages, setMessages] = useState<GameMessage[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const pollingRef = useRef<ReturnType<typeof setInterval> | null>(null);
-  const lastMessageTimeRef = useRef<string | null>(null);
+  const channelRef = useRef<ReturnType<ReturnType<typeof getSupabaseBrowserClient>["channel"]> | null>(null);
 
   const loadMessages = useCallback(async () => {
     if (!gameId) return;
@@ -37,10 +37,6 @@ export function useGameChat(gameId: string | null): UseGameChatReturn {
       const result = await gameClient.getMessages(gameId, 50);
       if (result.success && result.data) {
         setMessages(result.data);
-        // Garder le timestamp du dernier message pour le polling
-        if (result.data.length > 0) {
-          lastMessageTimeRef.current = result.data[result.data.length - 1].createdAt;
-        }
       } else {
         setError(result.error ?? "Impossible de charger les messages.");
       }
@@ -49,62 +45,76 @@ export function useGameChat(gameId: string | null): UseGameChatReturn {
     }
   }, [gameId]);
 
-  const pollNewMessages = useCallback(async () => {
-    if (!gameId || !lastMessageTimeRef.current) return;
-
-    try {
-      const result = await gameClient.getMessages(gameId, 50);
-      if (result.success && result.data) {
-        setMessages((prev) => {
-          // Créer un Set des IDs existants pour éviter les doublons
-          const existingIds = new Set(prev.map((m) => m.id));
-          // Filtrer les nouveaux messages (ceux qui ne sont pas déjà dans la liste)
-          const newMessages = result.data!.filter((msg) => !existingIds.has(msg.id));
-          
-          if (newMessages.length > 0) {
-            // Mettre à jour le timestamp du dernier message
-            const lastMsg = result.data![result.data!.length - 1];
-            lastMessageTimeRef.current = lastMsg.createdAt;
-            // Ajouter les nouveaux messages à la fin
-            return [...prev, ...newMessages];
-          }
-          
-          return prev;
-        });
-      }
-    } catch (err) {
-      // Erreur silencieuse pour le polling
-    }
-  }, [gameId]);
-
   useEffect(() => {
-    if (gameId) {
-      setIsLoading(true);
-      loadMessages().finally(() => setIsLoading(false));
-
-      // Démarrer le polling pour les nouveaux messages
-      pollingRef.current = setInterval(pollNewMessages, POLL_INTERVAL_MS);
-    } else {
+    if (!gameId || !user) {
       setMessages([]);
-      lastMessageTimeRef.current = null;
+      return;
     }
+
+    // Charger les messages initiaux
+    setIsLoading(true);
+    loadMessages().finally(() => setIsLoading(false));
+
+    // Configurer Realtime pour les nouveaux messages
+    const supabase = getSupabaseBrowserClient();
+    const channel = supabase
+      .channel(`game_messages:${gameId}`)
+      .on(
+        "postgres_changes",
+        {
+          event: "INSERT",
+          schema: "public",
+          table: "game_messages",
+          filter: `game_id=eq.${gameId}`,
+        },
+        async (payload) => {
+          // Nouveau message dans la partie
+          const newMessage = payload.new as any;
+          
+          // Récupérer les infos du profil de l'expéditeur
+          const { data: profile } = await supabase
+            .from("profiles")
+            .select("pseudo, avatar_url")
+            .eq("id", newMessage.user_id)
+            .single();
+
+          if (profile) {
+            const message: GameMessage = {
+              id: newMessage.id,
+              gameId: newMessage.game_id,
+              userId: newMessage.user_id,
+              userPseudo: profile.pseudo,
+              userAvatarUrl: profile.avatar_url,
+              content: newMessage.content,
+              createdAt: newMessage.created_at,
+            };
+            setMessages((prev) => {
+              // Éviter les doublons
+              if (prev.some((m) => m.id === message.id)) return prev;
+              return [...prev, message];
+            });
+          }
+        },
+      )
+      .subscribe();
+
+    channelRef.current = channel as any;
 
     return () => {
-      if (pollingRef.current) {
-        clearInterval(pollingRef.current);
-        pollingRef.current = null;
+      if (channelRef.current) {
+        supabase.removeChannel(channelRef.current);
+        channelRef.current = null;
       }
     };
-  }, [gameId, loadMessages, pollNewMessages]);
+  }, [gameId, user, loadMessages]);
 
   const sendMessage = useCallback(
     async (content: string): Promise<boolean> => {
       if (!gameId || !content.trim()) return false;
 
       const result = await gameClient.sendMessage(gameId, { content: content.trim() });
-      if (result.success && result.data) {
-        setMessages((prev) => [...prev, result.data!]);
-        lastMessageTimeRef.current = result.data.createdAt;
+      if (result.success) {
+        // Le message sera ajouté automatiquement via Realtime
         return true;
       } else {
         toast.error(result.error ?? "Impossible d'envoyer le message.");
