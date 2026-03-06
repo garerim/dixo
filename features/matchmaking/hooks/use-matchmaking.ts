@@ -98,7 +98,7 @@ export function useMatchmaking(displayName: string): UseMatchmakingReturn {
       });
 
       if (!result.success || !result.data) {
-        setError(result.error ?? "Impossible de rejoindre la file.");
+        setError(result.error ?? "Unable to join queue.");
         setState("error");
         return;
       }

@@ -14,19 +14,19 @@ const RemoveFriendSchema = z.object({
 export async function POST(request: NextRequest) {
   const { user, service } = await withFriendshipAuth();
   if (!user || !service) {
-    return errorResponse("Non authentifié.", 401);
+    return errorResponse("Not authenticated.", 401);
   }
 
   const body = await request.json().catch(() => null);
   const parsed = RemoveFriendSchema.safeParse(body);
   if (!parsed.success) {
-    return errorResponse("Données invalides. friendshipId requis.");
+    return errorResponse("Invalid data. friendshipId required.");
   }
 
   const result = await service.removeFriend(user.id, parsed.data.friendshipId);
 
   if (!result.success) {
-    return errorResponse(result.error ?? "Impossible de supprimer l'ami.", 400);
+    return errorResponse(result.error ?? "Unable to remove friend.", 400);
   }
 
   return successResponse(undefined);

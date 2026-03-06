@@ -31,7 +31,7 @@ export function GameOverView({ gameState, playerId }: GameOverViewProps) {
 
       <div className="flex flex-col items-center gap-2 text-center">
         <h1 className="text-3xl font-bold">
-          {isWinner ? "Vous avez gagné !" : "Partie terminée"}
+          {isWinner ? "You won!" : "Game over"}
         </h1>
 
         {/* ── ELO Change personnel ── */}
@@ -69,7 +69,7 @@ export function GameOverView({ gameState, playerId }: GameOverViewProps) {
             <div className="flex flex-col">
               <span className="text-lg font-bold">{winner.displayName}</span>
               <span className="text-sm text-muted-foreground">
-                Vainqueur du round {gameState.round}
+                Round {gameState.round} winner
               </span>
             </div>
             <Trophy className="size-6 text-amber-500" />
@@ -80,7 +80,7 @@ export function GameOverView({ gameState, playerId }: GameOverViewProps) {
       {/* ── Classement final ── */}
       <div className="w-full max-w-sm rounded-xl border bg-card p-4">
         <h3 className="mb-3 text-sm font-medium text-muted-foreground">
-          Classement final
+          Final ranking
         </h3>
         <div className="flex flex-col gap-2">
           {[...gameState.players]
@@ -138,7 +138,7 @@ export function GameOverView({ gameState, playerId }: GameOverViewProps) {
                   )}
 
                   <span className="text-xs text-muted-foreground">
-                    {player.diceCount} dé{player.diceCount !== 1 ? "s" : ""}
+                    {player.diceCount} die{player.diceCount !== 1 ? "s" : ""}
                   </span>
                 </div>
               );
@@ -150,7 +150,7 @@ export function GameOverView({ gameState, playerId }: GameOverViewProps) {
       {isRanked && (
         <Badge variant="outline" className="gap-1">
           <Trophy className="size-3" />
-          Partie classée
+          Ranked game
         </Badge>
       )}
 

@@ -14,19 +14,19 @@ const LeaveQueueSchema = z.object({
 export async function POST(request: NextRequest) {
   const { user, service } = await withMatchmakingAuth();
   if (!user || !service) {
-    return errorResponse("Non authentifié.", 401);
+    return errorResponse("Not authenticated.", 401);
   }
 
   const body = await request.json().catch(() => null);
   const parsed = LeaveQueueSchema.safeParse(body);
   if (!parsed.success) {
-    return errorResponse("queueEntryId requis.");
+    return errorResponse("queueEntryId required.");
   }
 
   const result = await service.leaveQueue(user.id, parsed.data.queueEntryId);
 
   if (!result.success) {
-    return errorResponse(result.error ?? "Erreur lors de la sortie de la file.");
+    return errorResponse(result.error ?? "Error leaving queue.");
   }
 
   return successResponse(undefined);

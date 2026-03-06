@@ -37,7 +37,7 @@ export function InviteFriends({ gameCode, open, onOpenChange }: InviteFriendsPro
 
   const handleInvite = async (friend: FriendInfo) => {
     setSending(friend.id);
-    const message = `Rejoins ma partie ! Code : ${gameCode}`;
+    const message = `Join my game! Code: ${gameCode}`;
     const result = await messagesClient.sendMessage({
       receiverId: friend.id,
       content: message,
@@ -45,9 +45,9 @@ export function InviteFriends({ gameCode, open, onOpenChange }: InviteFriendsPro
 
     if (result.success) {
       setInvitedFriends((prev) => new Set(prev).add(friend.id));
-      toast.success(`Invitation envoyée à ${friend.pseudo} !`);
+      toast.success(`Invitation sent to ${friend.pseudo}!`);
     } else {
-      toast.error(result.error ?? "Impossible d'envoyer l'invitation.");
+      toast.error(result.error ?? "Unable to send invitation.");
     }
     setSending(null);
   };
@@ -58,17 +58,17 @@ export function InviteFriends({ gameCode, open, onOpenChange }: InviteFriendsPro
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <UserPlus className="size-5" />
-            Inviter des amis
+            Invite friends
           </DialogTitle>
           <DialogDescription>
-            Envoyez le code de la partie à vos amis via message privé
+            Send the game code to your friends via private message
           </DialogDescription>
         </DialogHeader>
 
         <ScrollArea className="max-h-[400px]">
           {acceptedFriends.length === 0 ? (
             <p className="py-8 text-center text-muted-foreground">
-              Vous n'avez pas d'amis pour le moment.
+              You don't have any friends yet.
             </p>
           ) : (
             <div className="space-y-2">
@@ -95,7 +95,7 @@ export function InviteFriends({ gameCode, open, onOpenChange }: InviteFriendsPro
                             variant={friend.isOnline ? "default" : "secondary"}
                             className="text-xs"
                           >
-                            {friend.isOnline ? "En ligne" : "Hors ligne"}
+                            {friend.isOnline ? "Online" : "Offline"}
                           </Badge>
                         </div>
                       </div>
@@ -106,16 +106,16 @@ export function InviteFriends({ gameCode, open, onOpenChange }: InviteFriendsPro
                       disabled={isInvited || isSending}
                     >
                       {isSending ? (
-                        "Envoi..."
+                        "Sending..."
                       ) : isInvited ? (
                         <>
                           <Check className="size-4 mr-1" />
-                          Invité
+                          Invited
                         </>
                       ) : (
                         <>
                           <Send className="size-4 mr-1" />
-                          Inviter
+                          Invite
                         </>
                       )}
                     </Button>

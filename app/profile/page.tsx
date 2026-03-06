@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import {
@@ -15,6 +15,7 @@ import {
   X,
   Crown,
   Swords,
+  Camera,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -31,6 +32,7 @@ import { Separator } from "@/components/ui/separator";
 import { useAuth } from "@/components/providers/auth-provider";
 import { useProfile } from "@/features/profile/hooks/use-profile";
 import { EloChart } from "@/features/profile/components/elo-chart";
+import { profileClient } from "@/features/profile/api/profile-client";
 
 // =============================================================================
 // Helpers
@@ -43,7 +45,7 @@ function getSubscriptionLabel(tier: string) {
     case "vip":
       return { label: "VIP", variant: "destructive" as const };
     default:
-      return { label: "Gratuit", variant: "secondary" as const };
+      return { label: "Free", variant: "secondary" as const };
   }
 }
 
@@ -69,6 +71,8 @@ export default function ProfilePage() {
   const [isEditingPseudo, setIsEditingPseudo] = useState(false);
   const [editPseudo, setEditPseudo] = useState("");
   const [isSaving, setIsSaving] = useState(false);
+  const [isUploadingAvatar, setIsUploadingAvatar] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Redirection si pas connecté
   useEffect(() => {
@@ -88,34 +92,71 @@ export default function ProfilePage() {
   if (!profile) {
     return (
       <div className="flex min-h-svh items-center justify-center text-muted-foreground">
-        Profil non trouvé.
+        Profile not found.
       </div>
     );
   }
 
   const sub = getSubscriptionLabel(profile.subscription);
 
-  // ─── Sauvegarder le pseudo ───
+  // ─── Save pseudo ───
   async function handleSavePseudo() {
     if (!editPseudo.trim()) return;
 
     setIsSaving(true);
-    const success = await actions.updatePseudo(editPseudo.trim());
+    const result = await actions.updatePseudo(editPseudo.trim());
 
-    if (success) {
-      toast.success("Pseudo mis à jour !");
+    if (result.success) {
+      toast.success("Pseudo updated!");
       setIsEditingPseudo(false);
       await refreshProfile();
     } else {
-      toast.error("Impossible de mettre à jour le pseudo.");
+      // Use the specific error message from the API
+      toast.error(result.error ?? "Unable to update pseudo.");
     }
     setIsSaving(false);
   }
 
-  // ─── Commencer l'édition ───
+  // ─── Start editing ───
   function startEditing() {
     setEditPseudo(profile!.pseudo);
     setIsEditingPseudo(true);
+  }
+
+  // ─── Handle avatar upload ───
+  async function handleAvatarUpload(event: React.ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    // Validate file type
+    const allowedTypes = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
+    if (!allowedTypes.includes(file.type)) {
+      toast.error("Invalid file type. Only JPEG, PNG, and WebP images are allowed.");
+      return;
+    }
+
+    // Validate file size (5MB max)
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error("File size exceeds 5MB limit.");
+      return;
+    }
+
+    setIsUploadingAvatar(true);
+    const result = await profileClient.uploadAvatar(file);
+
+    if (result.success && result.data) {
+      toast.success("Avatar updated!");
+      // Refresh profile to get the new avatar URL
+      await actions.refresh();
+    } else {
+      toast.error(result.error ?? "Unable to upload avatar.");
+    }
+
+    setIsUploadingAvatar(false);
+    // Reset input
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
   }
 
   return (
@@ -131,7 +172,7 @@ export default function ProfilePage() {
         </Button>
         <div className="flex items-center gap-2">
           <Dice5 className="size-5 text-primary" />
-          <span className="text-lg font-bold tracking-tight">Mon Profil</span>
+          <span className="text-lg font-bold tracking-tight">My Profile</span>
         </div>
       </header>
 
@@ -141,12 +182,38 @@ export default function ProfilePage() {
         <Card>
           <CardContent className="flex flex-col items-center gap-4 pt-6 sm:flex-row sm:items-start">
             {/* Avatar */}
-            <Avatar className="size-20">
-              <AvatarImage src={profile.avatarUrl ?? undefined} alt={profile.pseudo} />
-              <AvatarFallback className="text-xl">
-                {profile.pseudo.slice(0, 2).toUpperCase()}
-              </AvatarFallback>
-            </Avatar>
+            <div className="relative group">
+              <Avatar className="size-20">
+                <AvatarImage 
+                  src={profile.avatarUrl ?? undefined} 
+                  alt={profile.pseudo}
+                  className="object-cover"
+                />
+                <AvatarFallback className="text-xl">
+                  {profile.pseudo.slice(0, 2).toUpperCase()}
+                </AvatarFallback>
+              </Avatar>
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/jpeg,image/jpg,image/png,image/webp"
+                onChange={handleAvatarUpload}
+                className="hidden"
+                disabled={isUploadingAvatar}
+              />
+              <button
+                onClick={() => fileInputRef.current?.click()}
+                disabled={isUploadingAvatar}
+                className="absolute inset-0 flex items-center justify-center rounded-full bg-black/50 opacity-0 transition-opacity group-hover:opacity-100 disabled:opacity-50"
+                title="Change avatar"
+              >
+                {isUploadingAvatar ? (
+                  <Loader2 className="size-6 animate-spin text-white" />
+                ) : (
+                  <Camera className="size-6 text-white" />
+                )}
+              </button>
+            </div>
 
             {/* Infos */}
             <div className="flex flex-1 flex-col items-center gap-2 sm:items-start">
@@ -210,10 +277,10 @@ export default function ProfilePage() {
                 </Badge>
               </div>
 
-              {/* Membre depuis */}
+              {/* Member since */}
               <p className="text-xs text-muted-foreground">
-                Membre depuis le{" "}
-                {new Date(profile.createdAt).toLocaleDateString("fr-FR", {
+                Member since{" "}
+                {new Date(profile.createdAt).toLocaleDateString("en-US", {
                   day: "numeric",
                   month: "long",
                   year: "numeric",
@@ -225,22 +292,22 @@ export default function ProfilePage() {
 
         {/* ── Statistiques ── */}
         <div className="grid gap-4 sm:grid-cols-2">
-          {/* Parties */}
+          {/* Games */}
           <Card>
             <CardHeader className="pb-2">
               <CardTitle className="flex items-center gap-2 text-base">
                 <Swords className="size-4 text-primary" />
-                Parties
+                Games
               </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-2 gap-4">
                 <StatItem
-                  label="Jouées"
+                  label="Played"
                   value={profile.gamesPlayed.toString()}
                 />
                 <StatItem
-                  label="Gagnées"
+                  label="Won"
                   value={profile.gamesWon.toString()}
                 />
                 <StatItem
@@ -248,7 +315,7 @@ export default function ProfilePage() {
                   value={getWinRate(profile.gamesPlayed, profile.gamesWon)}
                 />
                 <StatItem
-                  label="Série en cours"
+                  label="Current streak"
                   value={profile.currentWinStreak.toString()}
                 />
               </div>
@@ -266,22 +333,22 @@ export default function ProfilePage() {
             <CardContent>
               <div className="grid grid-cols-2 gap-4">
                 <StatItem
-                  label="Appels"
+                  label="Calls"
                   value={profile.totalChallengeCalls.toString()}
                 />
                 <StatItem
-                  label="Réussis"
+                  label="Successful"
                   value={profile.totalChallengeSuccess.toString()}
                 />
                 <StatItem
-                  label="Précision"
+                  label="Accuracy"
                   value={getChallengeSuccessRate(
                     profile.totalChallengeCalls,
                     profile.totalChallengeSuccess,
                   )}
                 />
                 <StatItem
-                  label="Meilleure série"
+                  label="Best streak"
                   value={profile.bestWinStreak.toString()}
                   icon={<Flame className="size-3 text-orange-500" />}
                 />
@@ -290,18 +357,18 @@ export default function ProfilePage() {
           </Card>
         </div>
 
-        {/* ── Évolution ELO (graphique) ── */}
+        {/* ── ELO Evolution (chart) ── */}
         <EloChart elo1v1={profile.elo1v1} elo4p={profile.elo4p} />
 
-        {/* ── Classement ELO ── */}
+        {/* ── ELO Ranking ── */}
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-base">
               <Crown className="size-4 text-yellow-500" />
-              Classement
+              Ranking
             </CardTitle>
             <CardDescription>
-              Votre position dans le classement ELO
+              Your position in the ELO ranking
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -314,14 +381,14 @@ export default function ProfilePage() {
                 <Separator orientation="vertical" className="h-auto" />
                 <div>
                   <p className="text-3xl font-bold">{profile.elo4p}</p>
-                  <p className="text-sm text-muted-foreground">ELO 4 joueurs</p>
+                  <p className="text-sm text-muted-foreground">ELO 4 players</p>
                 </div>
               </div>
               <Button
                 variant="outline"
                 onClick={() => router.push("/leaderboard")}
               >
-                Voir le classement
+                View leaderboard
               </Button>
             </div>
           </CardContent>

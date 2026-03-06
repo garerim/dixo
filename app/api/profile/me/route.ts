@@ -13,13 +13,13 @@ export async function GET() {
   const { user, service } = await withProfileAuth();
 
   if (!user || !service) {
-    return errorResponse("Non authentifié.", 401);
+    return errorResponse("Not authenticated.", 401);
   }
 
   const result = await service.getMyProfile(user.id);
 
   if (!result.success) {
-    return errorResponse(result.error ?? "Profil non trouvé.", 404);
+    return errorResponse(result.error ?? "Profile not found.", 404);
   }
 
   return successResponse(result.data);
@@ -30,19 +30,19 @@ export async function PATCH(request: Request) {
   const { user, service } = await withProfileAuth();
 
   if (!user || !service) {
-    return errorResponse("Non authentifié.", 401);
+    return errorResponse("Not authenticated.", 401);
   }
 
   let body: UpdateProfileRequest;
   try {
     body = await request.json();
   } catch {
-    return errorResponse("Body JSON invalide.", 400);
+    return errorResponse("Invalid JSON body.", 400);
   }
 
-  // Au moins un champ requis
+  // At least one field required
   if (!body.pseudo && !body.avatarUrl) {
-    return errorResponse("Au moins un champ (pseudo, avatarUrl) est requis.", 400);
+    return errorResponse("At least one field (pseudo, avatarUrl) is required.", 400);
   }
 
   const result = await service.updateProfile(user.id, {
@@ -51,7 +51,7 @@ export async function PATCH(request: Request) {
   });
 
   if (!result.success) {
-    return errorResponse(result.error ?? "Impossible de mettre à jour le profil.", 400);
+    return errorResponse(result.error ?? "Unable to update profile.", 400);
   }
 
   return successResponse(result.data);

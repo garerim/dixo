@@ -77,7 +77,7 @@ export class MessageService {
     } catch (error) {
       return {
         success: false,
-        error: error instanceof Error ? error.message : "Erreur inconnue.",
+        error: error instanceof Error ? error.message : "Unknown error.",
       };
     }
   }
@@ -95,7 +95,7 @@ export class MessageService {
       // Vérifier que les utilisateurs sont amis
       const areFriends = await this.friendships.areFriends(userId, friendId);
       if (!areFriends) {
-        return { success: false, error: "Vous devez être amis pour voir cette conversation." };
+        return { success: false, error: "You must be friends to view this conversation." };
       }
 
       // Récupérer les messages
@@ -121,7 +121,7 @@ export class MessageService {
           id: msg.id,
           senderId: msg.sender_id,
           receiverId: msg.receiver_id,
-          senderPseudo: sender?.pseudo ?? "Inconnu",
+          senderPseudo: sender?.pseudo ?? "Unknown",
           senderAvatarUrl: sender?.avatarUrl ?? null,
           content: msg.content,
           isRead: msg.is_read,
@@ -133,7 +133,7 @@ export class MessageService {
     } catch (error) {
       return {
         success: false,
-        error: error instanceof Error ? error.message : "Erreur inconnue.",
+        error: error instanceof Error ? error.message : "Unknown error.",
       };
     }
   }
@@ -151,7 +151,7 @@ export class MessageService {
     } catch (error) {
       return {
         success: false,
-        error: error instanceof Error ? error.message : "Erreur inconnue.",
+        error: error instanceof Error ? error.message : "Unknown error.",
       };
     }
   }

@@ -16,6 +16,8 @@ import {
   Search,
   X,
   UserPlus,
+  User,
+  Settings,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -37,6 +39,14 @@ import {
 } from "@/components/ui/dialog";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { useAuth } from "@/components/providers/auth-provider";
 import { gameClient } from "@/features/game/api/game-client";
 import { useMatchmaking } from "@/features/matchmaking/hooks/use-matchmaking";
@@ -53,7 +63,7 @@ export default function HomePage() {
   const [showCreateDialog, setShowCreateDialog] = useState(false);
 
   const displayName =
-    profile?.pseudo ?? user?.user_metadata?.full_name ?? "Joueur";
+    profile?.pseudo ?? user?.user_metadata?.full_name ?? "Player";
 
   const {
     state: mmState,
@@ -81,7 +91,7 @@ export default function HomePage() {
   const avatarUrl =
     profile?.avatarUrl ?? user?.user_metadata?.avatar_url ?? undefined;
 
-  // ─── Créer une partie privée (avec code d'invitation) ───
+  // ─── Create a private game (with invitation code) ───
   async function handleCreatePrivate() {
     setIsCreating(true);
     const result = await gameClient.createGame({
@@ -93,33 +103,33 @@ export default function HomePage() {
       setCreatedCode(result.data.joinCode);
       setCreatedGameId(result.data.gameId);
       setShowCreateDialog(true);
-      toast.success("Partie créée !");
+      toast.success("Game created!");
     } else {
-      toast.error(result.error ?? "Impossible de créer la partie.");
+      toast.error(result.error ?? "Unable to create the game.");
     }
     setIsCreating(false);
   }
 
-  // ─── Lancer matchmaking Normal ───
+  // ─── Start Normal matchmaking ───
   async function handlePlayNormal(playerCount: 2 | 4) {
     await mmActions.search("NORMAL", playerCount);
   }
 
-  // ─── Lancer matchmaking Classée ───
+  // ─── Start Ranked matchmaking ───
   async function handlePlayRanked(playerCount: 2 | 4) {
     await mmActions.search("RANKED", playerCount);
   }
 
-  // ─── Annuler la recherche ───
+  // ─── Cancel search ───
   async function handleCancelSearch() {
     await mmActions.cancel();
-    toast.info("Recherche annulée.");
+    toast.info("Search cancelled.");
   }
 
-  // ─── Rejoindre une partie ───
+  // ─── Join a game ───
   async function handleJoin() {
     if (joinCode.length !== 6) {
-      toast.error("Le code doit contenir 6 caractères.");
+      toast.error("The code must contain 6 characters.");
       return;
     }
 
@@ -130,10 +140,10 @@ export default function HomePage() {
     });
 
     if (result.success && result.data) {
-      toast.success("Vous avez rejoint la partie !");
+      toast.success("You have joined the game!");
       router.push(`/game/${result.data.gameId}`);
     } else {
-      toast.error(result.error ?? "Impossible de rejoindre la partie.");
+      toast.error(result.error ?? "Unable to join the game.");
     }
     setIsJoining(false);
   }
@@ -147,11 +157,11 @@ export default function HomePage() {
   function copyCode() {
     if (createdCode) {
       navigator.clipboard.writeText(createdCode);
-      toast.success("Code copié !");
+      toast.success("Code copied!");
     }
   }
 
-  // ─── En recherche de partie ───
+  // ─── Searching for a game ───
   const isSearching = mmState === "searching";
 
   return (
@@ -178,32 +188,39 @@ export default function HomePage() {
             </div>
           )}
 
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => router.push("/friends")}
-            className="hidden sm:flex"
-            title="Amis"
-          >
-            <UserPlus className="size-5" />
-          </Button>
-          <button
-            className="flex items-center gap-2 rounded-lg px-2 py-1 transition-colors hover:bg-muted"
-            onClick={() => router.push("/profile")}
-          >
-            <Avatar className="size-8">
-              <AvatarImage src={avatarUrl} alt={displayName} />
-              <AvatarFallback>
-                {displayName.slice(0, 2).toUpperCase()}
-              </AvatarFallback>
-            </Avatar>
-            <span className="hidden text-sm font-medium sm:inline">
-              {displayName}
-            </span>
-          </button>
-          <Button variant="ghost" size="icon" onClick={signOut}>
-            <LogOut className="size-4" />
-          </Button>
+          {/* Dropdown Menu */}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button className="flex items-center gap-2 rounded-lg px-2 py-1 transition-colors hover:bg-muted">
+                <Avatar className="size-8">
+                  <AvatarImage src={avatarUrl} alt={displayName} />
+                  <AvatarFallback>
+                    {displayName.slice(0, 2).toUpperCase()}
+                  </AvatarFallback>
+                </Avatar>
+                <span className="hidden text-sm font-medium sm:inline">
+                  {displayName}
+                </span>
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-56">
+              <DropdownMenuLabel>My Account</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={() => router.push("/profile")}>
+                <User className="mr-2 size-4" />
+                <span>Profile</span>
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => router.push("/friends")}>
+                <UserPlus className="mr-2 size-4" />
+                <span>Friends</span>
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={signOut} className="text-destructive">
+                <LogOut className="mr-2 size-4" />
+                <span>Logout</span>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </header>
 
@@ -218,12 +235,12 @@ export default function HomePage() {
             Dixo
           </h1>
           <p className="max-w-md text-muted-foreground">
-            Bluffez vos adversaires dans ce jeu de dés menteur inspiré du
+            Bluff your opponents in this online dice bluffing game inspired by
             Perudo.
           </p>
         </div>
 
-        {/* ─── Écran de recherche ─── */}
+        {/* ─── Search screen ─── */}
         {isSearching ? (
           <SearchingView
             waitTime={waitTime}
@@ -234,24 +251,24 @@ export default function HomePage() {
             onCancel={handleCancelSearch}
           />
         ) : (
-          /* ─── Sélection du mode de jeu ─── */
+          /* ─── Game mode selection ─── */
           <div className="flex w-full max-w-md flex-col gap-4">
-            {/* Erreur matchmaking */}
+            {/* Matchmaking error */}
             {mmError && (
               <div className="rounded-lg bg-destructive/10 p-3 text-center text-sm text-destructive">
                 {mmError}
               </div>
             )}
 
-            {/* ── Partie Normale ── */}
+            {/* ── Normal Game ── */}
             <Card>
               <CardHeader className="pb-3">
                 <CardTitle className="flex items-center gap-2 text-base">
                   <Swords className="size-5 text-blue-500" />
-                  Partie Normale
+                  Normal Game
                 </CardTitle>
                 <CardDescription>
-                  Matchmaking rapide, sans impact sur votre ELO
+                  Quick matchmaking, no impact on your ELO
                 </CardDescription>
               </CardHeader>
               <CardContent className="grid grid-cols-2 gap-2">
@@ -269,20 +286,20 @@ export default function HomePage() {
                   onClick={() => handlePlayNormal(4)}
                 >
                   <Users className="size-4" />
-                  4 joueurs
+                  4 players
                 </Button>
               </CardContent>
             </Card>
 
-            {/* ── Partie Classée ── */}
+            {/* ── Ranked Game ── */}
             <Card>
               <CardHeader className="pb-3">
                 <CardTitle className="flex items-center gap-2 text-base">
                   <Trophy className="size-5 text-yellow-500" />
-                  Partie Classée
+                  Ranked Game
                 </CardTitle>
                 <CardDescription>
-                  Affrontez des joueurs de votre niveau, gagnez de l&apos;ELO
+                  Face players of your level, earn ELO
                 </CardDescription>
               </CardHeader>
               <CardContent className="grid grid-cols-2 gap-2">
@@ -305,7 +322,7 @@ export default function HomePage() {
                   onClick={() => handlePlayRanked(4)}
                 >
                   <Users className="size-4" />
-                  4 joueurs
+                  4 players
                   {profile && (
                     <Badge variant="secondary" className="ml-auto text-xs">
                       {profile.elo4p}
@@ -318,14 +335,14 @@ export default function HomePage() {
             <div className="flex items-center gap-3">
               <Separator className="flex-1" />
               <span className="text-xs text-muted-foreground">
-                ou jouez avec des amis
+                or play with friends
               </span>
               <Separator className="flex-1" />
             </div>
 
-            {/* ── Partie Privée ── */}
+            {/* ── Private Game ── */}
             <div className="grid gap-3 sm:grid-cols-2">
-              {/* Créer */}
+              {/* Create */}
               <Button
                 size="lg"
                 variant="outline"
@@ -338,7 +355,7 @@ export default function HomePage() {
                 ) : (
                   <Plus className="size-4" />
                 )}
-                Créer une partie
+                Create a game
               </Button>
 
               {/* Rejoindre */}
@@ -368,14 +385,13 @@ export default function HomePage() {
         )}
       </main>
 
-      {/* ─── Dialog code de partie ─── */}
+      {/* ─── Game code dialog ─── */}
       <Dialog open={showCreateDialog} onOpenChange={setShowCreateDialog}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Partie créée !</DialogTitle>
+            <DialogTitle>Game created!</DialogTitle>
             <DialogDescription>
-              Partagez ce code avec vos amis pour qu&apos;ils rejoignent la
-              partie.
+              Share this code with your friends so they can join the game.
             </DialogDescription>
           </DialogHeader>
 
@@ -392,7 +408,7 @@ export default function HomePage() {
 
           <DialogFooter>
             <Button className="w-full" onClick={goToGame}>
-              Accéder au lobby
+              Go to lobby
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -400,7 +416,7 @@ export default function HomePage() {
 
       {/* ─── Footer ─── */}
       <footer className="border-t py-4 text-center text-xs text-muted-foreground">
-        Dixo — Jeu de dés menteur en ligne 🎲
+        Dixo — Online dice bluffing game 🎲
       </footer>
     </div>
   );
@@ -426,13 +442,13 @@ function SearchingView({
   onCancel: () => void;
 }) {
   const isRanked = gameMode === "RANKED";
-  const modeLabel = isRanked ? "Classée" : "Normale";
-  const formatLabel = playerCount === 2 ? "1v1" : "4 joueurs";
+  const modeLabel = isRanked ? "Ranked" : "Normal";
+  const formatLabel = playerCount === 2 ? "1v1" : "4 players";
 
   return (
     <Card className="w-full max-w-sm">
       <CardContent className="flex flex-col items-center gap-4 pt-6">
-        {/* Animation de recherche */}
+        {/* Search animation */}
         <div className="relative flex size-20 items-center justify-center">
           <div className="absolute inset-0 animate-ping rounded-full bg-primary/20" />
           <div className="absolute inset-2 animate-pulse rounded-full bg-primary/10" />
@@ -441,23 +457,23 @@ function SearchingView({
 
         <div className="text-center">
           <h3 className="text-lg font-semibold">
-            Recherche {playerCount === 2 ? "d'adversaire" : "d'adversaires"}...
+            Searching for {playerCount === 2 ? "opponent" : "opponents"}...
           </h3>
           <p className="text-sm text-muted-foreground">
             {modeLabel} — {formatLabel}
           </p>
         </div>
 
-        {/* Infos */}
+        {/* Info */}
         <div className="flex w-full justify-around rounded-lg bg-muted/50 px-4 py-3">
           <div className="text-center">
             <p className="text-2xl font-bold tabular-nums">{waitTime}</p>
-            <p className="text-xs text-muted-foreground">Attente</p>
+            <p className="text-xs text-muted-foreground">Wait time</p>
           </div>
           <Separator orientation="vertical" className="h-auto" />
           <div className="text-center">
             <p className="text-2xl font-bold">{playersInQueue}</p>
-            <p className="text-xs text-muted-foreground">En file</p>
+            <p className="text-xs text-muted-foreground">In queue</p>
           </div>
           {isRanked && (
             <>
@@ -476,7 +492,7 @@ function SearchingView({
           onClick={onCancel}
         >
           <X className="size-4" />
-          Annuler
+          Cancel
         </Button>
       </CardContent>
     </Card>

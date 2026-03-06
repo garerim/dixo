@@ -18,17 +18,17 @@ export async function POST(request: NextRequest) {
   // 1. Authentification
   const { user, service } = await withAuth();
   if (!user || !service) {
-    return errorResponse("Non authentifié.", 401);
+    return errorResponse("Not authenticated.", 401);
   }
 
-  // 2. Validation des entrées
+  // 2. Validate inputs
   const body = await request.json().catch(() => null);
   const parsed = CreateGameSchema.safeParse(body);
   if (!parsed.success) {
-    return errorResponse("Nom d'affichage requis (1-30 caractères).");
+    return errorResponse("Display name required (1-30 characters).");
   }
 
-  // 3. Convertir le mode de jeu
+  // 3. Convert game mode
   const gameModeMap: Record<string, GameMode> = {
     PRIVATE: GameMode.PRIVATE,
     NORMAL: GameMode.NORMAL,
@@ -36,11 +36,11 @@ export async function POST(request: NextRequest) {
   };
   const gameMode = gameModeMap[parsed.data.gameMode] ?? GameMode.PRIVATE;
 
-  // 4. Appel du service
+  // 4. Service call
   const result = await service.createGame(user.id, parsed.data.displayName, gameMode);
 
   if (!result.success) {
-    return errorResponse(result.error ?? "Erreur lors de la création.");
+    return errorResponse(result.error ?? "Error creating game.");
   }
 
   return successResponse(result.data, 201);

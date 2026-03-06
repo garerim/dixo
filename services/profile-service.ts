@@ -77,13 +77,13 @@ const PSEUDO_REGEX = /^[a-zA-Z0-9_àâäéèêëïîôùûüÿçÀÂÄÉÈÊËÏ
 
 function validatePseudo(pseudo: string): string | null {
   if (pseudo.length < PSEUDO_MIN_LENGTH) {
-    return `Le pseudo doit contenir au moins ${PSEUDO_MIN_LENGTH} caractères.`;
+    return `Pseudo must contain at least ${PSEUDO_MIN_LENGTH} characters.`;
   }
   if (pseudo.length > PSEUDO_MAX_LENGTH) {
-    return `Le pseudo ne doit pas dépasser ${PSEUDO_MAX_LENGTH} caractères.`;
+    return `Pseudo must not exceed ${PSEUDO_MAX_LENGTH} characters.`;
   }
   if (!PSEUDO_REGEX.test(pseudo)) {
-    return "Le pseudo ne peut contenir que des lettres, chiffres, tirets et underscores.";
+    return "Pseudo can only contain letters, numbers, hyphens and underscores.";
   }
   return null;
 }
@@ -114,7 +114,7 @@ export class ProfileService {
     } catch (error) {
       return {
         success: false,
-        error: error instanceof Error ? error.message : "Erreur inconnue.",
+        error: error instanceof Error ? error.message : "Unknown error.",
       };
     }
   }
@@ -134,7 +134,7 @@ export class ProfileService {
     } catch (error) {
       return {
         success: false,
-        error: error instanceof Error ? error.message : "Erreur inconnue.",
+        error: error instanceof Error ? error.message : "Unknown error.",
       };
     }
   }
@@ -154,10 +154,10 @@ export class ProfileService {
         return { success: false, error: validationError };
       }
 
-      // Vérifier l'unicité
+      // Check uniqueness
       const taken = await this.repository.isPseudoTaken(newPseudo, userId);
       if (taken) {
-        return { success: false, error: "Ce pseudo est déjà pris." };
+        return { success: false, error: "This pseudo is already taken." };
       }
 
       const updated = await this.repository.update(userId, { pseudo: newPseudo });
@@ -169,7 +169,7 @@ export class ProfileService {
     } catch (error) {
       return {
         success: false,
-        error: error instanceof Error ? error.message : "Erreur inconnue.",
+        error: error instanceof Error ? error.message : "Unknown error.",
       };
     }
   }
@@ -199,7 +199,7 @@ export class ProfileService {
     } catch (error) {
       return {
         success: false,
-        error: error instanceof Error ? error.message : "Erreur inconnue.",
+        error: error instanceof Error ? error.message : "Unknown error.",
       };
     }
   }
@@ -224,7 +224,7 @@ export class ProfileService {
 
         const taken = await this.repository.isPseudoTaken(data.pseudo, userId);
         if (taken) {
-          return { success: false, error: "Ce pseudo est déjà pris." };
+          return { success: false, error: "This pseudo is already taken." };
         }
 
         updateData.pseudo = data.pseudo;
@@ -253,7 +253,7 @@ export class ProfileService {
     } catch (error) {
       return {
         success: false,
-        error: error instanceof Error ? error.message : "Erreur inconnue.",
+        error: error instanceof Error ? error.message : "Unknown error.",
       };
     }
   }
@@ -269,7 +269,7 @@ export class ProfileService {
     } catch (error) {
       return {
         success: false,
-        error: error instanceof Error ? error.message : "Erreur inconnue.",
+        error: error instanceof Error ? error.message : "Unknown error.",
       };
     }
   }
@@ -288,7 +288,7 @@ export class ProfileService {
     } catch (error) {
       return {
         success: false,
-        error: error instanceof Error ? error.message : "Erreur inconnue.",
+        error: error instanceof Error ? error.message : "Unknown error.",
       };
     }
   }
@@ -314,7 +314,7 @@ export class ProfileService {
     } catch (error) {
       return {
         success: false,
-        error: error instanceof Error ? error.message : "Erreur inconnue.",
+        error: error instanceof Error ? error.message : "Unknown error.",
       };
     }
   }

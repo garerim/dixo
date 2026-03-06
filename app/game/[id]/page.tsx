@@ -104,7 +104,7 @@ function GameContent({
       <div className="flex flex-1 flex-col items-center justify-center gap-3">
         <Loader2 className="size-8 animate-spin text-muted-foreground" />
         <p className="text-sm text-muted-foreground">
-          Chargement de la partie...
+          Loading game...
         </p>
       </div>
     );
@@ -121,7 +121,7 @@ function GameContent({
 
   const handleSurrender = async () => {
     await actions.surrender();
-    toast.info("Vous avez abandonné la partie.");
+    toast.info("You have surrendered the game.");
   };
 
   // ── Phase du jeu → Vue correspondante ──
@@ -165,7 +165,7 @@ function GameContent({
       default:
         return (
           <div className="flex flex-1 items-center justify-center text-muted-foreground">
-            Phase inconnue : {gameState.phase}
+            Unknown phase: {gameState.phase}
           </div>
         );
     }
@@ -187,20 +187,20 @@ function GameContent({
               </AlertDialogTrigger>
               <AlertDialogContent>
                 <AlertDialogHeader>
-                  <AlertDialogTitle>Abandonner la partie ?</AlertDialogTitle>
+                  <AlertDialogTitle>Surrender the game?</AlertDialogTitle>
                   <AlertDialogDescription>
-                    Vous serez éliminé et votre adversaire gagnera la partie.
+                    You will be eliminated and your opponent will win the game.
                     {gameState.gameMode === "RANKED" &&
-                      " Votre ELO sera impacté."}
+                      " Your ELO will be affected."}
                   </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
-                  <AlertDialogCancel>Annuler</AlertDialogCancel>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
                   <AlertDialogAction
                     onClick={handleSurrender}
                     className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
                   >
-                    Confirmer l&apos;abandon
+                    Confirm surrender
                   </AlertDialogAction>
                 </AlertDialogFooter>
               </AlertDialogContent>

@@ -105,7 +105,7 @@ export function addPlayer(
   }
 
   if (state.players.some((p) => p.id === player.id)) {
-    return { success: false, state, error: "Vous êtes déjà dans la partie." };
+    return { success: false, state, error: "You are already in the game." };
   }
 
   const newPlayer: PlayerState = {
@@ -149,12 +149,12 @@ export function removePlayer(
     return { success: false, state, error: "Joueur non trouvé." };
   }
 
-  // L'hôte ne peut pas quitter (il doit détruire la partie)
+  // Host cannot leave (they must destroy the game)
   if (state.players[playerIndex].isHost) {
     return {
       success: false,
       state,
-      error: "L'hôte ne peut pas quitter la partie.",
+      error: "The host cannot leave the game.",
     };
   }
 
@@ -177,8 +177,8 @@ export function removePlayer(
 // =============================================================================
 
 /**
- * Démarre la partie : passe de LOBBY à ROLLING.
- * Seul l'hôte peut démarrer.
+ * Starts the game: transitions from LOBBY to ROLLING.
+ * Only the host can start.
  */
 export function startGame(
   state: GameState,
@@ -186,7 +186,7 @@ export function startGame(
   random: RandomGenerator = defaultRandom,
 ): GameActionResult {
   if (state.phase !== GamePhase.LOBBY) {
-    return { success: false, state, error: "La partie a déjà commencé." };
+    return { success: false, state, error: "The game has already started." };
   }
 
   const host = state.players.find((p) => p.isHost);
@@ -194,7 +194,7 @@ export function startGame(
     return {
       success: false,
       state,
-      error: "Seul l'hôte peut démarrer la partie.",
+      error: "Only the host can start the game.",
     };
   }
 

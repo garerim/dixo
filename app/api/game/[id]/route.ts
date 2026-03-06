@@ -14,20 +14,20 @@ export async function GET(
   // 1. Authentification
   const { user, service } = await withAuth();
   if (!user || !service) {
-    return errorResponse("Non authentifié.", 401);
+    return errorResponse("Not authenticated.", 401);
   }
 
-  // 2. Récupérer le gameId depuis les params
+  // 2. Get gameId from params
   const { id: gameId } = await params;
   if (!gameId) {
-    return errorResponse("ID de partie requis.");
+    return errorResponse("Game ID required.");
   }
 
-  // 3. Appel du service
+  // 3. Service call
   const result = await service.getGameState(user.id, gameId);
 
   if (!result.success) {
-    return errorResponse(result.error ?? "Partie non trouvée.", 404);
+    return errorResponse(result.error ?? "Game not found.", 404);
   }
 
   return successResponse(result.data);

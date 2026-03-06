@@ -40,31 +40,31 @@ export class GameMessageService {
       // Vérifier que l'utilisateur fait partie de la partie
       const gameState = await this.games.findById(gameId);
       if (!gameState) {
-        return { success: false, error: "Partie non trouvée." };
+        return { success: false, error: "Game not found." };
       }
 
       const isPlayer = gameState.players.some((p) => p.id === userId);
       if (!isPlayer) {
-        return { success: false, error: "Vous ne faites pas partie de cette partie." };
+        return { success: false, error: "You are not part of this game." };
       }
 
-      // Vérifier que le contenu n'est pas vide
+      // Check that content is not empty
       if (!content.trim()) {
-        return { success: false, error: "Le message ne peut pas être vide." };
+        return { success: false, error: "Message cannot be empty." };
       }
 
-      // Vérifier la longueur du message
+      // Check message length
       if (content.length > 500) {
-        return { success: false, error: "Le message ne peut pas dépasser 500 caractères." };
+        return { success: false, error: "Message cannot exceed 500 characters." };
       }
 
       // Envoyer le message
       const message = await this.messages.send(gameId, userId, content);
 
-      // Récupérer le profil pour enrichir le message
+      // Get profile to enrich message
       const profile = await this.profiles.findById(userId);
       if (!profile) {
-        return { success: false, error: "Profil utilisateur non trouvé." };
+        return { success: false, error: "User profile not found." };
       }
 
       const result: GameMessage = {
@@ -81,7 +81,7 @@ export class GameMessageService {
     } catch (error) {
       return {
         success: false,
-        error: error instanceof Error ? error.message : "Erreur inconnue.",
+        error: error instanceof Error ? error.message : "Unknown error.",
       };
     }
   }
@@ -130,7 +130,7 @@ export class GameMessageService {
           id: msg.id,
           gameId: msg.game_id,
           userId: msg.user_id,
-          userPseudo: profile?.pseudo ?? "Inconnu",
+          userPseudo: profile?.pseudo ?? "Unknown",
           userAvatarUrl: profile?.avatarUrl ?? null,
           content: msg.content,
           createdAt: msg.created_at,
@@ -141,7 +141,7 @@ export class GameMessageService {
     } catch (error) {
       return {
         success: false,
-        error: error instanceof Error ? error.message : "Erreur inconnue.",
+        error: error instanceof Error ? error.message : "Unknown error.",
       };
     }
   }
@@ -189,7 +189,7 @@ export class GameMessageService {
           id: msg.id,
           gameId: msg.game_id,
           userId: msg.user_id,
-          userPseudo: profile?.pseudo ?? "Inconnu",
+          userPseudo: profile?.pseudo ?? "Unknown",
           userAvatarUrl: profile?.avatarUrl ?? null,
           content: msg.content,
           createdAt: msg.created_at,
@@ -200,7 +200,7 @@ export class GameMessageService {
     } catch (error) {
       return {
         success: false,
-        error: error instanceof Error ? error.message : "Erreur inconnue.",
+        error: error instanceof Error ? error.message : "Unknown error.",
       };
     }
   }

@@ -18,17 +18,17 @@ export async function POST(request: NextRequest) {
   // 1. Authentification
   const { user, service } = await withAuth();
   if (!user || !service) {
-    return errorResponse("Non authentifié.", 401);
+    return errorResponse("Not authenticated.", 401);
   }
 
   // 2. Validation
   const body = await request.json().catch(() => null);
   const parsed = PlaceBidSchema.safeParse(body);
   if (!parsed.success) {
-    return errorResponse("Enchère invalide : gameId (UUID), quantity (>= 1), faceValue (1-6) requis.");
+    return errorResponse("Invalid bid: gameId (UUID), quantity (>= 1), faceValue (1-6) required.");
   }
 
-  // 3. Appel du service
+  // 3. Service call
   const result = await service.placeBid(
     user.id,
     parsed.data.gameId,
@@ -37,7 +37,7 @@ export async function POST(request: NextRequest) {
   );
 
   if (!result.success) {
-    return errorResponse(result.error ?? "Erreur lors de l'enchère.");
+    return errorResponse(result.error ?? "Error placing bid.");
   }
 
   return successResponse(result.data);

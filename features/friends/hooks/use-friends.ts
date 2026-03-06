@@ -33,7 +33,7 @@ export function useFriends(): UseFriendsReturn {
     if (result.success && result.data) {
       setFriends(result.data);
     } else {
-      setError(result.error ?? "Impossible de charger les amis.");
+      setError(result.error ?? "Unable to load friends.");
     }
     setIsLoading(false);
   }, []);

@@ -16,9 +16,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Dixo — Le jeu de dés menteur",
+  title: "Dixo — The dice bluffing game",
   description:
-    "Jeu multijoueur en ligne inspiré du Perudo. Bluffez, misez et survivez !",
+    "Online multiplayer game inspired by Perudo. Bluff, bid and survive!",
 };
 
 export default function RootLayout({
@@ -27,7 +27,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="fr" suppressHydrationWarning>
+      <html lang="en" suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >

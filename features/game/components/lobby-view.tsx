@@ -24,27 +24,27 @@ export function LobbyView({ gameState, playerId, onStartGame }: LobbyViewProps) 
 
   function copyCode() {
     navigator.clipboard.writeText(gameState.joinCode);
-    toast.success("Code copié !");
+    toast.success("Code copied!");
   }
 
   return (
     <div className="mx-auto flex w-full max-w-md flex-col items-center gap-6 p-4">
-      {/* ── Badge du mode ── */}
+      {/* ── Mode badge ── */}
       {gameState.gameMode === "RANKED" ? (
         <Badge className="gap-1 bg-yellow-500/10 text-yellow-600">
           <Trophy className="size-3" />
-          Partie classée
+          Ranked game
         </Badge>
       ) : gameState.gameMode === "NORMAL" ? (
         <Badge variant="secondary" className="gap-1">
           <Swords className="size-3" />
-          Partie normale
+          Normal game
         </Badge>
       ) : null}
 
-      {/* ── Code de la partie ── */}
+      {/* ── Game code ── */}
       <div className="flex flex-col items-center gap-2">
-        <p className="text-sm text-muted-foreground">Code de la partie</p>
+        <p className="text-sm text-muted-foreground">Game code</p>
         <button
           onClick={copyCode}
           className="group flex items-center gap-2 rounded-xl bg-muted px-6 py-3 transition-colors hover:bg-muted/80"
@@ -55,7 +55,7 @@ export function LobbyView({ gameState, playerId, onStartGame }: LobbyViewProps) 
           <Copy className="size-4 text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100" />
         </button>
         <p className="text-xs text-muted-foreground">
-          Partagez ce code avec vos amis
+          Share this code with your friends
         </p>
         <Button
           variant="outline"
@@ -64,16 +64,16 @@ export function LobbyView({ gameState, playerId, onStartGame }: LobbyViewProps) 
           onClick={() => setShowInviteDialog(true)}
         >
           <UserPlus className="size-4" />
-          Inviter des amis
+          Invite friends
         </Button>
       </div>
 
-      {/* ── Liste des joueurs ── */}
+      {/* ── Players list ── */}
       <div className="w-full rounded-xl border bg-card p-4">
         <div className="mb-3 flex items-center gap-2">
           <Users className="size-4 text-muted-foreground" />
           <span className="text-sm font-medium">
-            Joueurs ({playerCount}/6)
+            Players ({playerCount}/6)
           </span>
         </div>
 
@@ -94,31 +94,31 @@ export function LobbyView({ gameState, playerId, onStartGame }: LobbyViewProps) 
               </span>
               {player.isHost && (
                 <Badge variant="secondary" className="text-xs">
-                  Hôte
+                  Host
                 </Badge>
               )}
               {player.id === playerId && (
                 <Badge variant="outline" className="text-xs">
-                  Vous
+                  You
                 </Badge>
               )}
             </div>
           ))}
 
-          {/* Slots vides */}
+          {/* Empty slots */}
           {Array.from({ length: 6 - playerCount }).map((_, i) => (
             <div
               key={`empty-${i}`}
               className="flex items-center gap-3 rounded-lg border border-dashed px-3 py-2 text-muted-foreground"
             >
               <div className="size-6 rounded-full bg-muted" />
-              <span className="text-sm">En attente...</span>
+              <span className="text-sm">Waiting...</span>
             </div>
           ))}
         </div>
       </div>
 
-      {/* ── Bouton démarrer ── */}
+      {/* ── Start button ── */}
       {isHost ? (
         <Button
           size="lg"
@@ -128,13 +128,13 @@ export function LobbyView({ gameState, playerId, onStartGame }: LobbyViewProps) 
         >
           <Play className="size-4" />
           {canStart
-            ? "Lancer la partie"
-            : `En attente de joueurs (min. 2)`}
+            ? "Start game"
+            : `Waiting for players (min. 2)`}
         </Button>
       ) : (
         <div className="flex items-center gap-2 text-sm text-muted-foreground">
           <Loader2 className="size-4 animate-spin" />
-          En attente du lancement par l&apos;hôte...
+          Waiting for host to start...
         </div>
       )}
 

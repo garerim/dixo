@@ -60,7 +60,7 @@ export class FriendshipService {
     } catch (error) {
       return {
         success: false,
-        error: error instanceof Error ? error.message : "Erreur inconnue.",
+        error: error instanceof Error ? error.message : "Unknown error.",
       };
     }
   }
@@ -102,7 +102,7 @@ export class FriendshipService {
     } catch (error) {
       return {
         success: false,
-        error: error instanceof Error ? error.message : "Erreur inconnue.",
+        error: error instanceof Error ? error.message : "Unknown error.",
       };
     }
   }
@@ -128,7 +128,7 @@ export class FriendshipService {
       if (friendship.friend_id !== userId || friendship.status !== "pending") {
         return {
           success: false,
-          error: "Vous ne pouvez pas répondre à cette demande.",
+          error: "You cannot respond to this request.",
         };
       }
 
@@ -142,7 +142,7 @@ export class FriendshipService {
     } catch (error) {
       return {
         success: false,
-        error: error instanceof Error ? error.message : "Erreur inconnue.",
+        error: error instanceof Error ? error.message : "Unknown error.",
       };
     }
   }
@@ -169,7 +169,7 @@ export class FriendshipService {
     } catch (error) {
       return {
         success: false,
-        error: error instanceof Error ? error.message : "Erreur inconnue.",
+        error: error instanceof Error ? error.message : "Unknown error.",
       };
     }
   }

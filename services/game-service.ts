@@ -80,7 +80,7 @@ export class GameService {
     } catch (error) {
       return {
         success: false,
-        error: error instanceof Error ? error.message : "Erreur inconnue.",
+        error: error instanceof Error ? error.message : "Unknown error.",
       };
     }
   }
@@ -97,7 +97,7 @@ export class GameService {
     try {
       const state = await this.repository.findByJoinCode(joinCode);
       if (!state) {
-        return { success: false, error: "Partie non trouvée." };
+        return { success: false, error: "Game not found." };
       }
 
       const result = addPlayer(state, { id: userId, displayName });
@@ -111,7 +111,7 @@ export class GameService {
     } catch (error) {
       return {
         success: false,
-        error: error instanceof Error ? error.message : "Erreur inconnue.",
+        error: error instanceof Error ? error.message : "Unknown error.",
       };
     }
   }
@@ -127,7 +127,7 @@ export class GameService {
     try {
       const state = await this.loadGame(gameId);
       if (!state) {
-        return { success: false, error: "Partie non trouvée." };
+        return { success: false, error: "Game not found." };
       }
 
       const result = startGame(state, userId);
@@ -144,7 +144,7 @@ export class GameService {
     } catch (error) {
       return {
         success: false,
-        error: error instanceof Error ? error.message : "Erreur inconnue.",
+        error: error instanceof Error ? error.message : "Unknown error.",
       };
     }
   }
@@ -162,7 +162,7 @@ export class GameService {
     try {
       const state = await this.loadGame(gameId);
       if (!state) {
-        return { success: false, error: "Partie non trouvée." };
+        return { success: false, error: "Game not found." };
       }
 
       const result = placeBid(state, {
@@ -183,7 +183,7 @@ export class GameService {
     } catch (error) {
       return {
         success: false,
-        error: error instanceof Error ? error.message : "Erreur inconnue.",
+        error: error instanceof Error ? error.message : "Unknown error.",
       };
     }
   }
@@ -199,7 +199,7 @@ export class GameService {
     try {
       const state = await this.loadGame(gameId);
       if (!state) {
-        return { success: false, error: "Partie non trouvée." };
+        return { success: false, error: "Game not found." };
       }
 
       // Joueurs vivants AVANT le challenge
@@ -253,7 +253,7 @@ export class GameService {
     } catch (error) {
       return {
         success: false,
-        error: error instanceof Error ? error.message : "Erreur inconnue.",
+        error: error instanceof Error ? error.message : "Unknown error.",
       };
     }
   }
@@ -269,7 +269,7 @@ export class GameService {
     try {
       const state = await this.loadGame(gameId);
       if (!state) {
-        return { success: false, error: "Partie non trouvée." };
+        return { success: false, error: "Game not found." };
       }
 
       const result = startNextRound(state);
@@ -286,7 +286,7 @@ export class GameService {
     } catch (error) {
       return {
         success: false,
-        error: error instanceof Error ? error.message : "Erreur inconnue.",
+        error: error instanceof Error ? error.message : "Unknown error.",
       };
     }
   }
@@ -302,7 +302,7 @@ export class GameService {
     try {
       const state = await this.loadGame(gameId);
       if (!state) {
-        return { success: false, error: "Partie non trouvée." };
+        return { success: false, error: "Game not found." };
       }
 
       const result = surrender(state, userId);
@@ -347,7 +347,7 @@ export class GameService {
     } catch (error) {
       return {
         success: false,
-        error: error instanceof Error ? error.message : "Erreur inconnue.",
+        error: error instanceof Error ? error.message : "Unknown error.",
       };
     }
   }
@@ -363,13 +363,13 @@ export class GameService {
     try {
       const state = await this.loadGame(gameId);
       if (!state) {
-        return { success: false, error: "Partie non trouvée." };
+        return { success: false, error: "Game not found." };
       }
 
       // Vérifier que le joueur fait partie de la partie
       const isPlayer = state.players.some((p) => p.id === userId);
       if (!isPlayer) {
-        return { success: false, error: "Vous ne faites pas partie de cette partie." };
+        return { success: false, error: "You are not part of this game." };
       }
 
       return {
@@ -379,7 +379,7 @@ export class GameService {
     } catch (error) {
       return {
         success: false,
-        error: error instanceof Error ? error.message : "Erreur inconnue.",
+        error: error instanceof Error ? error.message : "Unknown error.",
       };
     }
   }

@@ -15,7 +15,7 @@ export async function GET(request: Request) {
   } = await supabase.auth.getUser();
 
   if (error || !user) {
-    return errorResponse("Non authentifié.", 401);
+    return errorResponse("Not authenticated.", 401);
   }
 
   try {
@@ -37,7 +37,7 @@ export async function GET(request: Request) {
     return successResponse(entries);
   } catch (err) {
     return errorResponse(
-      err instanceof Error ? err.message : "Erreur inconnue.",
+      err instanceof Error ? err.message : "Unknown error.",
       500,
     );
   }

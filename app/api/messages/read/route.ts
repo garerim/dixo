@@ -14,19 +14,19 @@ const MarkReadSchema = z.object({
 export async function POST(request: NextRequest) {
   const { user, service } = await withMessageAuth();
   if (!user || !service) {
-    return errorResponse("Non authentifié.", 401);
+    return errorResponse("Not authenticated.", 401);
   }
 
   const body = await request.json().catch(() => null);
   const parsed = MarkReadSchema.safeParse(body);
   if (!parsed.success) {
-    return errorResponse("Données invalides. friendId requis.");
+    return errorResponse("Invalid data. friendId required.");
   }
 
   const result = await service.markAsRead(user.id, parsed.data.friendId);
 
   if (!result.success) {
-    return errorResponse(result.error ?? "Impossible de marquer les messages comme lus.", 400);
+    return errorResponse(result.error ?? "Unable to mark messages as read.", 400);
   }
 
   return successResponse(undefined);

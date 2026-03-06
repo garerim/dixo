@@ -48,7 +48,7 @@ export function Messages({ friend }: MessagesProps) {
     return (
       <Card>
         <CardContent className="flex items-center justify-center py-12">
-          <p className="text-muted-foreground">Sélectionnez un ami pour commencer à discuter</p>
+          <p className="text-muted-foreground">Select a friend to start chatting</p>
         </CardContent>
       </Card>
     );
@@ -65,7 +65,7 @@ export function Messages({ friend }: MessagesProps) {
           <div>
             <CardTitle className="text-base">{friend.pseudo}</CardTitle>
             <CardDescription>
-              {friend.isOnline ? "En ligne" : "Hors ligne"}
+              {friend.isOnline ? "Online" : "Offline"}
             </CardDescription>
           </div>
         </div>
@@ -81,7 +81,7 @@ export function Messages({ friend }: MessagesProps) {
             </div>
           ) : messages.length === 0 ? (
             <p className="py-8 text-center text-muted-foreground">
-              Aucun message. Commencez la conversation !
+              No messages. Start the conversation!
             </p>
           ) : (
             <div className="space-y-4">
@@ -124,7 +124,7 @@ export function Messages({ friend }: MessagesProps) {
         <div className="border-t p-4">
           <div className="flex gap-2">
             <Input
-              placeholder="Tapez un message..."
+              placeholder="Type a message..."
               value={messageContent}
               onChange={(e) => setMessageContent(e.target.value)}
               onKeyDown={(e) => {

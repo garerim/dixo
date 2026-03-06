@@ -15,13 +15,13 @@ const RespondSchema = z.object({
 export async function POST(request: NextRequest) {
   const { user, service } = await withFriendshipAuth();
   if (!user || !service) {
-    return errorResponse("Non authentifié.", 401);
+    return errorResponse("Not authenticated.", 401);
   }
 
   const body = await request.json().catch(() => null);
   const parsed = RespondSchema.safeParse(body);
   if (!parsed.success) {
-    return errorResponse("Données invalides. friendshipId et accept requis.");
+    return errorResponse("Invalid data. friendshipId and accept required.");
   }
 
   const result = await service.respondToRequest(
@@ -31,7 +31,7 @@ export async function POST(request: NextRequest) {
   );
 
   if (!result.success) {
-    return errorResponse(result.error ?? "Impossible de répondre à la demande.", 400);
+    return errorResponse(result.error ?? "Unable to respond to request.", 400);
   }
 
   return successResponse(undefined);

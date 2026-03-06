@@ -9,7 +9,7 @@ export async function GET(request: Request) {
   const { user, service } = await withProfileAuth();
 
   if (!user || !service) {
-    return errorResponse("Non authentifié.", 401);
+    return errorResponse("Not authenticated.", 401);
   }
 
   const { searchParams } = new URL(request.url);
@@ -21,7 +21,7 @@ export async function GET(request: Request) {
   const result = await service.getLeaderboard(limit);
 
   if (!result.success) {
-    return errorResponse(result.error ?? "Erreur lors du chargement du classement.", 500);
+    return errorResponse(result.error ?? "Error loading leaderboard.", 500);
   }
 
   return successResponse(result.data);

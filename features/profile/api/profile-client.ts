@@ -91,4 +91,33 @@ export const profileClient = {
     const query = mode ? `?mode=${mode}` : "";
     return fetchApi(`/elo-history${query}`, { method: "GET" });
   },
+
+  /** Upload avatar image */
+  async uploadAvatar(file: File): Promise<ApiResponse<{ avatarUrl: string }>> {
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+
+      const response = await fetch(`${BASE_URL}/upload-avatar`, {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        return {
+          success: false,
+          error: data.error ?? `HTTP error ${response.status}`,
+        };
+      }
+
+      return data;
+    } catch {
+      return {
+        success: false,
+        error: "Network error. Check your connection.",
+      };
+    }
+  },
 } as const;

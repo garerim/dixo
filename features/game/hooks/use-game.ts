@@ -65,7 +65,7 @@ export function useGame({ gameId, playerId }: UseGameOptions): UseGameReturn {
     if (result.success && result.data) {
       setGameState(result.data);
     } else {
-      setError(result.error ?? "Impossible de charger la partie.");
+      setError(result.error ?? "Unable to load game.");
     }
 
     setIsLoading(false);

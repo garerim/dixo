@@ -86,11 +86,11 @@ export function GameChat({ gameId, className, hideHeader = false, fullHeight = f
         >
           {isLoading && messages.length === 0 ? (
             <p className="py-4 text-center text-sm text-muted-foreground">
-              Chargement des messages...
+              Loading messages...
             </p>
           ) : messages.length === 0 ? (
             <p className="py-4 text-center text-sm text-muted-foreground">
-              Aucun message. Commencez la conversation !
+              No messages. Start the conversation!
             </p>
           ) : (
             <div className="space-y-3">
@@ -138,7 +138,7 @@ export function GameChat({ gameId, className, hideHeader = false, fullHeight = f
         <div className="border-t p-3 flex-shrink-0">
           <div className="flex gap-2">
             <Input
-              placeholder="Tapez un message..."
+              placeholder="Type a message..."
               value={messageContent}
               onChange={(e) => setMessageContent(e.target.value)}
               onKeyDown={(e) => {

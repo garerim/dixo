@@ -16,21 +16,21 @@ export async function POST(request: NextRequest) {
   // 1. Authentification
   const { user, service } = await withAuth();
   if (!user || !service) {
-    return errorResponse("Non authentifié.", 401);
+    return errorResponse("Not authenticated.", 401);
   }
 
   // 2. Validation
   const body = await request.json().catch(() => null);
   const parsed = StartGameSchema.safeParse(body);
   if (!parsed.success) {
-    return errorResponse("ID de partie invalide.");
+    return errorResponse("Invalid game ID.");
   }
 
   // 3. Appel du service
   const result = await service.startGame(user.id, parsed.data.gameId);
 
   if (!result.success) {
-    return errorResponse(result.error ?? "Erreur lors du démarrage.");
+    return errorResponse(result.error ?? "Error starting game.");
   }
 
   return successResponse(result.data);

@@ -15,13 +15,13 @@ const SendMessageSchema = z.object({
 export async function POST(request: NextRequest) {
   const { user, service } = await withMessageAuth();
   if (!user || !service) {
-    return errorResponse("Non authentifié.", 401);
+    return errorResponse("Not authenticated.", 401);
   }
 
   const body = await request.json().catch(() => null);
   const parsed = SendMessageSchema.safeParse(body);
   if (!parsed.success) {
-    return errorResponse("Données invalides. receiverId et content requis.");
+    return errorResponse("Invalid data. receiverId and content required.");
   }
 
   const result = await service.sendMessage(
@@ -31,7 +31,7 @@ export async function POST(request: NextRequest) {
   );
 
   if (!result.success) {
-    return errorResponse(result.error ?? "Impossible d'envoyer le message.", 400);
+    return errorResponse(result.error ?? "Unable to send message.", 400);
   }
 
   return successResponse(result.data, 201);

@@ -16,13 +16,13 @@ const JoinQueueSchema = z.object({
 export async function POST(request: NextRequest) {
   const { user, service } = await withMatchmakingAuth();
   if (!user || !service) {
-    return errorResponse("Non authentifié.", 401);
+    return errorResponse("Not authenticated.", 401);
   }
 
   const body = await request.json().catch(() => null);
   const parsed = JoinQueueSchema.safeParse(body);
   if (!parsed.success) {
-    return errorResponse("Données invalides. displayName, gameMode et playerCount requis.");
+    return errorResponse("Invalid data. displayName, gameMode and playerCount required.");
   }
 
   const result = await service.joinQueue(
@@ -33,7 +33,7 @@ export async function POST(request: NextRequest) {
   );
 
   if (!result.success) {
-    return errorResponse(result.error ?? "Erreur lors de l'ajout à la file.");
+    return errorResponse(result.error ?? "Error joining queue.");
   }
 
   return successResponse(result.data, 201);

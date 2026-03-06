@@ -47,16 +47,16 @@ export function BiddingView({
           className="gap-1"
         >
           {isMyTurn
-            ? "C'est votre tour !"
-            : `Tour de ${currentPlayer?.displayName ?? "..."}`}
+            ? "Your turn!"
+            : `${currentPlayer?.displayName ?? "..."}'s turn`}
         </Badge>
       </div>
 
-      {/* ── Mes dés ── */}
+      {/* ── My dice ── */}
       {me && me.diceValues.length > 0 && (
         <div className="flex flex-col items-center gap-2 rounded-xl border bg-card p-4">
           <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
-            Vos dés
+            Your dice
           </span>
           <DiceRow
             values={[...me.diceValues]}
@@ -66,7 +66,7 @@ export function BiddingView({
         </div>
       )}
 
-      {/* ── Adversaires ── */}
+      {/* ── Opponents ── */}
       <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
         {gameState.players
           .filter((p) => p.id !== playerId)
@@ -83,7 +83,7 @@ export function BiddingView({
           ))}
       </div>
 
-      {/* ── Panel d'enchère (si c'est mon tour) ── */}
+      {/* ── Bidding panel (if it's my turn) ── */}
       {isMyTurn && me?.isAlive && (
         <BidPanel
           currentBid={gameState.currentBid}
@@ -94,7 +94,7 @@ export function BiddingView({
         />
       )}
 
-      {/* ── En attente (si pas mon tour) ── */}
+      {/* ── Waiting (if not my turn) ── */}
       {!isMyTurn && (
         <div className="flex items-center justify-center gap-2 rounded-xl border border-dashed p-4 text-muted-foreground">
           <span className="relative flex size-2">
@@ -102,7 +102,7 @@ export function BiddingView({
             <span className="relative inline-flex size-2 rounded-full bg-primary" />
           </span>
           <span className="text-sm">
-            En attente de {currentPlayer?.displayName}...
+            Waiting for {currentPlayer?.displayName}...
           </span>
         </div>
       )}

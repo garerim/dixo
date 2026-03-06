@@ -43,11 +43,11 @@ export function FriendProfileModal({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-h-[90vh] max-w-2xl overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>Profil de {friend.pseudo}</DialogTitle>
+          <DialogTitle>{friend.pseudo}'s Profile</DialogTitle>
         </DialogHeader>
 
         <div className="flex flex-col gap-4">
-          {/* ── Carte identité ── */}
+          {/* ── Identity card ── */}
           <Card>
             <CardContent className="flex flex-col items-center gap-4 pt-6 sm:flex-row sm:items-start">
               {/* Avatar */}
@@ -58,14 +58,14 @@ export function FriendProfileModal({
                 </AvatarFallback>
               </Avatar>
 
-              {/* Infos */}
+              {/* Info */}
               <div className="flex flex-1 flex-col items-center gap-2 sm:items-start">
                 <h2 className="text-2xl font-bold">{friend.pseudo}</h2>
 
                 {/* Badges */}
                 <div className="flex flex-wrap items-center gap-2">
                   <Badge variant={friend.isOnline ? "default" : "secondary"}>
-                    {friend.isOnline ? "En ligne" : "Hors ligne"}
+                    {friend.isOnline ? "Online" : "Offline"}
                   </Badge>
                   <Badge variant="outline" className="gap-1">
                     <Trophy className="size-3" />
@@ -80,12 +80,12 @@ export function FriendProfileModal({
             </CardContent>
           </Card>
 
-          {/* ── Classement ELO ── */}
+          {/* ── ELO Ranking ── */}
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2 text-base">
                 <Trophy className="size-4 text-yellow-500" />
-                Classement
+                Ranking
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -97,7 +97,7 @@ export function FriendProfileModal({
                 <Separator orientation="vertical" className="h-auto" />
                 <div>
                   <p className="text-3xl font-bold">{friend.elo4p}</p>
-                  <p className="text-sm text-muted-foreground">ELO 4 joueurs</p>
+                  <p className="text-sm text-muted-foreground">ELO 4 players</p>
                 </div>
               </div>
             </CardContent>

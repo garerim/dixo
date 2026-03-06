@@ -25,7 +25,7 @@ export default function FriendsPage() {
         </Button>
         <div className="flex items-center gap-2">
           <Users className="size-5 text-primary" />
-          <span className="text-lg font-bold tracking-tight">Amis</span>
+          <span className="text-lg font-bold tracking-tight">Friends</span>
         </div>
       </header>
 

@@ -24,7 +24,7 @@ export async function GET(
   } = await supabase.auth.getUser();
 
   if (error || !user) {
-    return errorResponse("Non authentifié.", 401);
+    return errorResponse("Not authenticated.", 401);
   }
 
   const { searchParams } = new URL(request.url);
@@ -35,7 +35,7 @@ export async function GET(
   const result = await service.getMessages(gameId, user.id, limit, before);
 
   if (!result.success) {
-    return errorResponse(result.error ?? "Impossible de récupérer les messages.", 400);
+    return errorResponse(result.error ?? "Unable to retrieve messages.", 400);
   }
 
   return successResponse(result.data);
@@ -53,20 +53,20 @@ export async function POST(
   } = await supabase.auth.getUser();
 
   if (error || !user) {
-    return errorResponse("Non authentifié.", 401);
+    return errorResponse("Not authenticated.", 401);
   }
 
   const body = await request.json().catch(() => null);
   const parsed = SendMessageSchema.safeParse(body);
   if (!parsed.success) {
-    return errorResponse("Données invalides. content requis (1-500 caractères).");
+    return errorResponse("Invalid data. content required (1-500 characters).");
   }
 
   const service = new GameMessageService(supabase);
   const result = await service.sendMessage(gameId, user.id, parsed.data.content);
 
   if (!result.success) {
-    return errorResponse(result.error ?? "Impossible d'envoyer le message.", 400);
+    return errorResponse(result.error ?? "Unable to send message.", 400);
   }
 
   return successResponse(result.data, 201);

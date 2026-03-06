@@ -72,7 +72,7 @@ export function EloChart({ elo1v1, elo4p }: EloChartProps) {
     load();
   }, [mode]);
 
-  // Transformer les données pour le chart
+  // Transform data for the chart
   const chartData: ChartDataPoint[] = history.map((entry) => ({
     date: new Date(entry.createdAt).toLocaleDateString("fr-FR", {
       day: "2-digit",
@@ -82,12 +82,12 @@ export function EloChart({ elo1v1, elo4p }: EloChartProps) {
     delta: entry.delta,
   }));
 
-  // Toujours ajouter le point initial si on a de l'historique
+  // Always add the initial point if we have history
   if (chartData.length > 0) {
     const firstEntry = history[0];
     const initialElo = firstEntry.elo - firstEntry.delta;
     chartData.unshift({
-      date: "Début",
+      date: "Start",
       elo: initialElo,
       delta: 0,
     });
@@ -118,12 +118,12 @@ export function EloChart({ elo1v1, elo4p }: EloChartProps) {
           <div>
             <CardTitle className="flex items-center gap-2 text-base">
               {trendIcon}
-              Évolution ELO
+              ELO Evolution
             </CardTitle>
             <CardDescription>
               {history.length > 0
-                ? `${history.length} partie${history.length > 1 ? "s" : ""} classée${history.length > 1 ? "s" : ""}`
-                : "Aucune partie classée pour le moment"}
+                ? `${history.length} ranked game${history.length > 1 ? "s" : ""}`
+                : "No ranked games yet"}
             </CardDescription>
           </div>
 
@@ -143,7 +143,7 @@ export function EloChart({ elo1v1, elo4p }: EloChartProps) {
               className="h-7 px-3 text-xs"
               onClick={() => setMode("4p")}
             >
-              4 joueurs
+              4 players
             </Button>
           </div>
         </div>
@@ -156,7 +156,7 @@ export function EloChart({ elo1v1, elo4p }: EloChartProps) {
         ) : chartData.length === 0 ? (
           <div className="flex h-[200px] flex-col items-center justify-center gap-2 text-muted-foreground">
             <p className="text-sm">
-              Jouez des parties classées en {mode === "1v1" ? "1v1" : "4 joueurs"} pour voir votre progression !
+              Play ranked games in {mode === "1v1" ? "1v1" : "4 players"} mode to see your progress!
             </p>
             <p className="text-2xl font-bold text-foreground">{currentElo} ELO</p>
           </div>

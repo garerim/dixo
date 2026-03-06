@@ -27,7 +27,7 @@ export default function LoginPage() {
   if (isLoading) {
     return (
       <div className="flex min-h-svh items-center justify-center">
-        <div className="animate-pulse text-muted-foreground">Chargement...</div>
+        <div className="animate-pulse text-muted-foreground">Loading...</div>
       </div>
     );
   }
@@ -40,15 +40,15 @@ export default function LoginPage() {
         </div>
         <h1 className="text-4xl font-bold tracking-tight">Dixo</h1>
         <p className="text-muted-foreground text-center max-w-xs">
-          Le jeu de dés menteur en ligne — Bluffez, misez, survivez !
+          The online dice bluffing game — Bluff, bid, survive!
         </p>
       </div>
 
       <Card className="w-full max-w-sm">
         <CardHeader className="text-center">
-          <CardTitle>Connexion</CardTitle>
+          <CardTitle>Login</CardTitle>
           <CardDescription>
-            Connectez-vous pour créer ou rejoindre une partie
+            Sign in to create or join a game
           </CardDescription>
         </CardHeader>
         <CardContent className="flex flex-col gap-4">
@@ -75,13 +75,13 @@ export default function LoginPage() {
                 fill="#EA4335"
               />
             </svg>
-            Continuer avec Google
+            Continue with Google
           </Button>
         </CardContent>
       </Card>
 
       <p className="mt-6 text-xs text-muted-foreground">
-        En vous connectant, vous acceptez de jouer fair-play 🎲
+        By signing in, you agree to play fair 🎲
       </p>
     </div>
   );

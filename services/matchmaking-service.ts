@@ -70,7 +70,7 @@ export class MatchmakingService {
       if (existing) {
         return {
           success: false,
-          error: "Vous êtes déjà en file d'attente.",
+          error: "You are already in the queue.",
         };
       }
 
@@ -92,7 +92,7 @@ export class MatchmakingService {
     } catch (error) {
       return {
         success: false,
-        error: error instanceof Error ? error.message : "Erreur inconnue.",
+        error: error instanceof Error ? error.message : "Unknown error.",
       };
     }
   }
@@ -111,7 +111,7 @@ export class MatchmakingService {
     } catch (error) {
       return {
         success: false,
-        error: error instanceof Error ? error.message : "Erreur inconnue.",
+        error: error instanceof Error ? error.message : "Unknown error.",
       };
     }
   }
@@ -128,7 +128,7 @@ export class MatchmakingService {
       const entry = await this.queue.findActiveByUserId(userId);
 
       if (!entry) {
-        return { success: false, error: "Vous n'êtes pas en file d'attente." };
+        return { success: false, error: "You are not in the queue." };
       }
 
       // Si l'entrée est en attente, tenter un match (au cas où)
@@ -189,7 +189,7 @@ export class MatchmakingService {
     } catch (error) {
       return {
         success: false,
-        error: error instanceof Error ? error.message : "Erreur inconnue.",
+        error: error instanceof Error ? error.message : "Unknown error.",
       };
     }
   }

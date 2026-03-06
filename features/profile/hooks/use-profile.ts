@@ -26,7 +26,7 @@ interface UseProfileReturn {
   /** Actions */
   actions: {
     /** Met à jour le pseudo */
-    updatePseudo: (pseudo: string) => Promise<boolean>;
+    updatePseudo: (pseudo: string) => Promise<{ success: boolean; error?: string }>;
     /** Met à jour l'avatar */
     updateAvatar: (avatarUrl: string) => Promise<boolean>;
     /** Met à jour pseudo + avatar */
@@ -58,7 +58,7 @@ export function useProfile(): UseProfileReturn {
     if (result.success && result.data) {
       setProfile(result.data);
     } else {
-      setError(result.error ?? "Impossible de charger le profil.");
+      setError(result.error ?? "Unable to load profile.");
     }
 
     setIsLoading(false);
@@ -72,17 +72,18 @@ export function useProfile(): UseProfileReturn {
   // Mettre à jour le pseudo
   // ===========================================================================
 
-  const updatePseudo = useCallback(async (pseudo: string): Promise<boolean> => {
+  const updatePseudo = useCallback(async (pseudo: string): Promise<{ success: boolean; error?: string }> => {
     setError(null);
     const result = await profileClient.updateProfile({ pseudo });
 
     if (result.success && result.data) {
       setProfile(result.data);
-      return true;
+      return { success: true };
     }
 
-    setError(result.error ?? "Impossible de mettre à jour le pseudo.");
-    return false;
+    const errorMessage = result.error ?? "Unable to update pseudo.";
+    setError(errorMessage);
+    return { success: false, error: errorMessage };
   }, []);
 
   // ===========================================================================
@@ -98,7 +99,7 @@ export function useProfile(): UseProfileReturn {
       return true;
     }
 
-    setError(result.error ?? "Impossible de mettre à jour l'avatar.");
+    setError(result.error ?? "Unable to update avatar.");
     return false;
   }, []);
 
@@ -116,7 +117,7 @@ export function useProfile(): UseProfileReturn {
         return true;
       }
 
-      setError(result.error ?? "Impossible de mettre à jour le profil.");
+      setError(result.error ?? "Unable to update profile.");
       return false;
     },
     [],

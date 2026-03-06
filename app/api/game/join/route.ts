@@ -17,17 +17,17 @@ export async function POST(request: NextRequest) {
   // 1. Authentification
   const { user, service } = await withAuth();
   if (!user || !service) {
-    return errorResponse("Non authentifié.", 401);
+    return errorResponse("Not authenticated.", 401);
   }
 
-  // 2. Validation des entrées
+  // 2. Validate inputs
   const body = await request.json().catch(() => null);
   const parsed = JoinGameSchema.safeParse(body);
   if (!parsed.success) {
-    return errorResponse("Code d'accès (6 caractères) et nom d'affichage requis.");
+    return errorResponse("Access code (6 characters) and display name required.");
   }
 
-  // 3. Appel du service
+  // 3. Service call
   const result = await service.joinGame(
     user.id,
     parsed.data.displayName,
@@ -35,7 +35,7 @@ export async function POST(request: NextRequest) {
   );
 
   if (!result.success) {
-    return errorResponse(result.error ?? "Erreur lors de la jonction.");
+    return errorResponse(result.error ?? "Error joining game.");
   }
 
   return successResponse(result.data);

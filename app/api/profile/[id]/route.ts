@@ -14,14 +14,14 @@ export async function GET(
   const { user, service } = await withProfileAuth();
 
   if (!user || !service) {
-    return errorResponse("Non authentifié.", 401);
+    return errorResponse("Not authenticated.", 401);
   }
 
   // Si c'est son propre profil → retourner la version complète
   if (targetUserId === user.id) {
     const result = await service.getMyProfile(user.id);
     if (!result.success) {
-      return errorResponse(result.error ?? "Profil non trouvé.", 404);
+      return errorResponse(result.error ?? "Profile not found.", 404);
     }
     return successResponse(result.data);
   }
@@ -30,7 +30,7 @@ export async function GET(
   const result = await service.getPublicProfile(targetUserId);
 
   if (!result.success) {
-    return errorResponse(result.error ?? "Profil non trouvé.", 404);
+    return errorResponse(result.error ?? "Profile not found.", 404);
   }
 
   return successResponse(result.data);

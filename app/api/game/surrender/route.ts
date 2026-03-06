@@ -16,21 +16,21 @@ export async function POST(request: NextRequest) {
   // 1. Authentification
   const { user, service } = await withAuth();
   if (!user || !service) {
-    return errorResponse("Non authentifié.", 401);
+    return errorResponse("Not authenticated.", 401);
   }
 
   // 2. Validation
   const body = await request.json().catch(() => null);
   const parsed = SurrenderSchema.safeParse(body);
   if (!parsed.success) {
-    return errorResponse("ID de partie invalide.");
+    return errorResponse("Invalid game ID.");
   }
 
   // 3. Appel du service
   const result = await service.surrenderGame(user.id, parsed.data.gameId);
 
   if (!result.success) {
-    return errorResponse(result.error ?? "Erreur lors de l'abandon.");
+    return errorResponse(result.error ?? "Error during surrender.");
   }
 
   return successResponse(result.data);
