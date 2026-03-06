@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import {
   ArrowLeft,
@@ -16,6 +16,8 @@ import {
   Crown,
   Swords,
   Camera,
+  Star,
+  ExternalLink,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -33,6 +35,7 @@ import { useAuth } from "@/components/providers/auth-provider";
 import { useProfile } from "@/features/profile/hooks/use-profile";
 import { EloChart } from "@/features/profile/components/elo-chart";
 import { profileClient } from "@/features/profile/api/profile-client";
+import { useBilling } from "@/features/billing/hooks/use-billing";
 
 // =============================================================================
 // Helpers
@@ -67,6 +70,8 @@ export default function ProfilePage() {
   const { user, isLoading: authLoading, refreshProfile } = useAuth();
   const { profile, isLoading: profileLoading, actions } = useProfile();
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const { isLoading: billingLoading, openPortal } = useBilling();
 
   const [isEditingPseudo, setIsEditingPseudo] = useState(false);
   const [editPseudo, setEditPseudo] = useState("");
@@ -80,6 +85,16 @@ export default function ProfilePage() {
       router.replace("/login");
     }
   }, [authLoading, user, router]);
+
+  // Toast de bienvenue après upgrade
+  useEffect(() => {
+    if (searchParams.get("upgraded") === "1") {
+      toast.success("Welcome to Premium! Your account has been upgraded.");
+      // Nettoyer le query param sans rechargement
+      router.replace("/profile");
+      refreshProfile();
+    }
+  }, [searchParams, router, refreshProfile]);
 
   if (authLoading || profileLoading || !user) {
     return (
@@ -128,16 +143,24 @@ export default function ProfilePage() {
     const file = event.target.files?.[0];
     if (!file) return;
 
-    // Validate file type
-    const allowedTypes = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
+    const isPremiumUser = profile?.subscription !== "free";
+    const allowedTypes = isPremiumUser
+      ? ["image/jpeg", "image/jpg", "image/png", "image/webp", "image/gif"]
+      : ["image/jpeg", "image/jpg", "image/png", "image/webp"];
+
     if (!allowedTypes.includes(file.type)) {
-      toast.error("Invalid file type. Only JPEG, PNG, and WebP images are allowed.");
+      if (file.type === "image/gif") {
+        toast.error("GIF avatars are reserved for Premium members.");
+      } else {
+        toast.error("Invalid file type. Only JPEG, PNG, and WebP images are allowed.");
+      }
       return;
     }
 
-    // Validate file size (5MB max)
-    if (file.size > 5 * 1024 * 1024) {
-      toast.error("File size exceeds 5MB limit.");
+    const isGif = file.type === "image/gif";
+    const maxSize = isGif ? 10 * 1024 * 1024 : 5 * 1024 * 1024;
+    if (file.size > maxSize) {
+      toast.error(isGif ? "File size exceeds 10MB limit." : "File size exceeds 5MB limit.");
       return;
     }
 
@@ -196,7 +219,11 @@ export default function ProfilePage() {
               <input
                 ref={fileInputRef}
                 type="file"
-                accept="image/jpeg,image/jpg,image/png,image/webp"
+                accept={
+                  profile?.subscription !== "free"
+                    ? "image/jpeg,image/jpg,image/png,image/webp,image/gif"
+                    : "image/jpeg,image/jpg,image/png,image/webp"
+                }
                 onChange={handleAvatarUpload}
                 className="hidden"
                 disabled={isUploadingAvatar}
@@ -356,6 +383,63 @@ export default function ProfilePage() {
             </CardContent>
           </Card>
         </div>
+
+        {/* ── Abonnement ── */}
+        <Card>
+          <CardHeader className="pb-2">
+            <CardTitle className="flex items-center gap-2 text-base">
+              <Star className="size-4 text-yellow-400 fill-yellow-400" />
+              Subscription
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            {profile.subscription === "free" ? (
+              <div className="flex items-center justify-between gap-4">
+                <div>
+                  <p className="font-medium">Free plan</p>
+                  <p className="text-sm text-muted-foreground">
+                    Upgrade to Premium to unlock GIF avatars, full ELO history and more.
+                  </p>
+                </div>
+                <Button onClick={() => router.push("/pricing")}>
+                  <Star className="mr-2 size-4" />
+                  Upgrade
+                </Button>
+              </div>
+            ) : (
+              <div className="flex items-center justify-between gap-4">
+                <div>
+                  <p className="flex items-center gap-2 font-medium">
+                    <Star className="size-4 fill-yellow-400 text-yellow-400" />
+                    Premium
+                  </p>
+                  {profile.subscriptionExpiresAt && (
+                    <p className="text-sm text-muted-foreground">
+                      Renews on{" "}
+                      {new Date(profile.subscriptionExpiresAt).toLocaleDateString("en-US", {
+                        day: "numeric",
+                        month: "long",
+                        year: "numeric",
+                      })}
+                    </p>
+                  )}
+                </div>
+                <Button
+                  variant="outline"
+                  onClick={openPortal}
+                  disabled={billingLoading}
+                >
+                  {billingLoading ? (
+                    <Loader2 className="mr-2 size-4 animate-spin" />
+                  ) : (
+                    <ExternalLink className="mr-2 size-4" />
+                  )}
+                  Manage subscription
+                </Button>
+              </div>
+            )}
+          </CardContent>
+        </Card>
 
         {/* ── ELO Evolution (chart) ── */}
         <EloChart elo1v1={profile.elo1v1} elo4p={profile.elo4p} />

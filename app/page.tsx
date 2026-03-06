@@ -17,7 +17,7 @@ import {
   X,
   UserPlus,
   User,
-  Settings,
+  Star,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -214,6 +214,15 @@ export default function HomePage() {
                 <UserPlus className="mr-2 size-4" />
                 <span>Friends</span>
               </DropdownMenuItem>
+              {profile?.subscription === "free" && (
+                <>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={() => router.push("/pricing")}>
+                    <Star className="mr-2 size-4 fill-yellow-400 text-yellow-400" />
+                    <span>Upgrade to Premium</span>
+                  </DropdownMenuItem>
+                </>
+              )}
               <DropdownMenuSeparator />
               <DropdownMenuItem onClick={signOut} className="text-destructive">
                 <LogOut className="mr-2 size-4" />

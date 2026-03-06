@@ -39,6 +39,8 @@ export interface PlayerState {
   readonly displayName: string;
   /** URL de l'avatar (optionnel) */
   readonly avatarUrl?: string;
+  /** Tier d'abonnement (pour affichage du badge, sans impact sur la logique) */
+  readonly subscription?: string;
   /** Nombre de dés restants (commence à 5 au Perudo) */
   readonly diceCount: number;
   /** Résultat du dernier lancer de dés (caché aux autres joueurs) */

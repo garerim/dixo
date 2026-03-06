@@ -7,7 +7,8 @@ import { errorResponse, successResponse } from "@/app/api/game/helpers";
 import { getSupabaseServerClient } from "@/lib/supabase/server";
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
-const ALLOWED_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
+const MAX_FILE_SIZE_GIF = 10 * 1024 * 1024; // 10MB for GIFs (Premium)
+const ALLOWED_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp", "image/gif"];
 
 export async function POST(request: NextRequest) {
   const supabase = await getSupabaseServerClient();
@@ -31,14 +32,33 @@ export async function POST(request: NextRequest) {
     // Validate file type
     if (!ALLOWED_TYPES.includes(file.type)) {
       return errorResponse(
-        "Invalid file type. Only JPEG, PNG, and WebP images are allowed.",
+        "Invalid file type. Only JPEG, PNG, WebP and GIF images are allowed.",
         400,
       );
     }
 
+    // GIF réservé aux membres Premium
+    const isGif = file.type === "image/gif";
+    if (isGif) {
+      const { data: profileDataRaw } = await supabase
+        .from("profiles")
+        .select("subscription")
+        .eq("id", user.id)
+        .single();
+      const profileData = profileDataRaw as { subscription: string } | null;
+
+      if (!profileData || profileData.subscription === "free") {
+        return errorResponse("GIF avatars are reserved for Premium members.", 403);
+      }
+    }
+
     // Validate file size
-    if (file.size > MAX_FILE_SIZE) {
-      return errorResponse("File size exceeds 5MB limit.", 400);
+    const maxSize = isGif ? MAX_FILE_SIZE_GIF : MAX_FILE_SIZE;
+    if (file.size > maxSize) {
+      return errorResponse(
+        isGif ? "File size exceeds 10MB limit." : "File size exceeds 5MB limit.",
+        400,
+      );
     }
 
     // Generate unique filename

@@ -6,7 +6,7 @@
 // =============================================================================
 
 import type { SupabaseClient } from "@supabase/supabase-js";
-import type { Database, ProfileRow } from "@/types/database";
+import type { Database, ProfileRow, SubscriptionTier } from "@/types/database";
 
 // =============================================================================
 // Opérations CRUD
@@ -158,6 +158,56 @@ export class ProfileRepository {
     if (error || !data) return [];
 
     return data;
+  }
+
+  /**
+   * Récupère un profil par son stripe_customer_id.
+   */
+  async findByStripeCustomerId(stripeCustomerId: string): Promise<ProfileRow | null> {
+    const { data, error } = await this.supabase
+      .from("profiles")
+      .select("*")
+      .eq("stripe_customer_id", stripeCustomerId)
+      .single();
+
+    if (error || !data) return null;
+
+    return data;
+  }
+
+  /**
+   * Enregistre le stripe_customer_id sur le profil.
+   */
+  async updateStripeCustomerId(userId: string, stripeCustomerId: string): Promise<void> {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { error } = await (this.supabase.from("profiles") as any)
+      .update({ stripe_customer_id: stripeCustomerId })
+      .eq("id", userId);
+
+    if (error) {
+      throw new Error(`Erreur mise à jour stripe_customer_id: ${error.message}`);
+    }
+  }
+
+  /**
+   * Met à jour le tier d'abonnement et la date d'expiration.
+   */
+  async updateSubscription(
+    userId: string,
+    tier: SubscriptionTier,
+    expiresAt: string | null,
+  ): Promise<void> {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { error } = await (this.supabase.from("profiles") as any)
+      .update({
+        subscription: tier,
+        subscription_expires_at: expiresAt,
+      })
+      .eq("id", userId);
+
+    if (error) {
+      throw new Error(`Erreur mise à jour abonnement: ${error.message}`);
+    }
   }
 
   /**

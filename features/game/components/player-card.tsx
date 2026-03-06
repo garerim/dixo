@@ -1,7 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { Crown, Skull } from "lucide-react";
+import { Crown, Skull, Star } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import type { PublicPlayerInfo } from "@/types/api";
@@ -58,6 +58,9 @@ export function PlayerCard({
             >
               {player.displayName}
             </span>
+            {player.subscription === "premium" && (
+              <Star className="size-3 fill-yellow-400 text-yellow-400" />
+            )}
             {isMe && (
               <Badge variant="outline" className="text-[10px] px-1.5 py-0">
                 Vous

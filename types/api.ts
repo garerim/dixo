@@ -53,6 +53,8 @@ export interface PublicPlayerInfo {
   id: string;
   displayName: string;
   avatarUrl?: string;
+  /** Tier d'abonnement (pour affichage du badge Premium) */
+  subscription?: string;
   diceCount: number;
   /** Dés visibles uniquement pour le joueur lui-même */
   diceValues: number[];

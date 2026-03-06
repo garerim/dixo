@@ -26,6 +26,7 @@ import {
   type GameState,
 } from "@/core/game-engine";
 import { GameRepository } from "@/lib/database/game-repository";
+import { ProfileRepository } from "@/lib/database/profile-repository";
 import { EloService } from "./elo-service";
 import { sanitizeGameStateForPlayer } from "./game-state-sanitizer";
 
@@ -45,12 +46,14 @@ interface ServiceResult<T> {
 
 export class GameService {
   private readonly repository: GameRepository;
+  private readonly profileRepository: ProfileRepository;
   private readonly eloService: EloService;
   /** Tracking de l'ordre d'élimination pour le calcul ELO (en mémoire par partie) */
   private static eliminationOrders = new Map<string, string[]>();
 
   constructor(supabase: SupabaseClient<Database>) {
     this.repository = new GameRepository(supabase);
+    this.profileRepository = new ProfileRepository(supabase);
     this.eloService = new EloService();
   }
 
@@ -64,10 +67,16 @@ export class GameService {
     gameMode: GameMode = GameMode.PRIVATE,
   ): Promise<ServiceResult<{ gameId: string; joinCode: string }>> {
     try {
+      const profile = await this.profileRepository.findById(userId);
       const gameId = generateGameId();
       const initialState = createInitialGameState(
         gameId,
-        { id: userId, displayName },
+        {
+          id: userId,
+          displayName,
+          avatarUrl: profile?.avatar_url ?? undefined,
+          subscription: profile?.subscription ?? "free",
+        },
         gameMode,
       );
 
@@ -100,7 +109,13 @@ export class GameService {
         return { success: false, error: "Game not found." };
       }
 
-      const result = addPlayer(state, { id: userId, displayName });
+      const profile = await this.profileRepository.findById(userId);
+      const result = addPlayer(state, {
+        id: userId,
+        displayName,
+        avatarUrl: profile?.avatar_url ?? undefined,
+        subscription: profile?.subscription ?? "free",
+      });
       if (!result.success) {
         return { success: false, error: result.error };
       }

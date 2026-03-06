@@ -36,6 +36,7 @@ export function sanitizeGameStateForPlayer(
       id: player.id,
       displayName: player.displayName,
       avatarUrl: player.avatarUrl,
+      subscription: player.subscription,
       diceCount: player.diceCount,
       diceValues: showDice ? [...player.diceValues] : [],
       isAlive: player.isAlive,

@@ -23,8 +23,18 @@ export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
     const rankedMode = searchParams.get("mode") ?? undefined;
 
+    // Limiter l'historique pour les membres Free (10 dernières entrées)
+    const { data: profileDataRaw } = await supabase
+      .from("profiles")
+      .select("subscription")
+      .eq("id", user.id)
+      .single();
+    const profileData = profileDataRaw as { subscription: string } | null;
+
+    const historyLimit = profileData?.subscription === "free" ? 10 : 200;
+
     const repository = new EloHistoryRepository(supabase);
-    const rows = await repository.findByUserId(user.id, 100, rankedMode);
+    const rows = await repository.findByUserId(user.id, historyLimit, rankedMode);
 
     const entries: EloHistoryEntry[] = rows.map((row) => ({
       elo: row.elo,
