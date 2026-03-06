@@ -294,3 +294,42 @@ export interface SendGameMessageRequest {
 
 export type SendGameMessageResponse = ApiResponse<GameMessage>;
 export type GetGameMessagesResponse = ApiResponse<GameMessage[]>;
+
+// =============================================================================
+// Reports
+// =============================================================================
+
+import type { ReportRow } from "./database";
+
+/** Requête pour créer un signalement */
+export interface CreateReportRequest {
+  reportType: "player" | "message";
+  reportedUserId?: string;
+  reportedMessageId?: string;
+  reason: ReportRow["reason"];
+  description?: string;
+}
+
+export type CreateReportResponse = ApiResponse<{ id: string }>;
+
+/** Signalement retourné à l'admin */
+export interface AdminReport {
+  id: string;
+  reportType: ReportRow["report_type"];
+  reporterId: string;
+  reportedUserId: string | null;
+  reportedMessageId: string | null;
+  reason: ReportRow["reason"];
+  description: string | null;
+  status: ReportRow["status"];
+  adminNotes: string | null;
+  createdAt: string;
+}
+
+export interface UpdateReportRequest {
+  status?: ReportRow["status"];
+  adminNotes?: string;
+}
+
+export type AdminReportsResponse = ApiResponse<{ rows: AdminReport[]; count: number }>;
+export type UpdateReportResponse = ApiResponse<AdminReport>;

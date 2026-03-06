@@ -24,6 +24,7 @@ export class MessageRepository {
         sender_id: senderId,
         receiver_id: receiverId,
         content: content.trim(),
+        is_read: false,
       })
       .select("*")
       .single();

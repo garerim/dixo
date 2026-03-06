@@ -9,7 +9,7 @@
 export type GameModeDB = "PRIVATE" | "NORMAL" | "RANKED";
 
 /** Ligne de la table `games` */
-export interface GameRow {
+export type GameRow = {
   id: string;
   join_code: string;
   game_mode: GameModeDB;
@@ -21,10 +21,10 @@ export interface GameRow {
   winner_id: string | null;
   created_at: string;
   updated_at: string;
-}
+};
 
 /** Ligne de la table `matchmaking_queue` */
-export interface MatchmakingQueueRow {
+export type MatchmakingQueueRow = {
   id: string;
   user_id: string;
   elo: number;
@@ -34,10 +34,10 @@ export interface MatchmakingQueueRow {
   matched_game_id: string | null;
   joined_at: string;
   updated_at: string;
-}
+};
 
 /** Ligne de la table `game_players` */
-export interface GamePlayerRow {
+export type GamePlayerRow = {
   id: string;
   game_id: string;
   user_id: string;
@@ -49,13 +49,13 @@ export interface GamePlayerRow {
   is_alive: boolean;
   is_host: boolean;
   joined_at: string;
-}
+};
 
 /** Tiers d'abonnement */
 export type SubscriptionTier = "free" | "premium" | "vip";
 
 /** Ligne de la table `profiles` */
-export interface ProfileRow {
+export type ProfileRow = {
   id: string;
 
   // Identité
@@ -81,15 +81,18 @@ export interface ProfileRow {
   // Stripe
   stripe_customer_id: string | null;
 
+  // Admin
+  is_admin: boolean;
+
   // Métadonnées
   is_online: boolean;
   last_seen_at: string | null;
   created_at: string;
   updated_at: string;
-}
+};
 
 /** Ligne de la table `elo_history` */
-export interface EloHistoryRow {
+export type EloHistoryRow = {
   id: string;
   user_id: string;
   elo: number;
@@ -98,39 +101,54 @@ export interface EloHistoryRow {
   /** Mode classé ('1v1' ou '4p') */
   ranked_mode: string;
   created_at: string;
-}
+};
 
 /** Statut d'une amitié */
 export type FriendshipStatus = "pending" | "accepted" | "blocked";
 
 /** Ligne de la table `friendships` */
-export interface FriendshipRow {
+export type FriendshipRow = {
   id: string;
   user_id: string;
   friend_id: string;
   status: FriendshipStatus;
   created_at: string;
   updated_at: string;
-}
+};
 
 /** Ligne de la table `private_messages` */
-export interface MessageRow {
+export type MessageRow = {
   id: string;
   sender_id: string;
   receiver_id: string;
   content: string;
   is_read: boolean;
   created_at: string;
-}
+};
 
 /** Ligne de la table `game_messages` */
-export interface GameMessageRow {
+export type GameMessageRow = {
   id: string;
   game_id: string;
   user_id: string;
   content: string;
   created_at: string;
-}
+};
+
+/** Ligne de la table `reports` */
+export type ReportRow = {
+  id: string;
+  reporter_id: string;
+  reported_user_id: string | null;
+  reported_message_id: string | null;
+  report_type: "player" | "message";
+  reason: "inappropriate_content" | "harassment" | "cheating" | "spam" | "other";
+  description: string | null;
+  status: "pending" | "reviewed" | "resolved" | "dismissed";
+  admin_notes: string | null;
+  created_at: string;
+  updated_at: string;
+};
 
 /** Types générés pour la base Supabase */
 export interface Database {
@@ -140,41 +158,62 @@ export interface Database {
         Row: GameRow;
         Insert: Omit<GameRow, "created_at" | "updated_at">;
         Update: Partial<GameRow>;
+        Relationships: [];
       };
       game_players: {
         Row: GamePlayerRow;
         Insert: Omit<GamePlayerRow, "id" | "joined_at">;
         Update: Partial<GamePlayerRow>;
+        Relationships: [];
       };
       profiles: {
         Row: ProfileRow;
         Insert: Omit<ProfileRow, "created_at" | "updated_at">;
         Update: Partial<ProfileRow>;
+        Relationships: [];
       };
       matchmaking_queue: {
         Row: MatchmakingQueueRow;
         Insert: Omit<MatchmakingQueueRow, "id" | "joined_at" | "updated_at">;
         Update: Partial<MatchmakingQueueRow>;
+        Relationships: [];
       };
       elo_history: {
         Row: EloHistoryRow;
         Insert: Omit<EloHistoryRow, "id" | "created_at">;
         Update: Partial<EloHistoryRow>;
+        Relationships: [];
       };
       friendships: {
         Row: FriendshipRow;
         Insert: Omit<FriendshipRow, "id" | "created_at" | "updated_at">;
         Update: Partial<FriendshipRow>;
+        Relationships: [];
       };
       private_messages: {
         Row: MessageRow;
         Insert: Omit<MessageRow, "id" | "created_at">;
         Update: Partial<MessageRow>;
+        Relationships: [];
       };
       game_messages: {
         Row: GameMessageRow;
         Insert: Omit<GameMessageRow, "id" | "created_at">;
         Update: Partial<GameMessageRow>;
+        Relationships: [];
+      };
+      reports: {
+        Row: ReportRow;
+        Insert: Omit<ReportRow, "id" | "status" | "admin_notes" | "created_at" | "updated_at">;
+        Update: Partial<ReportRow>;
+        Relationships: [];
+      };
+    };
+    Views: { [_ in never]: never };
+    Functions: {
+      match_queue_entries: {
+        Args: { p_entry_ids: string[]; p_game_id: string };
+        Returns: undefined;
       };
     };
   };

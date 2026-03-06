@@ -5,7 +5,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { Send, MessageSquare } from "lucide-react";
+import { Send, MessageSquare, Flag } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -18,6 +18,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useGameChat } from "../hooks/use-game-chat";
 import { useAuth } from "@/components/providers/auth-provider";
 import type { GameMessage } from "@/types/api";
+import { ReportDialog } from "@/features/reports/components/report-dialog";
 
 interface GameChatProps {
   gameId: string | null;
@@ -32,6 +33,8 @@ export function GameChat({ gameId, className, hideHeader = false, fullHeight = f
   const { messages, isLoading, actions } = useGameChat(gameId ?? null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const [isCollapsed, setIsCollapsed] = useState(false);
+  const [reportTarget, setReportTarget] = useState<GameMessage | null>(null);
+  const [reportOpen, setReportOpen] = useState(false);
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -99,7 +102,7 @@ export function GameChat({ gameId, className, hideHeader = false, fullHeight = f
                 return (
                   <div
                     key={msg.id}
-                    className={`flex gap-2 ${isOwn ? "flex-row-reverse" : ""}`}
+                    className={`group flex gap-2 ${isOwn ? "flex-row-reverse" : ""}`}
                   >
                     <Avatar className="size-6">
                       <AvatarImage src={msg.userAvatarUrl ?? undefined} />
@@ -119,14 +122,28 @@ export function GameChat({ gameId, className, hideHeader = false, fullHeight = f
                           })}
                         </span>
                       </div>
-                      <div
-                        className={`rounded-lg px-3 py-2 text-sm break-words ${
-                          isOwn
-                            ? "bg-primary text-primary-foreground"
-                            : "bg-muted"
-                        }`}
-                      >
-                        {msg.content}
+                      <div className={`flex items-center gap-1 ${isOwn ? "flex-row-reverse" : ""}`}>
+                        <div
+                          className={`rounded-lg px-3 py-2 text-sm break-words ${
+                            isOwn
+                              ? "bg-primary text-primary-foreground"
+                              : "bg-muted"
+                          }`}
+                        >
+                          {msg.content}
+                        </div>
+                        {!isOwn && (
+                          <button
+                            className="opacity-0 group-hover:opacity-100 transition-opacity p-1 rounded hover:bg-muted"
+                            onClick={() => {
+                              setReportTarget(msg);
+                              setReportOpen(true);
+                            }}
+                            title="Report message"
+                          >
+                            <Flag className="size-3 text-muted-foreground hover:text-destructive" />
+                          </button>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -156,6 +173,19 @@ export function GameChat({ gameId, className, hideHeader = false, fullHeight = f
           </div>
         </div>
       </CardContent>
+
+      {reportTarget && (
+        <ReportDialog
+          open={reportOpen}
+          onOpenChange={(open) => {
+            setReportOpen(open);
+            if (!open) setReportTarget(null);
+          }}
+          reportType="message"
+          targetId={reportTarget.id}
+          targetLabel={`message from ${reportTarget.userPseudo}`}
+        />
+      )}
     </Card>
   );
 }

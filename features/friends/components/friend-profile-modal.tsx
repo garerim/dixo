@@ -4,6 +4,7 @@
 
 "use client";
 
+import { useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -19,8 +20,10 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { Trophy, Users } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Trophy, Users, Flag } from "lucide-react";
 import type { FriendInfo } from "@/types/api";
+import { ReportDialog } from "@/features/reports/components/report-dialog";
 
 interface FriendProfileModalProps {
   friend: FriendInfo | null;
@@ -33,6 +36,8 @@ export function FriendProfileModal({
   open,
   onOpenChange,
 }: FriendProfileModalProps) {
+  const [reportOpen, setReportOpen] = useState(false);
+
   if (!friend) return null;
 
   // Note: On n'a pas accès aux stats complètes depuis FriendInfo
@@ -103,7 +108,28 @@ export function FriendProfileModal({
             </CardContent>
           </Card>
         </div>
+
+        {/* Report button */}
+        <div className="flex justify-end pt-2">
+          <Button
+            variant="ghost"
+            size="sm"
+            className="gap-1 text-muted-foreground hover:text-destructive"
+            onClick={() => setReportOpen(true)}
+          >
+            <Flag className="size-3" />
+            Report
+          </Button>
+        </div>
       </DialogContent>
+
+      <ReportDialog
+        open={reportOpen}
+        onOpenChange={setReportOpen}
+        reportType="player"
+        targetId={friend.id}
+        targetLabel={friend.pseudo}
+      />
     </Dialog>
   );
 }

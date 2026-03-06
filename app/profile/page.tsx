@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { Suspense, useState, useEffect, useRef } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import {
@@ -67,6 +67,14 @@ function getChallengeSuccessRate(total: number, success: number) {
 // =============================================================================
 
 export default function ProfilePage() {
+  return (
+    <Suspense>
+      <ProfileContent />
+    </Suspense>
+  );
+}
+
+function ProfileContent() {
   const { user, isLoading: authLoading, refreshProfile } = useAuth();
   const { profile, isLoading: profileLoading, actions } = useProfile();
   const router = useRouter();
@@ -483,7 +491,7 @@ export default function ProfilePage() {
 }
 
 // =============================================================================
-// Composants internes
+// Internal components
 // =============================================================================
 
 function StatItem({
