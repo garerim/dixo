@@ -182,7 +182,7 @@ function GameContent({
               <AlertDialogTrigger asChild>
                 <Button variant="destructive" size="sm" className="gap-1.5">
                   <Flag className="size-3.5" />
-                  Abandonner
+                  Surrender
                 </Button>
               </AlertDialogTrigger>
               <AlertDialogContent>

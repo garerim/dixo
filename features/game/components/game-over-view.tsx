@@ -160,7 +160,7 @@ export function GameOverView({ gameState, playerId }: GameOverViewProps) {
         onClick={() => router.push("/")}
       >
         <Home className="size-4" />
-        Retour à l&apos;accueil
+        Back to home
       </Button>
     </div>
   );
