@@ -18,7 +18,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Dixo — The dice bluffing game",
   description:
-    "Online multiplayer game inspired by Perudo. Bluff, bid and survive!",
+    "Bluff dice game, online, with friends or strangers.",
 };
 
 export default function RootLayout({

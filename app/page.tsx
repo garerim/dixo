@@ -18,6 +18,9 @@ import {
   UserPlus,
   User,
   Star,
+  Shield,
+  Zap,
+  ChevronRight,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -50,6 +53,7 @@ import {
 import { useAuth } from "@/components/providers/auth-provider";
 import { gameClient } from "@/features/game/api/game-client";
 import { useMatchmaking } from "@/features/matchmaking/hooks/use-matchmaking";
+import Link from "next/link";
 
 export default function HomePage() {
   const { user, profile, isLoading: authLoading, signOut } = useAuth();
@@ -73,19 +77,17 @@ export default function HomePage() {
     actions: mmActions,
   } = useMatchmaking(displayName);
 
-  // Rediriger vers login si pas connecté
-  useEffect(() => {
-    if (!authLoading && !user) {
-      router.replace("/login");
-    }
-  }, [authLoading, user, router]);
-
-  if (authLoading || !user) {
+  if (authLoading) {
     return (
       <div className="flex min-h-svh items-center justify-center">
         <Loader2 className="size-8 animate-spin text-muted-foreground" />
       </div>
     );
+  }
+
+  // Non connecté → Landing page
+  if (!user) {
+    return <LandingPage />;
   }
 
   const avatarUrl =
@@ -244,8 +246,7 @@ export default function HomePage() {
             Dixo
           </h1>
           <p className="max-w-md text-muted-foreground">
-            Bluff your opponents in this online dice bluffing game inspired by
-            Perudo.
+            Bluff your opponents in this online dice bluffing game.
           </p>
         </div>
 
@@ -426,6 +427,226 @@ export default function HomePage() {
       {/* ─── Footer ─── */}
       <footer className="border-t py-4 text-center text-xs text-muted-foreground">
         Dixo — Online dice bluffing game 🎲
+      </footer>
+    </div>
+  );
+}
+
+// =============================================================================
+// Composant : Landing Page (non connecté)
+// =============================================================================
+
+function LandingPage() {
+  const { signInWithGoogle } = useAuth();
+  const router = useRouter();
+
+  return (
+    <div className="flex min-h-svh flex-col bg-gradient-to-b from-background to-muted/30">
+      {/* ─── Header ─── */}
+      <header className="flex items-center justify-between border-b px-4 py-3 sm:px-8">
+        <div className="flex items-center gap-2">
+          <Dice5 className="size-6 text-primary" />
+          <span className="text-lg font-bold tracking-tight">Dixo</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <Button variant="ghost" size="sm" asChild>
+            <Link href="/pricing">Pricing</Link>
+          </Button>
+          <Button size="sm" onClick={signInWithGoogle}>
+            Sign in
+          </Button>
+        </div>
+      </header>
+
+      {/* ─── Hero ─── */}
+      <section className="flex flex-col items-center gap-6 px-4 py-20 text-center sm:py-28">
+        {/* Dice animation */}
+        <div className="relative flex size-24 items-center justify-center rounded-3xl bg-primary text-primary-foreground shadow-2xl shadow-primary/30">
+          <Dice5 className="size-14" />
+          <span className="absolute -right-2 -top-2 flex size-6 items-center justify-center rounded-full bg-yellow-400 text-xs font-bold text-yellow-900">
+            ✦
+          </span>
+        </div>
+
+        <div className="flex flex-col items-center gap-3">
+          <h1 className="text-5xl font-extrabold tracking-tight sm:text-6xl">
+            Dixo
+          </h1>
+          <p className="text-xl font-medium text-muted-foreground sm:text-2xl">
+            The online dice bluffing game
+          </p>
+          <p className="max-w-md text-muted-foreground">
+            Bluff your opponents, call their bluffs, and be
+            the last player standing. Free to play, online, with friends or
+            strangers.
+          </p>
+        </div>
+
+        <div className="flex flex-wrap items-center justify-center gap-3">
+          <Button size="lg" className="gap-2 px-8" onClick={signInWithGoogle}>
+            <svg className="size-5" viewBox="0 0 24 24">
+              <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/>
+              <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+              <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+              <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+            </svg>
+            Play for free
+          </Button>
+          <Button
+            size="lg"
+            variant="outline"
+            className="gap-2"
+            onClick={() => {
+              document.getElementById("how-to-play")?.scrollIntoView({ behavior: "smooth" });
+            }}
+          >
+            How to play
+            <ChevronRight className="size-4" />
+          </Button>
+        </div>
+
+        {/* Social proof */}
+        <p className="text-xs text-muted-foreground">
+          Free to play · No download · Sign in with Google
+        </p>
+      </section>
+
+      {/* ─── Game modes ─── */}
+      <section className="mx-auto w-full max-w-4xl px-4 py-12">
+        <h2 className="mb-8 text-center text-2xl font-bold">Pick your game mode</h2>
+        <div className="grid gap-4 sm:grid-cols-3">
+          <Card>
+            <CardHeader className="pb-2">
+              <CardTitle className="flex items-center gap-2 text-base">
+                <Swords className="size-5 text-blue-500" />
+                Normal
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm text-muted-foreground">
+                Quick matchmaking against players of all levels. No ELO impact — just for fun.
+              </p>
+            </CardContent>
+          </Card>
+          <Card className="border-yellow-500/40 bg-yellow-500/5">
+            <CardHeader className="pb-2">
+              <CardTitle className="flex items-center gap-2 text-base">
+                <Trophy className="size-5 text-yellow-500" />
+                Ranked
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm text-muted-foreground">
+                ELO-based matchmaking. Win to climb the leaderboard, lose ELO if you bluff too hard.
+              </p>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader className="pb-2">
+              <CardTitle className="flex items-center gap-2 text-base">
+                <Shield className="size-5 text-purple-500" />
+                Private
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm text-muted-foreground">
+                Create a private game and invite friends with a 6-character code. Up to 6 players.
+              </p>
+            </CardContent>
+          </Card>
+        </div>
+      </section>
+
+      {/* ─── How to play ─── */}
+      <section
+        id="how-to-play"
+        className="mx-auto w-full max-w-3xl px-4 py-12"
+      >
+        <h2 className="mb-8 text-center text-2xl font-bold">How to play</h2>
+        <div className="flex flex-col gap-6">
+          {[
+            {
+              step: "1",
+              title: "Roll your dice",
+              desc: "Each player rolls their dice in secret at the start of every round. Only you can see your own dice.",
+              icon: <Dice5 className="size-6 text-primary" />,
+            },
+            {
+              step: "2",
+              title: "Place a bid",
+              desc: 'Bid on how many dice of a given face exist across ALL players\' dice combined. Example: "3 fours". Each bid must be higher than the previous.',
+              icon: <Swords className="size-6 text-blue-500" />,
+            },
+            {
+              step: "3",
+              title: "Call the bluff",
+              desc: 'Say "Challenge!" if you think the bid is impossible. All dice are revealed — if the bid was wrong, the bidder loses a die. Otherwise, you do.',
+              icon: <Zap className="size-6 text-yellow-500" />,
+            },
+            {
+              step: "4",
+              title: "Last one standing wins",
+              desc: "Players eliminated when they run out of dice. The last player with dice wins the game and gains ELO in Ranked mode.",
+              icon: <Trophy className="size-6 text-green-500" />,
+            },
+          ].map(({ step, title, desc, icon }) => (
+            <div key={step} className="flex gap-4">
+              <div className="flex size-10 shrink-0 items-center justify-center rounded-full bg-muted text-sm font-bold">
+                {step}
+              </div>
+              <div className="flex flex-1 flex-col gap-1 pt-1">
+                <div className="flex items-center gap-2">
+                  {icon}
+                  <h3 className="font-semibold">{title}</h3>
+                </div>
+                <p className="text-sm text-muted-foreground">{desc}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ─── Premium teaser ─── */}
+      <section className="mx-auto w-full max-w-2xl px-4 py-12">
+        <Card className="border-primary/30 bg-primary/5">
+          <CardContent className="flex flex-col items-center gap-4 pt-6 text-center sm:flex-row sm:text-left">
+            <div className="flex size-14 shrink-0 items-center justify-center rounded-2xl bg-primary/10">
+              <Star className="size-8 fill-yellow-400 text-yellow-400" />
+            </div>
+            <div className="flex-1">
+              <h3 className="font-bold">Dixo Premium — €4.99/month</h3>
+              <p className="text-sm text-muted-foreground">
+                GIF avatars, Premium badge in-game, full ELO history, and more to come.
+              </p>
+            </div>
+            <Button variant="outline" asChild className="shrink-0">
+              <Link href="/pricing">See plans</Link>
+            </Button>
+          </CardContent>
+        </Card>
+      </section>
+
+      {/* ─── Final CTA ─── */}
+      <section className="flex flex-col items-center gap-4 px-4 py-16 text-center">
+        <h2 className="text-3xl font-bold">Ready to bluff?</h2>
+        <p className="text-muted-foreground">Join in seconds with your Google account.</p>
+        <Button size="lg" className="gap-2 px-10" onClick={signInWithGoogle}>
+          <svg className="size-5" viewBox="0 0 24 24">
+            <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/>
+            <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+            <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+            <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+          </svg>
+          Get started — it's free
+        </Button>
+      </section>
+
+      {/* ─── Footer ─── */}
+      <footer className="border-t px-4 py-6 text-center text-xs text-muted-foreground">
+        <div className="flex flex-wrap items-center justify-center gap-4">
+          <span>© 2025 Dixo</span>
+          <Link href="/pricing" className="hover:text-foreground transition-colors">Pricing</Link>
+        </div>
       </footer>
     </div>
   );
