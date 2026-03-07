@@ -278,9 +278,9 @@ export class ProfileService {
   // Classement
   // ===========================================================================
 
-  async getLeaderboard(limit: number = 50): Promise<ServiceResult<PublicProfile[]>> {
+  async getLeaderboard(limit: number = 50, mode: "1v1" | "4p" = "1v1"): Promise<ServiceResult<PublicProfile[]>> {
     try {
-      const rows = await this.repository.getLeaderboard(limit);
+      const rows = await this.repository.getLeaderboard(limit, mode);
       return {
         success: true,
         data: rows.map(toPublicProfile),

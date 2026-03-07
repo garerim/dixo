@@ -75,8 +75,8 @@ export const profileClient = {
   },
 
   /** Récupère le classement ELO */
-  getLeaderboard(limit: number = 50): Promise<ApiResponse<PublicProfile[]>> {
-    return fetchApi(`/leaderboard?limit=${limit}`, { method: "GET" });
+  getLeaderboard(limit: number = 50, mode: "1v1" | "4p" = "1v1"): Promise<ApiResponse<PublicProfile[]>> {
+    return fetchApi(`/leaderboard?limit=${limit}&mode=${mode}`, { method: "GET" });
   },
 
   /** Recherche de profils par pseudo */

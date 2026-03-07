@@ -17,8 +17,10 @@ export async function GET(request: Request) {
     parseInt(searchParams.get("limit") ?? "50", 10),
     100,
   );
+  const modeParam = searchParams.get("mode");
+  const mode: "1v1" | "4p" = modeParam === "4p" ? "4p" : "1v1";
 
-  const result = await service.getLeaderboard(limit);
+  const result = await service.getLeaderboard(limit, mode);
 
   if (!result.success) {
     return errorResponse(result.error ?? "Error loading leaderboard.", 500);
