@@ -129,10 +129,8 @@ export default function HowToPlayPage() {
             Dixo — Rules & Guide
           </h1>
           <p className="mt-3 text-muted-foreground">
-            Dixo is a digital adaptation of{" "}
-            <span className="font-medium text-foreground">Perudo</span>, the
-            South American dice bluffing game. 2 to 6 players, pure strategy
-            and deception.
+            A dice bluffing game for 2 to 6 players. Roll in secret, bid on what
+            you think is out there, and call out the liars — or get caught bluffing yourself.
           </p>
         </div>
 
