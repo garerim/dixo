@@ -21,6 +21,7 @@ import {
   Shield,
   Zap,
   ChevronRight,
+  BookOpen,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -215,6 +216,10 @@ export default function HomePage() {
               <DropdownMenuItem onClick={() => router.push("/friends")}>
                 <UserPlus className="mr-2 size-4" />
                 <span>Friends</span>
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => router.push("/how-to-play")}>
+                <BookOpen className="mr-2 size-4" />
+                <span>How to play</span>
               </DropdownMenuItem>
               {profile?.subscription === "free" && (
                 <>
@@ -450,6 +455,9 @@ function LandingPage() {
         </div>
         <div className="flex items-center gap-2">
           <Button variant="ghost" size="sm" asChild>
+            <Link href="/how-to-play">How to play</Link>
+          </Button>
+          <Button variant="ghost" size="sm" asChild>
             <Link href="/pricing">Pricing</Link>
           </Button>
           <Button size="sm" onClick={signInWithGoogle}>
@@ -492,16 +500,11 @@ function LandingPage() {
             </svg>
             Play for free
           </Button>
-          <Button
-            size="lg"
-            variant="outline"
-            className="gap-2"
-            onClick={() => {
-              document.getElementById("how-to-play")?.scrollIntoView({ behavior: "smooth" });
-            }}
-          >
-            How to play
-            <ChevronRight className="size-4" />
+          <Button size="lg" variant="outline" className="gap-2" asChild>
+            <Link href="/how-to-play">
+              How to play
+              <ChevronRight className="size-4" />
+            </Link>
           </Button>
         </div>
 
@@ -644,7 +647,8 @@ function LandingPage() {
       {/* ─── Footer ─── */}
       <footer className="border-t px-4 py-6 text-center text-xs text-muted-foreground">
         <div className="flex flex-wrap items-center justify-center gap-4">
-          <span>© 2025 Dixo</span>
+          <span>© 2026 Dixo</span>
+          <Link href="/how-to-play" className="hover:text-foreground transition-colors">How to play</Link>
           <Link href="/pricing" className="hover:text-foreground transition-colors">Pricing</Link>
         </div>
       </footer>
