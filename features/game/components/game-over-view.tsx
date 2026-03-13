@@ -1,16 +1,46 @@
 "use client";
 
+import { useState, useEffect, useCallback, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { Trophy, Home, TrendingUp, TrendingDown, Minus } from "lucide-react";
+import {
+  Trophy,
+  Home,
+  TrendingUp,
+  TrendingDown,
+  Minus,
+  RotateCcw,
+  Loader2,
+  Check,
+  X,
+} from "lucide-react";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import type { PublicGameState } from "@/types/api";
+import { gameClient } from "@/features/game/api/game-client";
+import {
+  subscribeToRematch,
+  type RematchHandle,
+  type RematchRequestPayload,
+  type RematchAcceptedPayload,
+} from "@/lib/realtime/rematch-channel";
 
 interface GameOverViewProps {
   gameState: PublicGameState;
   playerId: string;
 }
+
+// =============================================================================
+// Rematch states
+// =============================================================================
+
+type RematchStatus =
+  | "idle"             // No rematch requested
+  | "sent"             // I sent a request, waiting for opponent
+  | "received"         // Opponent sent a request, waiting for my answer
+  | "accepted"         // Rematch accepted, creating/joining game
+  | "declined";        // Opponent declined
 
 export function GameOverView({ gameState, playerId }: GameOverViewProps) {
   const router = useRouter();
@@ -18,9 +48,119 @@ export function GameOverView({ gameState, playerId }: GameOverViewProps) {
   const isWinner = gameState.winnerId === playerId;
   const isRanked = gameState.gameMode === "RANKED";
   const eloChanges = gameState.eloChanges;
-
-  // Trouver l'ELO change pour le joueur actuel
   const myEloChange = eloChanges?.find((e) => e.playerId === playerId);
+
+  // 1v1 rematch logic
+  const is1v1 = gameState.players.length === 2;
+  const opponent = gameState.players.find((p) => p.id !== playerId);
+  const me = gameState.players.find((p) => p.id === playerId);
+
+  const [rematchStatus, setRematchStatus] = useState<RematchStatus>("idle");
+  const [requesterName, setRequesterName] = useState("");
+  const handleRef = useRef<RematchHandle | null>(null);
+  const myDisplayName = me?.displayName ?? "Player";
+
+  // Subscribe to rematch events — single shared channel for send + receive
+  useEffect(() => {
+    if (!is1v1) return;
+
+    const handle = subscribeToRematch(
+      gameState.id,
+      (event, payload) => {
+        if (event === "rematch_request") {
+          const req = payload as RematchRequestPayload;
+          if (req.requesterId !== playerId) {
+            setRequesterName(req.requesterName);
+            setRematchStatus("received");
+          }
+        } else if (event === "rematch_accepted") {
+          const acc = payload as RematchAcceptedPayload;
+          setRematchStatus("accepted");
+          gameClient
+            .joinGame({
+              joinCode: acc.joinCode,
+              displayName: myDisplayName,
+            })
+            .then((res) => {
+              if (res.success) {
+                router.push(`/game/${acc.gameId}`);
+              } else {
+                toast.error(res.error ?? "Failed to join rematch game.");
+                setRematchStatus("idle");
+              }
+            });
+        } else if (event === "rematch_declined") {
+          const req = payload as RematchRequestPayload;
+          if (req.requesterId !== playerId) {
+            setRematchStatus("declined");
+          }
+        }
+      },
+    );
+
+    handleRef.current = handle;
+
+    return () => {
+      handle.unsubscribe();
+      handleRef.current = null;
+    };
+  }, [gameState.id, is1v1, playerId, myDisplayName, router]);
+
+  // Send rematch request
+  const handleRequestRematch = useCallback(async () => {
+    setRematchStatus("sent");
+    await handleRef.current?.send("rematch_request", {
+      requesterId: playerId,
+      requesterName: myDisplayName,
+    });
+  }, [playerId, myDisplayName]);
+
+  // Accept rematch — create a new game and broadcast the new game info
+  const handleAcceptRematch = useCallback(async () => {
+    setRematchStatus("accepted");
+
+    // Create a new game with the same mode
+    const createRes = await gameClient.createGame({
+      displayName: myDisplayName,
+      gameMode: gameState.gameMode,
+    });
+
+    if (!createRes.success || !createRes.data) {
+      toast.error(createRes.error ?? "Failed to create rematch game.");
+      setRematchStatus("received");
+      return;
+    }
+
+    const { gameId: newGameId, joinCode } = createRes.data;
+
+    // Copy settings from the original game (dice count, pacos, timer, max players)
+    const cfg = gameState.config;
+    await gameClient.updateSettings({
+      gameId: newGameId,
+      initialDiceCount: cfg.initialDiceCount as 3 | 5 | 7,
+      pacosAreWild: cfg.pacosAreWild,
+      turnTimer: cfg.turnTimer as null | 15 | 30 | 60,
+      maxPlayers: cfg.maxPlayers,
+    });
+
+    // Broadcast accepted event so the opponent can join
+    await handleRef.current?.send("rematch_accepted", {
+      gameId: newGameId,
+      joinCode,
+    });
+
+    // Navigate to the new game
+    router.push(`/game/${newGameId}`);
+  }, [gameState.gameMode, gameState.config, myDisplayName, router]);
+
+  // Decline rematch
+  const handleDeclineRematch = useCallback(async () => {
+    setRematchStatus("idle");
+    await handleRef.current?.send("rematch_declined", {
+      requesterId: playerId,
+      requesterName: myDisplayName,
+    });
+  }, [playerId, myDisplayName]);
 
   return (
     <div className="flex flex-col items-center gap-6 p-4 py-12">
@@ -154,6 +294,18 @@ export function GameOverView({ gameState, playerId }: GameOverViewProps) {
         </Badge>
       )}
 
+      {/* ── Rematch (1v1 only) ── */}
+      {is1v1 && opponent && (
+        <RematchSection
+          status={rematchStatus}
+          opponentName={opponent.displayName}
+          requesterName={requesterName}
+          onRequest={handleRequestRematch}
+          onAccept={handleAcceptRematch}
+          onDecline={handleDeclineRematch}
+        />
+      )}
+
       <Button
         size="lg"
         className="w-full max-w-sm gap-2"
@@ -164,4 +316,93 @@ export function GameOverView({ gameState, playerId }: GameOverViewProps) {
       </Button>
     </div>
   );
+}
+
+// =============================================================================
+// RematchSection
+// =============================================================================
+
+function RematchSection({
+  status,
+  opponentName,
+  requesterName,
+  onRequest,
+  onAccept,
+  onDecline,
+}: {
+  status: RematchStatus;
+  opponentName: string;
+  requesterName: string;
+  onRequest: () => void;
+  onAccept: () => void;
+  onDecline: () => void;
+}) {
+  switch (status) {
+    case "idle":
+      return (
+        <Button
+          size="lg"
+          variant="outline"
+          className="w-full max-w-sm gap-2"
+          onClick={onRequest}
+        >
+          <RotateCcw className="size-4" />
+          Rematch
+        </Button>
+      );
+
+    case "sent":
+      return (
+        <div className="flex w-full max-w-sm flex-col items-center gap-2 rounded-xl border bg-card p-4">
+          <div className="flex items-center gap-2 text-sm text-muted-foreground">
+            <Loader2 className="size-4 animate-spin" />
+            Waiting for {opponentName} to accept...
+          </div>
+        </div>
+      );
+
+    case "received":
+      return (
+        <div className="flex w-full max-w-sm flex-col items-center gap-3 rounded-xl border bg-card p-4">
+          <p className="text-sm font-medium">
+            {requesterName} wants a rematch!
+          </p>
+          <div className="flex gap-2">
+            <Button size="sm" className="gap-1.5" onClick={onAccept}>
+              <Check className="size-3.5" />
+              Accept
+            </Button>
+            <Button
+              size="sm"
+              variant="outline"
+              className="gap-1.5"
+              onClick={onDecline}
+            >
+              <X className="size-3.5" />
+              Decline
+            </Button>
+          </div>
+        </div>
+      );
+
+    case "accepted":
+      return (
+        <div className="flex w-full max-w-sm items-center justify-center gap-2 rounded-xl border bg-card p-4">
+          <Loader2 className="size-4 animate-spin" />
+          <span className="text-sm">Creating rematch...</span>
+        </div>
+      );
+
+    case "declined":
+      return (
+        <div className="flex w-full max-w-sm items-center justify-center gap-2 rounded-xl border bg-muted/50 p-4">
+          <span className="text-sm text-muted-foreground">
+            {opponentName} declined the rematch.
+          </span>
+        </div>
+      );
+
+    default:
+      return null;
+  }
 }
