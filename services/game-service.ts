@@ -16,6 +16,7 @@ import type { PublicGameState } from "@/types/api";
 import {
   createInitialGameState,
   addPlayer,
+  removePlayer,
   updateSettings,
   startGame,
   placeBid,
@@ -124,6 +125,32 @@ export class GameService {
       await this.repository.update(result.state);
 
       return { success: true, data: { gameId: result.state.id } };
+    } catch (error) {
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : "Unknown error.",
+      };
+    }
+  }
+
+  // ===========================================================================
+  // Quitter une partie (LOBBY uniquement)
+  // ===========================================================================
+
+  async leaveGame(
+    userId: string,
+    gameId: string,
+  ): Promise<ServiceResult<void>> {
+    try {
+      const state = await this.loadGame(gameId);
+      if (!state) return { success: false, error: "Game not found." };
+
+      const result = removePlayer(state, userId);
+      if (!result.success) return { success: false, error: result.error };
+
+      await this.repository.update(result.state);
+
+      return { success: true };
     } catch (error) {
       return {
         success: false,

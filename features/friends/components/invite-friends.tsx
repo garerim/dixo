@@ -18,17 +18,20 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useFriends } from "../hooks/use-friends";
-import { messagesClient } from "@/features/messages/api/messages-client";
+import { useAuth } from "@/components/providers/auth-provider";
+import { sendGameInvite } from "@/lib/realtime/invite-channel";
 import { toast } from "sonner";
 import type { FriendInfo } from "@/types/api";
 
 interface InviteFriendsProps {
   gameCode: string;
+  gameId: string;
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }
 
-export function InviteFriends({ gameCode, open, onOpenChange }: InviteFriendsProps) {
+export function InviteFriends({ gameCode, gameId, open, onOpenChange }: InviteFriendsProps) {
+  const { user, profile } = useAuth();
   const { friends } = useFriends();
   const [invitedFriends, setInvitedFriends] = useState<Set<string>>(new Set());
   const [sending, setSending] = useState<string | null>(null);
@@ -36,18 +39,21 @@ export function InviteFriends({ gameCode, open, onOpenChange }: InviteFriendsPro
   const acceptedFriends = friends.filter((f) => f.status === "accepted");
 
   const handleInvite = async (friend: FriendInfo) => {
-    setSending(friend.id);
-    const message = `Join my game! Code: ${gameCode}`;
-    const result = await messagesClient.sendMessage({
-      receiverId: friend.id,
-      content: message,
-    });
+    if (!user) return;
 
-    if (result.success) {
+    setSending(friend.id);
+    try {
+      await sendGameInvite(friend.id, {
+        senderId: user.id,
+        senderPseudo: profile?.pseudo ?? user.user_metadata?.full_name ?? "Player",
+        senderAvatarUrl: profile?.avatarUrl ?? user.user_metadata?.avatar_url ?? null,
+        gameId,
+        joinCode: gameCode,
+      });
       setInvitedFriends((prev) => new Set(prev).add(friend.id));
       toast.success(`Invitation sent to ${friend.pseudo}!`);
-    } else {
-      toast.error(result.error ?? "Unable to send invitation.");
+    } catch {
+      toast.error("Unable to send invitation.");
     }
     setSending(null);
   };
@@ -61,14 +67,14 @@ export function InviteFriends({ gameCode, open, onOpenChange }: InviteFriendsPro
             Invite friends
           </DialogTitle>
           <DialogDescription>
-            Send the game code to your friends via private message
+            Send a real-time invitation to your friends
           </DialogDescription>
         </DialogHeader>
 
         <ScrollArea className="max-h-[400px]">
           {acceptedFriends.length === 0 ? (
             <p className="py-8 text-center text-muted-foreground">
-              You don't have any friends yet.
+              You don&apos;t have any friends yet.
             </p>
           ) : (
             <div className="space-y-2">

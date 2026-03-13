@@ -10,6 +10,7 @@ import type {
   JoinGameRequest,
   PlaceBidRequest,
   CallChallengeRequest,
+  LeaveGameRequest,
   StartGameRequest,
   UpdateSettingsRequest,
   NextRoundRequest,
@@ -20,6 +21,7 @@ import type {
   PlaceBidResponse,
   CallChallengeResponse,
   SurrenderResponse,
+  LeaveGameResponse,
   UpdateSettingsResponse,
   SendGameMessageRequest,
   SendGameMessageResponse,
@@ -79,6 +81,14 @@ export const gameClient = {
   /** Rejoint une partie existante */
   joinGame(data: JoinGameRequest): Promise<JoinGameResponse> {
     return fetchApi("/join", {
+      method: "POST",
+      body: JSON.stringify(data),
+    });
+  },
+
+  /** Quitte une partie en lobby */
+  leaveGame(data: LeaveGameRequest): Promise<LeaveGameResponse> {
+    return fetchApi("/leave", {
       method: "POST",
       body: JSON.stringify(data),
     });

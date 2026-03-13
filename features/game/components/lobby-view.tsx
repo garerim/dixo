@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Copy, Loader2, Play, Users, Trophy, Swords, UserPlus } from "lucide-react";
+import { Copy, Loader2, Play, Users, Trophy, Swords, UserPlus, LogOut } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -15,9 +15,10 @@ interface LobbyViewProps {
   playerId: string;
   onStartGame: () => Promise<void>;
   onUpdateSettings: (settings: Omit<UpdateSettingsRequest, "gameId">) => Promise<void>;
+  onLeaveGame: () => Promise<boolean>;
 }
 
-export function LobbyView({ gameState, playerId, onStartGame, onUpdateSettings }: LobbyViewProps) {
+export function LobbyView({ gameState, playerId, onStartGame, onUpdateSettings, onLeaveGame }: LobbyViewProps) {
   const [showInviteDialog, setShowInviteDialog] = useState(false);
   const me = gameState.players.find((p) => p.id === playerId);
   const isHost = me?.isHost ?? false;
@@ -144,14 +145,29 @@ export function LobbyView({ gameState, playerId, onStartGame, onUpdateSettings }
             : `Waiting for players (min. 2)`}
         </Button>
       ) : (
-        <div className="flex items-center gap-2 text-sm text-muted-foreground">
-          <Loader2 className="size-4 animate-spin" />
-          Waiting for host to start...
+        <div className="flex flex-col items-center gap-3">
+          <div className="flex items-center gap-2 text-sm text-muted-foreground">
+            <Loader2 className="size-4 animate-spin" />
+            Waiting for host to start...
+          </div>
+          <Button
+            variant="ghost"
+            size="sm"
+            className="gap-2 text-muted-foreground"
+            onClick={async () => {
+              const ok = await onLeaveGame();
+              if (ok) toast.info("You left the game.");
+            }}
+          >
+            <LogOut className="size-3.5" />
+            Leave game
+          </Button>
         </div>
       )}
 
       <InviteFriends
         gameCode={gameState.joinCode}
+        gameId={gameState.id}
         open={showInviteDialog}
         onOpenChange={setShowInviteDialog}
       />

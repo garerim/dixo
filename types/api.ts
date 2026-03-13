@@ -36,6 +36,10 @@ export interface SurrenderRequest {
   gameId: string;
 }
 
+export interface LeaveGameRequest {
+  gameId: string;
+}
+
 export interface StartGameRequest {
   gameId: string;
 }
@@ -120,6 +124,7 @@ export type CallChallengeResponse = ApiResponse<PublicGameState>;
 
 export type SurrenderResponse = ApiResponse<PublicGameState>;
 export type UpdateSettingsResponse = ApiResponse<PublicGameState>;
+export type LeaveGameResponse = ApiResponse<void>;
 
 // =============================================================================
 // Profil utilisateur

@@ -1,6 +1,6 @@
 "use client";
 
-import { use, useEffect } from "react";
+import { use, useEffect, useCallback, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { Dice5, ArrowLeft, Loader2, Flag, MessageSquare } from "lucide-react";
 import { toast } from "sonner";
@@ -49,6 +49,15 @@ export default function GamePage({
   }, [authLoading, user, router]);
 
   const playerId = user?.id ?? "";
+  const onBackRef = useRef<(() => void) | null>(null);
+
+  const handleBack = useCallback(() => {
+    if (onBackRef.current) {
+      onBackRef.current();
+    } else {
+      router.push("/");
+    }
+  }, [router]);
 
   return (
     <div className="flex min-h-svh flex-col bg-gradient-to-b from-background to-muted/30">
@@ -57,7 +66,7 @@ export default function GamePage({
         <Button
           variant="ghost"
           size="icon-sm"
-          onClick={() => router.push("/")}
+          onClick={handleBack}
         >
           <ArrowLeft className="size-4" />
         </Button>
@@ -74,7 +83,7 @@ export default function GamePage({
         </div>
       ) : (
         <>
-          <GameContent gameId={gameId} playerId={playerId} router={router} />
+          <GameContent gameId={gameId} playerId={playerId} router={router} onBackRef={onBackRef} />
           {/* ── Chat mobile ── */}
           <MobileChatDrawer gameId={gameId} />
         </>
@@ -88,15 +97,67 @@ function GameContent({
   gameId,
   playerId,
   router,
+  onBackRef,
 }: {
   gameId: string;
   playerId: string;
   router: ReturnType<typeof useRouter>;
+  onBackRef: React.MutableRefObject<(() => void) | null>;
 }) {
   const { gameState, isLoading, error, actions } = useGame({
     gameId,
     playerId,
   });
+
+  // ── Auto-leave lobby on page unload (non-host, LOBBY phase, PRIVATE) ──
+  const canAutoLeave = useCallback(() => {
+    if (!gameState) return false;
+    if (gameState.phase !== "LOBBY") return false;
+    const me = gameState.players.find((p) => p.id === playerId);
+    return me ? !me.isHost : false;
+  }, [gameState, playerId]);
+
+  // Keep a ref so the beforeunload handler always has the latest value
+  const canAutoLeaveRef = useRef(canAutoLeave);
+  canAutoLeaveRef.current = canAutoLeave;
+
+  useEffect(() => {
+    const handleBeforeUnload = () => {
+      if (canAutoLeaveRef.current()) {
+        // Use sendBeacon for reliable fire-and-forget on page close
+        navigator.sendBeacon(
+          "/api/game/leave",
+          new Blob(
+            [JSON.stringify({ gameId })],
+            { type: "application/json" },
+          ),
+        );
+      }
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => window.removeEventListener("beforeunload", handleBeforeUnload);
+  }, [gameId]);
+
+  const handleLeaveGame = useCallback(async () => {
+    const ok = await actions.leaveGame();
+    if (ok) router.push("/");
+    return ok;
+  }, [actions, router]);
+
+  // ── Register back button handler: leave game when in lobby as non-host ──
+  useEffect(() => {
+    if (canAutoLeave()) {
+      onBackRef.current = () => {
+        handleLeaveGame();
+      };
+    } else {
+      onBackRef.current = null;
+    }
+    return () => {
+      onBackRef.current = null;
+    };
+  }, [canAutoLeave, handleLeaveGame, onBackRef]);
 
   // ── Loading ──
   if (isLoading || !gameState) {
@@ -134,6 +195,7 @@ function GameContent({
             playerId={playerId}
             onStartGame={actions.startGame}
             onUpdateSettings={actions.updateSettings}
+            onLeaveGame={handleLeaveGame}
           />
         );
 

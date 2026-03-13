@@ -38,6 +38,7 @@ interface UseGameReturn {
     nextRound: () => Promise<void>;
     startGame: () => Promise<void>;
     updateSettings: (settings: Omit<UpdateSettingsRequest, "gameId">) => Promise<void>;
+    leaveGame: () => Promise<boolean>;
     surrender: () => Promise<void>;
     refresh: () => Promise<void>;
   };
@@ -156,6 +157,16 @@ export function useGame({ gameId, playerId }: UseGameOptions): UseGameReturn {
     [gameId],
   );
 
+  const leaveGame = useCallback(async (): Promise<boolean> => {
+    setError(null);
+    const result = await gameClient.leaveGame({ gameId });
+    if (!result.success) {
+      setError(result.error ?? "Erreur en quittant la partie.");
+      return false;
+    }
+    return true;
+  }, [gameId]);
+
   const surrenderGame = useCallback(async () => {
     setError(null);
     const result = await gameClient.surrender({ gameId });
@@ -181,6 +192,7 @@ export function useGame({ gameId, playerId }: UseGameOptions): UseGameReturn {
       nextRound,
       startGame,
       updateSettings: updateSettingsAction,
+      leaveGame,
       surrender: surrenderGame,
       refresh: loadGameState,
     },
