@@ -5,7 +5,7 @@
 // Partagés entre le frontend (client API) et le backend (route handlers).
 // =============================================================================
 
-import type { GamePhase, GameMode, Bid, ChallengeResult } from "@/core/game-engine";
+import type { GamePhase, GameMode, Bid, ChallengeResult, GameConfig } from "@/core/game-engine";
 
 // =============================================================================
 // Requêtes
@@ -40,6 +40,14 @@ export interface StartGameRequest {
   gameId: string;
 }
 
+export interface UpdateSettingsRequest {
+  gameId: string;
+  initialDiceCount?: 3 | 5 | 7;
+  pacosAreWild?: boolean;
+  turnTimer?: null | 15 | 30 | 60;
+  maxPlayers?: number;
+}
+
 export interface NextRoundRequest {
   gameId: string;
 }
@@ -68,6 +76,7 @@ export interface PublicGameState {
   id: string;
   joinCode: string;
   gameMode: GameMode;
+  config: GameConfig;
   players: PublicPlayerInfo[];
   currentPlayerIndex: number;
   phase: GamePhase;
@@ -110,6 +119,7 @@ export type PlaceBidResponse = ApiResponse<PublicGameState>;
 export type CallChallengeResponse = ApiResponse<PublicGameState>;
 
 export type SurrenderResponse = ApiResponse<PublicGameState>;
+export type UpdateSettingsResponse = ApiResponse<PublicGameState>;
 
 // =============================================================================
 // Profil utilisateur

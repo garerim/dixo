@@ -7,15 +7,17 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { InviteFriends } from "@/features/friends/components/invite-friends";
-import type { PublicGameState } from "@/types/api";
+import { GameSettingsPanel } from "./game-settings-panel";
+import type { PublicGameState, UpdateSettingsRequest } from "@/types/api";
 
 interface LobbyViewProps {
   gameState: PublicGameState;
   playerId: string;
   onStartGame: () => Promise<void>;
+  onUpdateSettings: (settings: Omit<UpdateSettingsRequest, "gameId">) => Promise<void>;
 }
 
-export function LobbyView({ gameState, playerId, onStartGame }: LobbyViewProps) {
+export function LobbyView({ gameState, playerId, onStartGame, onUpdateSettings }: LobbyViewProps) {
   const [showInviteDialog, setShowInviteDialog] = useState(false);
   const me = gameState.players.find((p) => p.id === playerId);
   const isHost = me?.isHost ?? false;
@@ -68,12 +70,22 @@ export function LobbyView({ gameState, playerId, onStartGame }: LobbyViewProps) 
         </Button>
       </div>
 
+      {/* ── Settings (private games only) ── */}
+      {gameState.gameMode === "PRIVATE" && (
+        <GameSettingsPanel
+          config={gameState.config}
+          isHost={isHost}
+          currentPlayerCount={playerCount}
+          onUpdateSettings={onUpdateSettings}
+        />
+      )}
+
       {/* ── Players list ── */}
       <div className="w-full rounded-xl border bg-card p-4">
         <div className="mb-3 flex items-center gap-2">
           <Users className="size-4 text-muted-foreground" />
           <span className="text-sm font-medium">
-            Players ({playerCount}/6)
+            Players ({playerCount}/{gameState.config.maxPlayers})
           </span>
         </div>
 
@@ -106,7 +118,7 @@ export function LobbyView({ gameState, playerId, onStartGame }: LobbyViewProps) 
           ))}
 
           {/* Empty slots */}
-          {Array.from({ length: 6 - playerCount }).map((_, i) => (
+          {Array.from({ length: gameState.config.maxPlayers - playerCount }).map((_, i) => (
             <div
               key={`empty-${i}`}
               className="flex items-center gap-3 rounded-lg border border-dashed px-3 py-2 text-muted-foreground"

@@ -16,6 +16,7 @@ import type { PublicGameState } from "@/types/api";
 import {
   createInitialGameState,
   addPlayer,
+  updateSettings,
   startGame,
   placeBid,
   callChallenge,
@@ -123,6 +124,41 @@ export class GameService {
       await this.repository.update(result.state);
 
       return { success: true, data: { gameId: result.state.id } };
+    } catch (error) {
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : "Unknown error.",
+      };
+    }
+  }
+
+  // ===========================================================================
+  // Modifier les paramètres
+  // ===========================================================================
+
+  async updateSettings(
+    userId: string,
+    gameId: string,
+    settings: {
+      initialDiceCount?: number;
+      pacosAreWild?: boolean;
+      turnTimer?: number | null;
+      maxPlayers?: number;
+    },
+  ): Promise<ServiceResult<PublicGameState>> {
+    try {
+      const state = await this.loadGame(gameId);
+      if (!state) return { success: false, error: "Game not found." };
+
+      const result = updateSettings(state, userId, settings);
+      if (!result.success) return { success: false, error: result.error };
+
+      await this.repository.update(result.state);
+
+      return {
+        success: true,
+        data: sanitizeGameStateForPlayer(result.state, userId),
+      };
     } catch (error) {
       return {
         success: false,

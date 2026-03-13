@@ -11,6 +11,7 @@ import type {
   PlaceBidRequest,
   CallChallengeRequest,
   StartGameRequest,
+  UpdateSettingsRequest,
   NextRoundRequest,
   SurrenderRequest,
   CreateGameResponse,
@@ -19,6 +20,7 @@ import type {
   PlaceBidResponse,
   CallChallengeResponse,
   SurrenderResponse,
+  UpdateSettingsResponse,
   SendGameMessageRequest,
   SendGameMessageResponse,
   GetGameMessagesResponse,
@@ -85,6 +87,14 @@ export const gameClient = {
   /** Démarre la partie */
   startGame(data: StartGameRequest): Promise<GameStateResponse> {
     return fetchApi("/start", {
+      method: "POST",
+      body: JSON.stringify(data),
+    });
+  },
+
+  /** Met à jour les paramètres de la partie */
+  updateSettings(data: UpdateSettingsRequest): Promise<UpdateSettingsResponse> {
+    return fetchApi("/settings", {
       method: "POST",
       body: JSON.stringify(data),
     });

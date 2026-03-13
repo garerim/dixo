@@ -89,6 +89,8 @@ export interface GameConfig {
   readonly initialDiceCount: number;
   /** Les Pacos (face 1) comptent-ils comme jokers ? */
   readonly pacosAreWild: boolean;
+  /** Timer par tour en secondes (null = illimité) */
+  readonly turnTimer: number | null;
 }
 
 /** Configuration par défaut */
@@ -97,6 +99,7 @@ export const DEFAULT_GAME_CONFIG: GameConfig = {
   maxPlayers: 6,
   initialDiceCount: 5,
   pacosAreWild: true,
+  turnTimer: null,
 } as const;
 
 /** État complet du jeu — source de vérité */

@@ -133,6 +133,7 @@ function GameContent({
             gameState={gameState}
             playerId={playerId}
             onStartGame={actions.startGame}
+            onUpdateSettings={actions.updateSettings}
           />
         );
 

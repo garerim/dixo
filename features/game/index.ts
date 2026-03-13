@@ -16,3 +16,4 @@ export { LobbyView } from "./components/lobby-view";
 export { BiddingView } from "./components/bidding-view";
 export { ResultView } from "./components/result-view";
 export { GameOverView } from "./components/game-over-view";
+export { GameSettingsPanel } from "./components/game-settings-panel";

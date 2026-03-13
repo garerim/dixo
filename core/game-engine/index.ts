@@ -60,6 +60,7 @@ export {
   generateJoinCode,
   addPlayer,
   removePlayer,
+  updateSettings,
   startGame,
   placeBid,
   callChallenge,

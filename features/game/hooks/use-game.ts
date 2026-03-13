@@ -9,7 +9,7 @@
 "use client";
 
 import { useState, useEffect, useCallback, useRef } from "react";
-import type { PublicGameState } from "@/types/api";
+import type { PublicGameState, UpdateSettingsRequest } from "@/types/api";
 import { gameClient } from "../api/game-client";
 import { subscribeToGame } from "@/lib/realtime/game-channel";
 
@@ -37,6 +37,7 @@ interface UseGameReturn {
     callChallenge: () => Promise<void>;
     nextRound: () => Promise<void>;
     startGame: () => Promise<void>;
+    updateSettings: (settings: Omit<UpdateSettingsRequest, "gameId">) => Promise<void>;
     surrender: () => Promise<void>;
     refresh: () => Promise<void>;
   };
@@ -141,6 +142,20 @@ export function useGame({ gameId, playerId }: UseGameOptions): UseGameReturn {
     }
   }, [gameId]);
 
+  const updateSettingsAction = useCallback(
+    async (settings: Omit<UpdateSettingsRequest, "gameId">) => {
+      setError(null);
+      const result = await gameClient.updateSettings({ gameId, ...settings });
+
+      if (result.success && result.data) {
+        setGameState(result.data);
+      } else {
+        setError(result.error ?? "Erreur lors de la mise à jour des paramètres.");
+      }
+    },
+    [gameId],
+  );
+
   const surrenderGame = useCallback(async () => {
     setError(null);
     const result = await gameClient.surrender({ gameId });
@@ -165,6 +180,7 @@ export function useGame({ gameId, playerId }: UseGameOptions): UseGameReturn {
       callChallenge,
       nextRound,
       startGame,
+      updateSettings: updateSettingsAction,
       surrender: surrenderGame,
       refresh: loadGameState,
     },

@@ -49,6 +49,7 @@ export function sanitizeGameStateForPlayer(
     id: state.id,
     joinCode: state.joinCode,
     gameMode: state.gameMode,
+    config: state.config,
     players,
     currentPlayerIndex: state.currentPlayerIndex,
     phase: state.phase,

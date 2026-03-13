@@ -252,6 +252,7 @@ export class MatchmakingService {
         maxPlayers: playerCount,
         initialDiceCount: 5,
         pacosAreWild: true,
+        turnTimer: null,
       };
 
       let gameState = createInitialGameState(

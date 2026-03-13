@@ -175,6 +175,87 @@ export function removePlayer(
 }
 
 // =============================================================================
+// Modifier les paramètres (LOBBY + PRIVATE uniquement)
+// =============================================================================
+
+/** Valeurs autorisées pour les paramètres configurables */
+const VALID_DICE_COUNTS = [3, 5, 7] as const;
+const VALID_TURN_TIMERS = [null, 15, 30, 60] as const;
+
+/**
+ * Met à jour les paramètres de la partie.
+ * Seul l'hôte peut modifier, uniquement en LOBBY et en mode PRIVATE.
+ */
+export function updateSettings(
+  state: GameState,
+  hostId: string,
+  settings: {
+    initialDiceCount?: number;
+    pacosAreWild?: boolean;
+    turnTimer?: number | null;
+    maxPlayers?: number;
+  },
+): GameActionResult {
+  if (state.phase !== GamePhase.LOBBY) {
+    return { success: false, state, error: "Can only change settings in the lobby." };
+  }
+
+  if (state.gameMode !== GameMode.PRIVATE) {
+    return { success: false, state, error: "Settings can only be changed in private games." };
+  }
+
+  const host = state.players.find((p) => p.isHost);
+  if (!host || host.id !== hostId) {
+    return { success: false, state, error: "Only the host can change settings." };
+  }
+
+  // Validate each setting
+  if (settings.initialDiceCount !== undefined) {
+    if (!(VALID_DICE_COUNTS as readonly number[]).includes(settings.initialDiceCount)) {
+      return { success: false, state, error: "Dice count must be 3, 5, or 7." };
+    }
+  }
+
+  if (settings.turnTimer !== undefined) {
+    if (!(VALID_TURN_TIMERS as readonly (number | null)[]).includes(settings.turnTimer)) {
+      return { success: false, state, error: "Turn timer must be 15, 30, 60, or unlimited." };
+    }
+  }
+
+  if (settings.maxPlayers !== undefined) {
+    if (!Number.isInteger(settings.maxPlayers) || settings.maxPlayers < 2 || settings.maxPlayers > 6) {
+      return { success: false, state, error: "Max players must be between 2 and 6." };
+    }
+    if (settings.maxPlayers < state.players.length) {
+      return { success: false, state, error: "Cannot set max players below the current player count." };
+    }
+  }
+
+  const newConfig: GameConfig = {
+    ...state.config,
+    ...(settings.initialDiceCount !== undefined && { initialDiceCount: settings.initialDiceCount }),
+    ...(settings.pacosAreWild !== undefined && { pacosAreWild: settings.pacosAreWild }),
+    ...(settings.turnTimer !== undefined && { turnTimer: settings.turnTimer }),
+    ...(settings.maxPlayers !== undefined && { maxPlayers: settings.maxPlayers }),
+  };
+
+  // If initialDiceCount changed, update all players' diceCount
+  const players = newConfig.initialDiceCount !== state.config.initialDiceCount
+    ? state.players.map((p) => ({ ...p, diceCount: newConfig.initialDiceCount }))
+    : state.players;
+
+  return {
+    success: true,
+    state: {
+      ...state,
+      config: newConfig,
+      players,
+      updatedAt: new Date().toISOString(),
+    },
+  };
+}
+
+// =============================================================================
 // Démarrer la partie
 // =============================================================================
 
