@@ -10,6 +10,7 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database, ProfileRow } from "@/types/database";
 import type { FullProfile, PublicProfile } from "@/types/api";
 import { ProfileRepository } from "@/lib/database/profile-repository";
+import { calculateLevel } from "@/core/xp";
 
 // =============================================================================
 // Types de résultats
@@ -28,6 +29,16 @@ interface ServiceResult<T> {
 /**
  * Convertit un ProfileRow (DB) en FullProfile (API privé).
  */
+function toLevelData(row: ProfileRow) {
+  return calculateLevel({
+    gamesPlayed: row.games_played,
+    gamesWon: row.games_won,
+    totalChallengeCalls: row.total_challenge_calls,
+    totalChallengeSuccess: row.total_challenge_success,
+    bestWinStreak: row.best_win_streak,
+  });
+}
+
 function toFullProfile(row: ProfileRow): FullProfile {
   return {
     id: row.id,
@@ -46,6 +57,7 @@ function toFullProfile(row: ProfileRow): FullProfile {
     isOnline: row.is_online,
     lastSeenAt: row.last_seen_at,
     createdAt: row.created_at,
+    levelData: toLevelData(row),
   };
 }
 
@@ -64,6 +76,7 @@ function toPublicProfile(row: ProfileRow): PublicProfile {
     gamesWon: row.games_won,
     bestWinStreak: row.best_win_streak,
     isOnline: row.is_online,
+    levelData: toLevelData(row),
   };
 }
 

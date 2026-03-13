@@ -132,6 +132,15 @@ export type LeaveGameResponse = ApiResponse<void>;
 
 import type { SubscriptionTier } from "./database";
 
+/** Info de niveau et XP */
+export interface LevelData {
+  level: number;
+  totalXp: number;
+  currentLevelXp: number;
+  xpToNextLevel: number;
+  progress: number;
+}
+
 /** Profil public (visible par tous) */
 export interface PublicProfile {
   id: string;
@@ -144,6 +153,7 @@ export interface PublicProfile {
   gamesWon: number;
   bestWinStreak: number;
   isOnline: boolean;
+  levelData: LevelData;
 }
 
 /** Profil complet (visible uniquement par le propriétaire) */

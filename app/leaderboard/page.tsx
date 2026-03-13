@@ -110,7 +110,7 @@ function LeaderboardRow({
           )}
         </div>
         <span className="text-xs text-muted-foreground">
-          {profile.gamesPlayed} games · {winRate(profile)} win rate · {profile.bestWinStreak}W streak
+          Lv.{profile.levelData.level} · {profile.gamesPlayed} games · {winRate(profile)} win rate
         </span>
       </div>
 

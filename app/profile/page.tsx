@@ -18,6 +18,7 @@ import {
   Camera,
   Star,
   ExternalLink,
+  Zap,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -30,6 +31,7 @@ import {
 } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
 import { Separator } from "@/components/ui/separator";
 import { useAuth } from "@/components/providers/auth-provider";
 import { useProfile } from "@/features/profile/hooks/use-profile";
@@ -320,6 +322,32 @@ function ProfileContent() {
                   month: "long",
                   year: "numeric",
                 })}
+              </p>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* ── Level & XP ── */}
+        <Card>
+          <CardContent className="flex items-center gap-4 pt-6">
+            <div className="flex size-14 shrink-0 items-center justify-center rounded-2xl bg-primary/10">
+              <span className="text-2xl font-extrabold text-primary">
+                {profile.levelData.level}
+              </span>
+            </div>
+            <div className="flex flex-1 flex-col gap-1.5">
+              <div className="flex items-center justify-between">
+                <span className="flex items-center gap-1.5 text-sm font-semibold">
+                  <Zap className="size-3.5 text-yellow-500" />
+                  Level {profile.levelData.level}
+                </span>
+                <span className="text-xs text-muted-foreground">
+                  {profile.levelData.currentLevelXp} / {profile.levelData.xpToNextLevel} XP
+                </span>
+              </div>
+              <Progress value={profile.levelData.progress * 100} className="h-2.5" />
+              <p className="text-xs text-muted-foreground">
+                {profile.levelData.totalXp} XP total
               </p>
             </div>
           </CardContent>
