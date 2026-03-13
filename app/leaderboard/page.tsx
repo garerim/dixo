@@ -77,7 +77,6 @@ function LeaderboardRow({
             alt={profile.pseudo}
             fill
             className="rounded-full object-cover"
-            unoptimized
           />
         ) : (
           <div className="flex size-9 items-center justify-center rounded-full bg-muted text-sm font-bold">
@@ -192,39 +191,37 @@ export default function LeaderboardPage() {
 
         {/* ─── Top 3 summary (podium stats) ─── */}
         {!loading && profiles.length >= 3 && (
-          <div className="grid grid-cols-3 gap-3 text-center">
+          <div className="grid grid-cols-3 items-end gap-3 text-center">
             {[profiles[1], profiles[0], profiles[2]].map((p, visualIdx) => {
               if (!p) return null;
               const actualRank = visualIdx === 0 ? 2 : visualIdx === 1 ? 1 : 3;
               const elo = mode === "1v1" ? p.elo1v1 : p.elo4p;
-              const heights = ["h-24", "h-32", "h-20"];
+              const avatarSizes = ["size-9", "size-12", "size-9"];
               return (
-                <Link
-                  key={p.id}
-                  href={`/profile?id=${p.id}`}
-                  className={`flex flex-col items-center justify-end gap-2 rounded-xl border bg-card p-3 transition-colors hover:bg-muted/60 ${heights[visualIdx]}`}
-                >
-                  <div className="flex flex-col items-center gap-1">
-                    <div className="relative size-10">
+                <div key={p.id} className="flex flex-col items-center gap-1.5">
+                  <span className="text-xl">{actualRank === 1 ? "🥇" : actualRank === 2 ? "🥈" : "🥉"}</span>
+                  <Link
+                    href={`/profile?id=${p.id}`}
+                    className="flex w-full flex-col items-center gap-1.5 rounded-xl border bg-card p-3 transition-colors hover:bg-muted/60"
+                  >
+                    <div className={`relative ${avatarSizes[visualIdx]} shrink-0`}>
                       {p.avatarUrl ? (
                         <Image
                           src={p.avatarUrl}
                           alt={p.pseudo}
                           fill
                           className="rounded-full object-cover"
-                          unoptimized
                         />
                       ) : (
-                        <div className="flex size-10 items-center justify-center rounded-full bg-muted text-sm font-bold">
+                        <div className={`flex ${avatarSizes[visualIdx]} items-center justify-center rounded-full bg-muted text-sm font-bold`}>
                           {p.pseudo[0]?.toUpperCase()}
                         </div>
                       )}
                     </div>
-                    <span className="text-xs font-medium truncate max-w-[80px]">{p.pseudo}</span>
+                    <span className="text-xs font-medium truncate w-full text-center">{p.pseudo}</span>
                     <span className="text-sm font-bold tabular-nums">{elo}</span>
-                    <span className="text-lg">{actualRank === 1 ? "🥇" : actualRank === 2 ? "🥈" : "🥉"}</span>
-                  </div>
-                </Link>
+                  </Link>
+                </div>
               );
             })}
           </div>
