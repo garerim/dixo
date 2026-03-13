@@ -426,6 +426,9 @@ export default function HowToPlayPage() {
           <Link href="/how-to-play" className="hover:text-foreground transition-colors">
             How to play
           </Link>
+          <Link href="/ranks" className="hover:text-foreground transition-colors">
+            Ranks
+          </Link>
         </div>
       </footer>
     </div>

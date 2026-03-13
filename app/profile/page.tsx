@@ -19,6 +19,9 @@ import {
   Star,
   ExternalLink,
   Zap,
+  Shield,
+  Medal,
+  Gem,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -38,6 +41,7 @@ import { useProfile } from "@/features/profile/hooks/use-profile";
 import { EloChart } from "@/features/profile/components/elo-chart";
 import { profileClient } from "@/features/profile/api/profile-client";
 import { useBilling } from "@/features/billing/hooks/use-billing";
+import { getRankForElo, getNextRank, getEloProgressInRank } from "@/core/ranks";
 
 // =============================================================================
 // Helpers
@@ -62,6 +66,21 @@ function getWinRate(gamesPlayed: number, gamesWon: number) {
 function getChallengeSuccessRate(total: number, success: number) {
   if (total === 0) return "0%";
   return `${Math.round((success / total) * 100)}%`;
+}
+
+function RankIcon({ icon, className }: { icon: string; className: string }) {
+  switch (icon) {
+    case "shield":
+      return <Shield className={className} />;
+    case "medal":
+      return <Medal className={className} />;
+    case "gem":
+      return <Gem className={className} />;
+    case "crown":
+      return <Crown className={className} />;
+    default:
+      return <Shield className={className} />;
+  }
 }
 
 // =============================================================================
@@ -491,21 +510,51 @@ function ProfileContent() {
               Your position in the ELO ranking
             </CardDescription>
           </CardHeader>
-          <CardContent>
-            <div className="flex items-center justify-between gap-4">
-              <div className="flex gap-6">
-                <div>
-                  <p className="text-3xl font-bold">{profile.elo1v1}</p>
-                  <p className="text-sm text-muted-foreground">ELO 1v1</p>
+          <CardContent className="flex flex-col gap-5">
+            {/* Rank badges for 1v1 and 4p */}
+            {(["1v1", "4p"] as const).map((mode) => {
+              const elo = mode === "1v1" ? profile.elo1v1 : profile.elo4p;
+              const rank = getRankForElo(elo);
+              const next = getNextRank(rank);
+              const progress = getEloProgressInRank(elo, rank);
+
+              return (
+                <div key={mode} className="flex items-center gap-4">
+                  <div className={`flex size-12 shrink-0 items-center justify-center rounded-2xl ${rank.bgColor}`}>
+                    <RankIcon icon={rank.icon} className={`size-6 ${rank.color}`} />
+                  </div>
+                  <div className="flex flex-1 flex-col gap-1">
+                    <div className="flex items-center justify-between">
+                      <span className="flex items-center gap-2">
+                        <span className={`font-bold ${rank.color}`}>{rank.label}</span>
+                        <span className="text-xs text-muted-foreground">
+                          {mode === "1v1" ? "1v1" : "4 players"}
+                        </span>
+                      </span>
+                      <span className="text-sm font-bold tabular-nums">{elo} ELO</span>
+                    </div>
+                    <Progress value={progress * 100} className="h-2" />
+                    <p className="text-xs text-muted-foreground">
+                      {next
+                        ? `${next.minElo - elo} ELO to ${next.label}`
+                        : "Highest rank reached"}
+                    </p>
+                  </div>
                 </div>
-                <Separator orientation="vertical" className="h-auto" />
-                <div>
-                  <p className="text-3xl font-bold">{profile.elo4p}</p>
-                  <p className="text-sm text-muted-foreground">ELO 4 players</p>
-                </div>
-              </div>
+              );
+            })}
+
+            <div className="flex items-center justify-between gap-4 pt-1">
               <Button
                 variant="outline"
+                size="sm"
+                onClick={() => router.push("/ranks")}
+              >
+                View all ranks
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
                 onClick={() => router.push("/leaderboard")}
               >
                 View leaderboard

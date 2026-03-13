@@ -16,12 +16,15 @@ import {
   Swords,
   Loader2,
   TrendingUp,
+  Shield,
+  Gem,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { profileClient } from "@/features/profile/api/profile-client";
 import type { PublicProfile } from "@/types/api";
+import { getRankForElo } from "@/core/ranks";
 
 // =============================================================================
 // Helpers
@@ -32,6 +35,23 @@ function rankIcon(rank: number) {
   if (rank === 2) return <Medal className="size-4 text-slate-400" />;
   if (rank === 3) return <Medal className="size-4 text-amber-600" />;
   return <span className="text-sm text-muted-foreground font-medium w-4 text-center">{rank}</span>;
+}
+
+function rankIconForElo(elo: number) {
+  const rank = getRankForElo(elo);
+  const className = `size-3.5 ${rank.color}`;
+  switch (rank.icon) {
+    case "shield":
+      return <Shield className={className} />;
+    case "medal":
+      return <Medal className={className} />;
+    case "gem":
+      return <Gem className={className} />;
+    case "crown":
+      return <Crown className={className} />;
+    default:
+      return <Shield className={className} />;
+  }
 }
 
 function winRate(profile: PublicProfile): string {
@@ -114,12 +134,15 @@ function LeaderboardRow({
         </span>
       </div>
 
-      {/* ELO */}
+      {/* ELO + Rank icon */}
       <div className="flex shrink-0 flex-col items-end gap-0.5">
         <span className={`text-lg font-bold tabular-nums ${topThree ? "text-foreground" : ""}`}>
           {elo}
         </span>
-        <span className="text-xs text-muted-foreground">ELO</span>
+        <span className="flex items-center gap-1 text-xs text-muted-foreground">
+          {rankIconForElo(elo)}
+          {getRankForElo(elo).label}
+        </span>
       </div>
     </Link>
   );
@@ -269,6 +292,9 @@ export default function LeaderboardPage() {
           </Link>
           <Link href="/how-to-play" className="hover:text-foreground transition-colors">
             How to play
+          </Link>
+          <Link href="/ranks" className="hover:text-foreground transition-colors">
+            Ranks
           </Link>
         </div>
       </footer>
