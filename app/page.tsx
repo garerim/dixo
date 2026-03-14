@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { motion } from "framer-motion";
 import {
   Dice5,
   Plus,
@@ -441,14 +442,29 @@ export default function HomePage() {
 // Composant : Landing Page (non connecté)
 // =============================================================================
 
+const fadeUp = {
+  hidden: { opacity: 0, y: 30 },
+  visible: { opacity: 1, y: 0 },
+};
+
+const staggerContainer = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.15 } },
+};
+
 function LandingPage() {
   const { signInWithGoogle } = useAuth();
   const router = useRouter();
 
   return (
-    <div className="flex min-h-svh flex-col bg-gradient-to-b from-background to-muted/30">
+    <div className="flex min-h-svh flex-col bg-gradient-to-b from-background to-muted/30 overflow-x-hidden">
       {/* ─── Header ─── */}
-      <header className="flex items-center justify-between border-b px-4 py-3 sm:px-8">
+      <motion.header
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="flex items-center justify-between border-b px-4 py-3 sm:px-8"
+      >
         <div className="flex items-center gap-2">
           <Dice5 className="size-6 text-primary" />
           <span className="text-lg font-bold tracking-tight">Dixo</span>
@@ -464,33 +480,65 @@ function LandingPage() {
             Sign in
           </Button>
         </div>
-      </header>
+      </motion.header>
 
       {/* ─── Hero ─── */}
       <section className="flex flex-col items-center gap-6 px-4 py-20 text-center sm:py-28">
         {/* Dice animation */}
-        <div className="relative flex size-24 items-center justify-center rounded-3xl bg-primary text-primary-foreground shadow-2xl shadow-primary/30">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.5, rotate: -20 }}
+          animate={{ opacity: 1, scale: 1, rotate: 0 }}
+          transition={{ type: "spring", stiffness: 200, damping: 15, delay: 0.2 }}
+          className="relative flex size-24 items-center justify-center rounded-3xl bg-primary text-primary-foreground shadow-2xl shadow-primary/30"
+        >
           <Dice5 className="size-14" />
-          <span className="absolute -right-2 -top-2 flex size-6 items-center justify-center rounded-full bg-yellow-400 text-xs font-bold text-yellow-900">
+          <motion.span
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            transition={{ type: "spring", stiffness: 300, damping: 10, delay: 0.6 }}
+            className="absolute -right-2 -top-2 flex size-6 items-center justify-center rounded-full bg-yellow-400 text-xs font-bold text-yellow-900"
+          >
             ✦
-          </span>
-        </div>
+          </motion.span>
+        </motion.div>
 
-        <div className="flex flex-col items-center gap-3">
-          <h1 className="text-5xl font-extrabold tracking-tight sm:text-6xl">
+        <motion.div
+          initial="hidden"
+          animate="visible"
+          variants={staggerContainer}
+          className="flex flex-col items-center gap-3"
+        >
+          <motion.h1
+            variants={fadeUp}
+            transition={{ duration: 0.5 }}
+            className="text-5xl font-extrabold tracking-tight sm:text-6xl"
+          >
             Dixo
-          </h1>
-          <p className="text-xl font-medium text-muted-foreground sm:text-2xl">
+          </motion.h1>
+          <motion.p
+            variants={fadeUp}
+            transition={{ duration: 0.5 }}
+            className="text-xl font-medium text-muted-foreground sm:text-2xl"
+          >
             The online dice bluffing game
-          </p>
-          <p className="max-w-md text-muted-foreground">
+          </motion.p>
+          <motion.p
+            variants={fadeUp}
+            transition={{ duration: 0.5 }}
+            className="max-w-md text-muted-foreground"
+          >
             Bluff your opponents, call their bluffs, and be
             the last player standing. Free to play, online, with friends or
             strangers.
-          </p>
-        </div>
+          </motion.p>
+        </motion.div>
 
-        <div className="flex flex-wrap items-center justify-center gap-3">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.7 }}
+          className="flex flex-wrap items-center justify-center gap-3"
+        >
           <Button size="lg" className="gap-2 px-8" onClick={signInWithGoogle}>
             <svg className="size-5" viewBox="0 0 24 24">
               <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/>
@@ -506,58 +554,83 @@ function LandingPage() {
               <ChevronRight className="size-4" />
             </Link>
           </Button>
-        </div>
+        </motion.div>
 
         {/* Social proof */}
-        <p className="text-xs text-muted-foreground">
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5, delay: 0.9 }}
+          className="text-xs text-muted-foreground"
+        >
           Free to play · No download · Sign in with Google
-        </p>
+        </motion.p>
       </section>
 
       {/* ─── Game modes ─── */}
       <section className="mx-auto w-full max-w-4xl px-4 py-12">
-        <h2 className="mb-8 text-center text-2xl font-bold">Pick your game mode</h2>
-        <div className="grid gap-4 sm:grid-cols-3">
-          <Card>
-            <CardHeader className="pb-2">
-              <CardTitle className="flex items-center gap-2 text-base">
-                <Swords className="size-5 text-blue-500" />
-                Normal
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-sm text-muted-foreground">
-                Quick matchmaking against players of all levels. No ELO impact — just for fun.
-              </p>
-            </CardContent>
-          </Card>
-          <Card className="border-yellow-500/40 bg-yellow-500/5">
-            <CardHeader className="pb-2">
-              <CardTitle className="flex items-center gap-2 text-base">
-                <Trophy className="size-5 text-yellow-500" />
-                Ranked
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-sm text-muted-foreground">
-                ELO-based matchmaking. Win to climb the leaderboard, lose ELO if you bluff too hard.
-              </p>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader className="pb-2">
-              <CardTitle className="flex items-center gap-2 text-base">
-                <Shield className="size-5 text-purple-500" />
-                Private
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-sm text-muted-foreground">
-                Create a private game and invite friends with a 6-character code. Up to 6 players.
-              </p>
-            </CardContent>
-          </Card>
-        </div>
+        <motion.h2
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.5 }}
+          className="mb-8 text-center text-2xl font-bold"
+        >
+          Pick your game mode
+        </motion.h2>
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          variants={staggerContainer}
+          className="grid gap-4 sm:grid-cols-3"
+        >
+          <motion.div variants={fadeUp} transition={{ duration: 0.4 }}>
+            <Card className="h-full">
+              <CardHeader className="pb-2">
+                <CardTitle className="flex items-center gap-2 text-base">
+                  <Swords className="size-5 text-blue-500" />
+                  Normal
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-muted-foreground">
+                  Quick matchmaking against players of all levels. No ELO impact — just for fun.
+                </p>
+              </CardContent>
+            </Card>
+          </motion.div>
+          <motion.div variants={fadeUp} transition={{ duration: 0.4 }}>
+            <Card className="h-full border-yellow-500/40 bg-yellow-500/5">
+              <CardHeader className="pb-2">
+                <CardTitle className="flex items-center gap-2 text-base">
+                  <Trophy className="size-5 text-yellow-500" />
+                  Ranked
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-muted-foreground">
+                  ELO-based matchmaking. Win to climb the leaderboard, lose ELO if you bluff too hard.
+                </p>
+              </CardContent>
+            </Card>
+          </motion.div>
+          <motion.div variants={fadeUp} transition={{ duration: 0.4 }}>
+            <Card className="h-full">
+              <CardHeader className="pb-2">
+                <CardTitle className="flex items-center gap-2 text-base">
+                  <Shield className="size-5 text-purple-500" />
+                  Private
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-muted-foreground">
+                  Create a private game and invite friends with a 6-character code. Up to 6 players.
+                </p>
+              </CardContent>
+            </Card>
+          </motion.div>
+        </motion.div>
       </section>
 
       {/* ─── How to play ─── */}
@@ -565,8 +638,22 @@ function LandingPage() {
         id="how-to-play"
         className="mx-auto w-full max-w-3xl px-4 py-12"
       >
-        <h2 className="mb-8 text-center text-2xl font-bold">How to play</h2>
-        <div className="flex flex-col gap-6">
+        <motion.h2
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.5 }}
+          className="mb-8 text-center text-2xl font-bold"
+        >
+          How to play
+        </motion.h2>
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          variants={staggerContainer}
+          className="flex flex-col gap-6"
+        >
           {[
             {
               step: "1",
@@ -593,7 +680,12 @@ function LandingPage() {
               icon: <Trophy className="size-6 text-green-500" />,
             },
           ].map(({ step, title, desc, icon }) => (
-            <div key={step} className="flex gap-4">
+            <motion.div
+              key={step}
+              variants={fadeUp}
+              transition={{ duration: 0.4 }}
+              className="flex gap-4"
+            >
               <div className="flex size-10 shrink-0 items-center justify-center rounded-full bg-muted text-sm font-bold">
                 {step}
               </div>
@@ -604,13 +696,19 @@ function LandingPage() {
                 </div>
                 <p className="text-sm text-muted-foreground">{desc}</p>
               </div>
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </section>
 
       {/* ─── Premium teaser ─── */}
-      <section className="mx-auto w-full max-w-2xl px-4 py-12">
+      <motion.section
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-100px" }}
+        transition={{ duration: 0.5 }}
+        className="mx-auto w-full max-w-2xl px-4 py-12"
+      >
         <Card className="border-primary/30 bg-primary/5">
           <CardContent className="flex flex-col items-center gap-4 pt-6 text-center sm:flex-row sm:text-left">
             <div className="flex size-14 shrink-0 items-center justify-center rounded-2xl bg-primary/10">
@@ -627,10 +725,16 @@ function LandingPage() {
             </Button>
           </CardContent>
         </Card>
-      </section>
+      </motion.section>
 
       {/* ─── Final CTA ─── */}
-      <section className="flex flex-col items-center gap-4 px-4 py-16 text-center">
+      <motion.section
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-100px" }}
+        transition={{ duration: 0.5 }}
+        className="flex flex-col items-center gap-4 px-4 py-16 text-center"
+      >
         <h2 className="text-3xl font-bold">Ready to bluff?</h2>
         <p className="text-muted-foreground">Join in seconds with your Google account.</p>
         <Button size="lg" className="gap-2 px-10" onClick={signInWithGoogle}>
@@ -642,7 +746,7 @@ function LandingPage() {
           </svg>
           Get started — it's free
         </Button>
-      </section>
+      </motion.section>
 
       {/* ─── Footer ─── */}
       <footer className="border-t px-4 py-6 text-center text-xs text-muted-foreground">
