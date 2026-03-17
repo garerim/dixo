@@ -41,13 +41,14 @@ export async function PATCH(request: Request) {
   }
 
   // At least one field required
-  if (!body.pseudo && !body.avatarUrl) {
-    return errorResponse("At least one field (pseudo, avatarUrl) is required.", 400);
+  if (!body.pseudo && !body.avatarUrl && body.diceSkin === undefined) {
+    return errorResponse("At least one field (pseudo, avatarUrl, diceSkin) is required.", 400);
   }
 
   const result = await service.updateProfile(user.id, {
     pseudo: body.pseudo,
     avatarUrl: body.avatarUrl,
+    diceSkin: body.diceSkin,
   });
 
   if (!result.success) {

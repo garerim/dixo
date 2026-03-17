@@ -99,12 +99,14 @@ export function PlayerCard({
               values={[...player.diceValues]}
               size="sm"
               highlightFace={highlightFace}
+              skin={player.diceSkin}
             />
           ) : showDice && hasDice ? (
             <DiceRow
               values={[...player.diceValues]}
               size="sm"
               highlightFace={highlightFace}
+              skin={player.diceSkin}
             />
           ) : (
             <HiddenDice count={player.diceCount} size="sm" />

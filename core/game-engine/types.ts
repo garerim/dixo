@@ -41,6 +41,8 @@ export interface PlayerState {
   readonly avatarUrl?: string;
   /** Tier d'abonnement (pour affichage du badge, sans impact sur la logique) */
   readonly subscription?: string;
+  /** Skin de dé sélectionné (nom du dossier dans /dices-skins/) */
+  readonly diceSkin?: string;
   /** Nombre de dés restants (commence à 5 au Perudo) */
   readonly diceCount: number;
   /** Résultat du dernier lancer de dés (caché aux autres joueurs) */

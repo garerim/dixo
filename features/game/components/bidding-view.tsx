@@ -62,6 +62,7 @@ export function BiddingView({
             values={[...me.diceValues]}
             size="lg"
             highlightFace={highlightFace}
+            skin={me.diceSkin}
           />
         </div>
       )}

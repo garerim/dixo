@@ -10,6 +10,8 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database, ProfileRow } from "@/types/database";
 import type { FullProfile, PublicProfile } from "@/types/api";
 import { ProfileRepository } from "@/lib/database/profile-repository";
+import { UserSkinRepository } from "@/lib/database/user-skin-repository";
+import { getSkinById } from "@/lib/skins/catalog";
 import { calculateLevel } from "@/core/xp";
 
 // =============================================================================
@@ -47,6 +49,7 @@ function toFullProfile(row: ProfileRow): FullProfile {
     elo1v1: row.elo_1v1,
     elo4p: row.elo_4p,
     subscription: row.subscription,
+    diceSkin: row.dice_skin,
     subscriptionExpiresAt: row.subscription_expires_at,
     gamesPlayed: row.games_played,
     gamesWon: row.games_won,
@@ -72,6 +75,7 @@ function toPublicProfile(row: ProfileRow): PublicProfile {
     elo1v1: row.elo_1v1,
     elo4p: row.elo_4p,
     subscription: row.subscription,
+    diceSkin: row.dice_skin,
     gamesPlayed: row.games_played,
     gamesWon: row.games_won,
     bestWinStreak: row.best_win_streak,
@@ -107,9 +111,11 @@ function validatePseudo(pseudo: string): string | null {
 
 export class ProfileService {
   private readonly repository: ProfileRepository;
+  private readonly skinRepository: UserSkinRepository;
 
   constructor(supabase: SupabaseClient<Database>) {
     this.repository = new ProfileRepository(supabase);
+    this.skinRepository = new UserSkinRepository(supabase);
   }
 
   // ===========================================================================
@@ -223,10 +229,10 @@ export class ProfileService {
 
   async updateProfile(
     userId: string,
-    data: { pseudo?: string; avatarUrl?: string },
+    data: { pseudo?: string; avatarUrl?: string; diceSkin?: string | null },
   ): Promise<ServiceResult<FullProfile>> {
     try {
-      const updateData: Partial<Pick<ProfileRow, "pseudo" | "avatar_url">> = {};
+      const updateData: Partial<Pick<ProfileRow, "pseudo" | "avatar_url" | "dice_skin">> = {};
 
       // Valider et préparer le pseudo
       if (data.pseudo) {
@@ -251,6 +257,23 @@ export class ProfileService {
           return { success: false, error: "URL d'avatar invalide." };
         }
         updateData.avatar_url = data.avatarUrl;
+      }
+
+      // Dice skin (null = default, string = skin folder name)
+      if (data.diceSkin !== undefined) {
+        if (data.diceSkin !== null) {
+          const skinDef = getSkinById(data.diceSkin);
+          if (!skinDef) {
+            return { success: false, error: "Skin not found." };
+          }
+          if (!skinDef.free) {
+            const owned = await this.skinRepository.userOwnsSkin(userId, data.diceSkin);
+            if (!owned) {
+              return { success: false, error: "You do not own this skin." };
+            }
+          }
+        }
+        updateData.dice_skin = data.diceSkin;
       }
 
       if (Object.keys(updateData).length === 0) {

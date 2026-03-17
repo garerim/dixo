@@ -10,6 +10,7 @@ import type Stripe from "stripe";
 import { stripe } from "@/lib/stripe/server";
 import { getSupabaseAdminClient } from "@/lib/supabase/server";
 import { ProfileRepository } from "@/lib/database/profile-repository";
+import { UserSkinRepository } from "@/lib/database/user-skin-repository";
 
 export async function POST(request: NextRequest) {
   const sig = request.headers.get("stripe-signature");
@@ -39,10 +40,21 @@ export async function POST(request: NextRequest) {
     switch (event.type) {
       case "checkout.session.completed": {
         const session = event.data.object as Stripe.Checkout.Session;
-        if (session.mode !== "subscription" || !session.subscription) break;
-
         const userId = session.metadata?.userId;
         if (!userId) break;
+
+        // ── Skin purchase (one-time payment) ──
+        if (session.mode === "payment" && session.metadata?.type === "skin_purchase") {
+          const skinId = session.metadata.skinId;
+          if (skinId) {
+            const skinRepo = new UserSkinRepository(supabase);
+            await skinRepo.grantSkin(userId, skinId, session.id);
+          }
+          break;
+        }
+
+        // ── Subscription purchase ──
+        if (session.mode !== "subscription" || !session.subscription) break;
 
         // Récupérer les détails de l'abonnement pour la date d'expiration
         const subscription = await stripe.subscriptions.retrieve(

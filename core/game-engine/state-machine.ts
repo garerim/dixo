@@ -51,7 +51,7 @@ export function generateJoinCode(): string {
  */
 export function createInitialGameState(
   gameId: string,
-  hostPlayer: { id: string; displayName: string; avatarUrl?: string; subscription?: string },
+  hostPlayer: { id: string; displayName: string; avatarUrl?: string; subscription?: string; diceSkin?: string },
   gameMode: GameMode = GameMode.PRIVATE,
   config: GameConfig = DEFAULT_GAME_CONFIG,
 ): GameState {
@@ -62,6 +62,7 @@ export function createInitialGameState(
     displayName: hostPlayer.displayName,
     avatarUrl: hostPlayer.avatarUrl,
     subscription: hostPlayer.subscription,
+    diceSkin: hostPlayer.diceSkin,
     diceCount: config.initialDiceCount,
     diceValues: [],
     isAlive: true,
@@ -95,7 +96,7 @@ export function createInitialGameState(
  */
 export function addPlayer(
   state: GameState,
-  player: { id: string; displayName: string; avatarUrl?: string; subscription?: string },
+  player: { id: string; displayName: string; avatarUrl?: string; subscription?: string; diceSkin?: string },
 ): GameActionResult {
   if (state.phase !== GamePhase.LOBBY) {
     return { success: false, state, error: "La partie a déjà commencé." };
@@ -114,6 +115,7 @@ export function addPlayer(
     displayName: player.displayName,
     avatarUrl: player.avatarUrl,
     subscription: player.subscription,
+    diceSkin: player.diceSkin,
     diceCount: state.config.initialDiceCount,
     diceValues: [],
     isAlive: true,

@@ -24,6 +24,7 @@ import { BiddingView } from "@/features/game/components/bidding-view";
 import { ResultView } from "@/features/game/components/result-view";
 import { GameOverView } from "@/features/game/components/game-over-view";
 import { GameChat } from "@/features/game/components/game-chat";
+import { useGameSounds, SoundControls } from "@/features/sound";
 import {
   Drawer,
   DrawerContent,
@@ -74,6 +75,9 @@ export default function GamePage({
           <Dice5 className="size-5 text-primary" />
           <span className="text-lg font-bold tracking-tight">Dixo</span>
         </div>
+        <div className="ml-auto">
+          <SoundControls />
+        </div>
       </header>
 
       {/* ── Contenu ── */}
@@ -108,6 +112,9 @@ function GameContent({
     gameId,
     playerId,
   });
+
+  // Trigger sound effects based on game state changes
+  useGameSounds(gameState, playerId);
 
   // ── Auto-leave lobby on page unload (non-host, LOBBY phase, PRIVATE) ──
   const canAutoLeave = useCallback(() => {

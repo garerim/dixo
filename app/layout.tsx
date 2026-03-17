@@ -4,6 +4,7 @@ import { ThemeProvider } from "next-themes";
 import { Toaster } from "@/components/ui/sonner";
 import { AuthProvider } from "@/components/providers/auth-provider";
 import { InviteProvider } from "@/components/providers/invite-provider";
+import { SoundProvider } from "@/components/providers/sound-provider";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -40,7 +41,9 @@ export default function RootLayout({
         >
           <AuthProvider>
             <InviteProvider>
-              {children}
+              <SoundProvider>
+                {children}
+              </SoundProvider>
             </InviteProvider>
             <Toaster position="top-center" richColors />
           </AuthProvider>

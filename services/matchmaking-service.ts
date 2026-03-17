@@ -277,6 +277,8 @@ export class MatchmakingService {
           id: playerEntry.userId,
           displayName: playerProfile.pseudo,
           avatarUrl: playerProfile.avatar_url ?? undefined,
+          subscription: playerProfile.subscription ?? "free",
+          diceSkin: playerProfile.dice_skin ?? undefined,
         });
 
         if (result.success) {

@@ -67,6 +67,8 @@ export interface PublicPlayerInfo {
   avatarUrl?: string;
   /** Tier d'abonnement (pour affichage du badge Premium) */
   subscription?: string;
+  /** Skin de dé sélectionné */
+  diceSkin?: string;
   diceCount: number;
   /** Dés visibles uniquement pour le joueur lui-même */
   diceValues: number[];
@@ -149,6 +151,7 @@ export interface PublicProfile {
   elo1v1: number;
   elo4p: number;
   subscription: SubscriptionTier;
+  diceSkin: string | null;
   gamesPlayed: number;
   gamesWon: number;
   bestWinStreak: number;
@@ -170,6 +173,7 @@ export interface FullProfile extends PublicProfile {
 export interface UpdateProfileRequest {
   pseudo?: string;
   avatarUrl?: string;
+  diceSkin?: string | null;
 }
 
 /** Un point dans l'historique ELO */

@@ -78,6 +78,7 @@ export class GameService {
           displayName,
           avatarUrl: profile?.avatar_url ?? undefined,
           subscription: profile?.subscription ?? "free",
+          diceSkin: profile?.dice_skin ?? undefined,
         },
         gameMode,
       );
@@ -117,6 +118,7 @@ export class GameService {
         displayName,
         avatarUrl: profile?.avatar_url ?? undefined,
         subscription: profile?.subscription ?? "free",
+        diceSkin: profile?.dice_skin ?? undefined,
       });
       if (!result.success) {
         return { success: false, error: result.error };

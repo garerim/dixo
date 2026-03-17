@@ -1,6 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/utils";
+import Image from "next/image";
 
 interface DiceFaceProps {
   value: number;
@@ -9,6 +10,8 @@ interface DiceFaceProps {
   hidden?: boolean;
   /** Dé mis en surbrillance (match avec l'enchère) */
   highlighted?: boolean;
+  /** Skin de dé (nom du dossier dans /dices-skins/) */
+  skin?: string;
   className?: string;
 }
 
@@ -16,6 +19,12 @@ const sizeClasses = {
   sm: "size-8 text-sm rounded-md",
   md: "size-11 text-lg rounded-lg",
   lg: "size-14 text-2xl rounded-xl",
+} as const;
+
+const skinSizePx = {
+  sm: 32,
+  md: 44,
+  lg: 56,
 } as const;
 
 /**
@@ -42,6 +51,7 @@ export function DiceFace({
   size = "md",
   hidden = false,
   highlighted = false,
+  skin,
   className,
 }: DiceFaceProps) {
   if (hidden) {
@@ -54,6 +64,31 @@ export function DiceFace({
         )}
       >
         ?
+      </div>
+    );
+  }
+
+  // Skin mode: render image instead of dots
+  if (skin) {
+    const px = skinSizePx[size];
+    return (
+      <div
+        className={cn(
+          "relative inline-flex items-center justify-center select-none overflow-hidden",
+          sizeClasses[size],
+          highlighted && "ring-2 ring-primary ring-offset-1 ring-offset-background",
+          className,
+        )}
+        title={`Dé : ${value}`}
+      >
+        <Image
+          src={`/dices-skins/${skin}/dice-${value}.png`}
+          alt={`Dé ${value}`}
+          width={px}
+          height={px}
+          className="size-full object-cover"
+          draggable={false}
+        />
       </div>
     );
   }
@@ -106,11 +141,13 @@ export function DiceRow({
   values,
   size = "md",
   highlightFace,
+  skin,
   className,
 }: {
   values: number[];
   size?: "sm" | "md" | "lg";
   highlightFace?: number;
+  skin?: string;
   className?: string;
 }) {
   if (values.length === 0) {
@@ -124,6 +161,7 @@ export function DiceRow({
           key={i}
           value={v}
           size={size}
+          skin={skin}
           highlighted={
             highlightFace !== undefined &&
             (v === highlightFace || (highlightFace !== 1 && v === 1))

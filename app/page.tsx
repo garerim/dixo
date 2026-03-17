@@ -23,6 +23,8 @@ import {
   Zap,
   ChevronRight,
   BookOpen,
+  Paintbrush,
+  ShoppingBag,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -217,6 +219,14 @@ export default function HomePage() {
               <DropdownMenuItem onClick={() => router.push("/friends")}>
                 <UserPlus className="mr-2 size-4" />
                 <span>Friends</span>
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => router.push("/skins")}>
+                <Paintbrush className="mr-2 size-4" />
+                <span>Dice Skins</span>
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => router.push("/shop")}>
+                <ShoppingBag className="mr-2 size-4" />
+                <span>Shop</span>
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => router.push("/how-to-play")}>
                 <BookOpen className="mr-2 size-4" />

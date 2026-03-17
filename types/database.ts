@@ -78,6 +78,9 @@ export type ProfileRow = {
   best_win_streak: number;
   current_win_streak: number;
 
+  // Personnalisation
+  dice_skin: string | null;
+
   // Stripe
   stripe_customer_id: string | null;
 
@@ -150,6 +153,15 @@ export type ReportRow = {
   updated_at: string;
 };
 
+/** Ligne de la table `user_skins` */
+export type UserSkinRow = {
+  id: string;
+  user_id: string;
+  skin_id: string;
+  purchased_at: string;
+  stripe_session_id: string | null;
+};
+
 /** Types générés pour la base Supabase */
 export interface Database {
   public: {
@@ -206,6 +218,12 @@ export interface Database {
         Row: ReportRow;
         Insert: Omit<ReportRow, "id" | "status" | "admin_notes" | "created_at" | "updated_at">;
         Update: Partial<ReportRow>;
+        Relationships: [];
+      };
+      user_skins: {
+        Row: UserSkinRow;
+        Insert: Omit<UserSkinRow, "id" | "purchased_at">;
+        Update: Partial<UserSkinRow>;
         Relationships: [];
       };
     };

@@ -69,7 +69,7 @@ export class ProfileRepository {
    */
   async update(
     userId: string,
-    data: Partial<Pick<ProfileRow, "pseudo" | "avatar_url" | "is_online" | "last_seen_at">>,
+    data: Partial<Pick<ProfileRow, "pseudo" | "avatar_url" | "dice_skin" | "is_online" | "last_seen_at">>,
   ): Promise<ProfileRow | null> {
     const { data: updated, error } = await this.supabase
       .from("profiles")
