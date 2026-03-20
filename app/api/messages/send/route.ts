@@ -6,6 +6,8 @@ import { NextRequest } from "next/server";
 import { z } from "zod";
 import { errorResponse, successResponse } from "@/app/api/game/helpers";
 import { withMessageAuth } from "../helpers";
+import { getSupabaseAdminClient } from "@/lib/supabase/server";
+import { NotificationService } from "@/services/notification-service";
 
 const SendMessageSchema = z.object({
   receiverId: z.string().uuid(),
@@ -32,6 +34,18 @@ export async function POST(request: NextRequest) {
 
   if (!result.success) {
     return errorResponse(result.error ?? "Unable to send message.", 400);
+  }
+
+  // Notify the receiver (with deduplication to avoid spam)
+  if (result.data) {
+    const admin = getSupabaseAdminClient();
+    await NotificationService.notifyMessageReceived(
+      admin,
+      parsed.data.receiverId,
+      result.data.senderPseudo,
+      result.data.senderAvatarUrl,
+      user.id,
+    );
   }
 
   return successResponse(result.data, 201);

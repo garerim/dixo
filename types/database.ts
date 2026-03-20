@@ -162,6 +162,26 @@ export type UserSkinRow = {
   stripe_session_id: string | null;
 };
 
+/** Type de notification */
+export type NotificationType =
+  | "friend_request_received"
+  | "friend_request_accepted"
+  | "message_received"
+  | "game_invite_received"
+  | "game_started";
+
+/** Ligne de la table `notifications` */
+export type NotificationRow = {
+  id: string;
+  user_id: string;
+  type: NotificationType;
+  title: string;
+  body: string | null;
+  data: Record<string, unknown>;
+  is_read: boolean;
+  created_at: string;
+};
+
 /** Types générés pour la base Supabase */
 export interface Database {
   public: {
@@ -224,6 +244,12 @@ export interface Database {
         Row: UserSkinRow;
         Insert: Omit<UserSkinRow, "id" | "purchased_at">;
         Update: Partial<UserSkinRow>;
+        Relationships: [];
+      };
+      notifications: {
+        Row: NotificationRow;
+        Insert: Omit<NotificationRow, "id" | "created_at">;
+        Update: Partial<NotificationRow>;
         Relationships: [];
       };
     };

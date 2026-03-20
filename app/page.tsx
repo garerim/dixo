@@ -57,6 +57,7 @@ import {
 import { useAuth } from "@/components/providers/auth-provider";
 import { gameClient } from "@/features/game/api/game-client";
 import { useMatchmaking } from "@/features/matchmaking/hooks/use-matchmaking";
+import { NotificationBell } from "@/features/notifications";
 import Link from "next/link";
 
 export default function HomePage() {
@@ -194,6 +195,23 @@ export default function HomePage() {
             </div>
           )}
 
+          {/* Header links */}
+          <Button variant="ghost" size="sm" className="hidden gap-1.5 sm:flex" asChild>
+            <Link href="/shop">
+              <ShoppingBag className="size-4" />
+              Shop
+            </Link>
+          </Button>
+          <Button variant="ghost" size="sm" className="hidden gap-1.5 sm:flex" asChild>
+            <Link href="/how-to-play">
+              <BookOpen className="size-4" />
+              How to play
+            </Link>
+          </Button>
+
+          {/* Notifications */}
+          <NotificationBell />
+
           {/* Dropdown Menu */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -224,11 +242,11 @@ export default function HomePage() {
                 <Paintbrush className="mr-2 size-4" />
                 <span>Dice Skins</span>
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => router.push("/shop")}>
+              <DropdownMenuItem onClick={() => router.push("/shop")} className="sm:hidden">
                 <ShoppingBag className="mr-2 size-4" />
                 <span>Shop</span>
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => router.push("/how-to-play")}>
+              <DropdownMenuItem onClick={() => router.push("/how-to-play")} className="sm:hidden">
                 <BookOpen className="mr-2 size-4" />
                 <span>How to play</span>
               </DropdownMenuItem>

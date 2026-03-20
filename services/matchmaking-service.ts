@@ -22,6 +22,7 @@ import {
 import { MatchmakingRepository } from "@/lib/database/matchmaking-repository";
 import { GameRepository } from "@/lib/database/game-repository";
 import { ProfileRepository } from "@/lib/database/profile-repository";
+import { NotificationService } from "@/services/notification-service";
 
 // =============================================================================
 // Types
@@ -41,8 +42,10 @@ export class MatchmakingService {
   private readonly queue: MatchmakingRepository;
   private readonly games: GameRepository;
   private readonly profiles: ProfileRepository;
+  private readonly supabase: SupabaseClient<Database>;
 
   constructor(supabase: SupabaseClient<Database>) {
+    this.supabase = supabase;
     this.queue = new MatchmakingRepository(supabase);
     this.games = new GameRepository(supabase);
     this.profiles = new ProfileRepository(supabase);
@@ -303,6 +306,15 @@ export class MatchmakingService {
         .map((e) => e.id);
 
       await this.queue.markAsMatched(matchedEntryIds, gameId);
+
+      // Notify all matched players that the game is starting
+      for (const player of match.players) {
+        NotificationService.notifyGameStarted(
+          this.supabase,
+          player.userId,
+          gameId,
+        ).catch(() => {});
+      }
 
       return gameId;
     } catch (error) {

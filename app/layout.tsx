@@ -5,6 +5,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { AuthProvider } from "@/components/providers/auth-provider";
 import { InviteProvider } from "@/components/providers/invite-provider";
 import { SoundProvider } from "@/components/providers/sound-provider";
+import { NotificationProvider } from "@/components/providers/notification-provider";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -40,11 +41,13 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <AuthProvider>
-            <InviteProvider>
-              <SoundProvider>
-                {children}
-              </SoundProvider>
-            </InviteProvider>
+            <NotificationProvider>
+              <InviteProvider>
+                <SoundProvider>
+                  {children}
+                </SoundProvider>
+              </InviteProvider>
+            </NotificationProvider>
             <Toaster position="top-center" richColors />
           </AuthProvider>
         </ThemeProvider>

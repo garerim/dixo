@@ -362,3 +362,24 @@ export interface UpdateReportRequest {
 
 export type AdminReportsResponse = ApiResponse<{ rows: AdminReport[]; count: number }>;
 export type UpdateReportResponse = ApiResponse<AdminReport>;
+
+// =============================================================================
+// Notifications
+// =============================================================================
+
+import type { NotificationType } from "./database";
+
+export interface NotificationInfo {
+  id: string;
+  type: NotificationType;
+  title: string;
+  body: string | null;
+  data: Record<string, unknown>;
+  isRead: boolean;
+  createdAt: string;
+}
+
+export type NotificationsListResponse = ApiResponse<NotificationInfo[]>;
+export type UnreadCountResponse = ApiResponse<{ count: number }>;
+export type MarkNotificationReadResponse = ApiResponse<void>;
+export type DeleteNotificationResponse = ApiResponse<void>;

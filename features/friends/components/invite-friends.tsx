@@ -43,13 +43,23 @@ export function InviteFriends({ gameCode, gameId, open, onOpenChange }: InviteFr
 
     setSending(friend.id);
     try {
-      await sendGameInvite(friend.id, {
-        senderId: user.id,
-        senderPseudo: profile?.pseudo ?? user.user_metadata?.full_name ?? "Player",
-        senderAvatarUrl: profile?.avatarUrl ?? user.user_metadata?.avatar_url ?? null,
-        gameId,
-        joinCode: gameCode,
-      });
+      // Send real-time broadcast + persistent notification in parallel
+      await Promise.all([
+        sendGameInvite(friend.id, {
+          senderId: user.id,
+          senderPseudo: profile?.pseudo ?? user.user_metadata?.full_name ?? "Player",
+          senderAvatarUrl: profile?.avatarUrl ?? user.user_metadata?.avatar_url ?? null,
+          gameId,
+          joinCode: gameCode,
+        }),
+        fetch("/api/notifications/game-invite", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ recipientId: friend.id, gameId, joinCode: gameCode }),
+        }).then((res) => {
+          if (!res.ok) console.error("[InviteFriends] Failed to create persistent notification");
+        }),
+      ]);
       setInvitedFriends((prev) => new Set(prev).add(friend.id));
       toast.success(`Invitation sent to ${friend.pseudo}!`);
     } catch {
