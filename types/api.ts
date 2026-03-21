@@ -383,3 +383,30 @@ export type NotificationsListResponse = ApiResponse<NotificationInfo[]>;
 export type UnreadCountResponse = ApiResponse<{ count: number }>;
 export type MarkNotificationReadResponse = ApiResponse<void>;
 export type DeleteNotificationResponse = ApiResponse<void>;
+
+// =============================================================================
+// Achievements
+// =============================================================================
+
+/** Définition statique d'un achievement */
+export interface AchievementDefinition {
+  id: string;
+  name: string;
+  description: string;
+  icon: string;
+  maxProgress: number;
+}
+
+/** Achievement avec progression utilisateur */
+export interface UserAchievement {
+  achievementId: string;
+  name: string;
+  description: string;
+  icon: string;
+  currentValue: number;
+  maxValue: number;
+  isUnlocked: boolean;
+  unlockedAt: string | null;
+}
+
+export type AchievementsListResponse = ApiResponse<UserAchievement[]>;

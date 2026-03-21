@@ -28,6 +28,7 @@ const TOAST_TYPES = new Set([
   "friend_request_accepted",
   "message_received",
   "game_invite_received",
+  "achievement_unlocked",
   "game_started",
 ]);
 

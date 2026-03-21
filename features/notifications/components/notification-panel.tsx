@@ -10,6 +10,7 @@ import {
   CheckCheck,
   Bell,
   X,
+  Trophy,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNotificationContext } from "@/components/providers/notification-provider";
@@ -22,6 +23,7 @@ const ICONS: Record<NotificationType, React.ReactNode> = {
   message_received: <MessageSquare className="size-4 text-purple-500" />,
   game_invite_received: <Dice5 className="size-4 text-yellow-500" />,
   game_started: <Swords className="size-4 text-primary" />,
+  achievement_unlocked: <Trophy className="size-4 text-yellow-500" />,
 };
 
 function timeAgo(dateString: string): string {
@@ -75,6 +77,9 @@ export function NotificationPanel() {
         }
         break;
       }
+      case "achievement_unlocked":
+        router.push("/profile");
+        break;
     }
   }
 

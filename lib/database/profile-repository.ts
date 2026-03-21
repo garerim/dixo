@@ -99,6 +99,7 @@ export class ProfileRepository {
       bestWinStreak?: number;
       elo1v1?: number;
       elo4p?: number;
+      consecutiveBluffWins?: number;
     },
   ): Promise<ProfileRow | null> {
     const updateData: Partial<ProfileRow> = {};
@@ -111,6 +112,7 @@ export class ProfileRepository {
     if (stats.bestWinStreak !== undefined) updateData.best_win_streak = stats.bestWinStreak;
     if (stats.elo1v1 !== undefined) updateData.elo_1v1 = stats.elo1v1;
     if (stats.elo4p !== undefined) updateData.elo_4p = stats.elo4p;
+    if (stats.consecutiveBluffWins !== undefined) updateData.consecutive_bluff_wins = stats.consecutiveBluffWins;
 
     const { data: updated, error } = await this.supabase
       .from("profiles")

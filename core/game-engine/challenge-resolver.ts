@@ -42,6 +42,14 @@ export function resolveChallenge(
   // Qui perd ?
   const loserId = isChallengeCorrect ? contestedBid.playerId : callerId;
 
+  // Snapshot des dés avant pénalité (pour affichage)
+  const revealedDice: Record<string, readonly number[]> = {};
+  for (const player of state.players) {
+    if (player.isAlive) {
+      revealedDice[player.id] = [...player.diceValues];
+    }
+  }
+
   return {
     callerId,
     bidderId: contestedBid.playerId,
@@ -49,6 +57,7 @@ export function resolveChallenge(
     actualCount,
     isChallengeCorrect,
     loserId,
+    revealedDice,
   };
 }
 

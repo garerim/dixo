@@ -2,20 +2,9 @@
 
 import { use, useEffect, useCallback, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { Dice5, ArrowLeft, Loader2, Flag, MessageSquare } from "lucide-react";
+import { Dice5, ArrowLeft, Loader2, MessageSquare } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
 import { useState } from "react";
 import { useAuth } from "@/components/providers/auth-provider";
 import { useGame } from "@/features/game/hooks/use-game";
@@ -166,6 +155,13 @@ function GameContent({
     };
   }, [canAutoLeave, handleLeaveGame, onBackRef]);
 
+  // ── Erreur ──
+  useEffect(() => {
+    if (error) {
+      toast.error(error);
+    }
+  }, [error]);
+
   // ── Loading ──
   if (isLoading || !gameState) {
     return (
@@ -177,15 +173,6 @@ function GameContent({
       </div>
     );
   }
-
-  // ── Erreur ──
-  if (error) {
-    toast.error(error);
-  }
-
-  // La partie est en cours (pas LOBBY, pas GAME_OVER) → on peut abandonner
-  const canSurrender =
-    gameState.phase !== "LOBBY" && gameState.phase !== "GAME_OVER";
 
   const handleSurrender = async () => {
     await actions.surrender();
@@ -214,6 +201,8 @@ function GameContent({
             playerId={playerId}
             onPlaceBid={actions.placeBid}
             onCallChallenge={actions.callChallenge}
+            onSurrender={handleSurrender}
+            isRanked={gameState.gameMode === "RANKED"}
           />
         );
 
@@ -224,6 +213,8 @@ function GameContent({
             gameState={gameState}
             playerId={playerId}
             onNextRound={actions.nextRound}
+            onSurrender={handleSurrender}
+            isRanked={gameState.gameMode === "RANKED"}
           />
         );
 
@@ -242,48 +233,15 @@ function GameContent({
   })();
 
   return (
-    <div className="flex flex-1 gap-4 p-4">
+    <div className="flex flex-1 gap-4 p-4 overflow-hidden min-h-0">
       {/* ── Contenu principal ── */}
-      <div className="flex flex-1 flex-col">
-        {/* ── Bouton Abandonner (flottant en haut) ── */}
-        {canSurrender && (
-          <div className="mb-2 flex justify-end">
-            <AlertDialog>
-              <AlertDialogTrigger asChild>
-                <Button variant="destructive" size="sm" className="gap-1.5">
-                  <Flag className="size-3.5" />
-                  Surrender
-                </Button>
-              </AlertDialogTrigger>
-              <AlertDialogContent>
-                <AlertDialogHeader>
-                  <AlertDialogTitle>Surrender the game?</AlertDialogTitle>
-                  <AlertDialogDescription>
-                    You will be eliminated and your opponent will win the game.
-                    {gameState.gameMode === "RANKED" &&
-                      " Your ELO will be affected."}
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                  <AlertDialogCancel>Cancel</AlertDialogCancel>
-                  <AlertDialogAction
-                    onClick={handleSurrender}
-                    className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-                  >
-                    Confirm surrender
-                  </AlertDialogAction>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialog>
-          </div>
-        )}
-
+      <div className="flex flex-1 flex-col overflow-y-auto min-h-0">
         {content}
       </div>
 
       {/* ── Chat (sur le côté desktop) ── */}
-      <div className="hidden lg:block">
-        <GameChat gameId={gameId} />
+      <div className="hidden lg:flex lg:w-80 lg:flex-col min-h-0">
+        <GameChat gameId={gameId} fullHeight />
       </div>
     </div>
   );

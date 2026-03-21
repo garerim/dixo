@@ -69,6 +69,8 @@ export interface ChallengeResult {
   readonly isChallengeCorrect: boolean;
   /** ID du joueur qui perd un dé */
   readonly loserId: string;
+  /** Snapshot des dés de chaque joueur au moment du challenge (avant pénalité) */
+  readonly revealedDice: Record<string, readonly number[]>;
 }
 
 /** Mode de jeu */

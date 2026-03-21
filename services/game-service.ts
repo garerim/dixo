@@ -30,6 +30,7 @@ import {
 import { GameRepository } from "@/lib/database/game-repository";
 import { ProfileRepository } from "@/lib/database/profile-repository";
 import { EloService } from "./elo-service";
+import { AchievementService } from "./achievement-service";
 import { sanitizeGameStateForPlayer } from "./game-state-sanitizer";
 
 // =============================================================================
@@ -301,7 +302,24 @@ export class GameService {
         GameService.eliminationOrders.set(gameId, order);
       }
 
-      // Si la partie est terminée → appliquer ELO + stats
+      // Mettre à jour le compteur de bluffs consécutifs du bidder
+      const challengeResult = result.state.lastChallengeResult;
+      if (challengeResult) {
+        const bidderId = challengeResult.bidderId;
+        const bluffSucceeded = !challengeResult.isChallengeCorrect;
+
+        const bidderProfile = await this.profileRepository.findById(bidderId);
+        if (bidderProfile) {
+          const newCount = bluffSucceeded
+            ? bidderProfile.consecutive_bluff_wins + 1
+            : 0;
+          await this.profileRepository.updateStats(bidderId, {
+            consecutiveBluffWins: newCount,
+          });
+        }
+      }
+
+      // Si la partie est terminée → appliquer ELO + stats + achievements
       const sanitized = sanitizeGameStateForPlayer(result.state, userId);
 
       if (result.state.phase === GamePhase.GAME_OVER) {
@@ -325,6 +343,11 @@ export class GameService {
         if (eloChanges) {
           sanitized.eloChanges = eloChanges;
         }
+
+        // Vérifier les achievements (fire-and-forget)
+        new AchievementService()
+          .checkAndUnlock(result.state, result.state.lastChallengeResult)
+          .catch((err) => console.error("[Achievements] check failed:", err));
       }
 
       await this.repository.update(result.state);
@@ -417,6 +440,11 @@ export class GameService {
           if (eloChanges) {
             sanitized.eloChanges = eloChanges;
           }
+
+          // Vérifier les achievements (fire-and-forget)
+          new AchievementService()
+            .checkAndUnlock(result.state, result.state.lastChallengeResult)
+            .catch((err) => console.error("[Achievements] check failed:", err));
         } catch (statsError) {
           console.error("Erreur mise à jour des stats après abandon:", statsError);
           // On ne bloque pas l'abandon si les stats échouent

@@ -1,8 +1,19 @@
 "use client";
 
-import { CheckCircle, XCircle, ArrowRight } from "lucide-react";
+import { CheckCircle, XCircle, ArrowRight, Flag } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import type { PublicGameState } from "@/types/api";
 import { PlayerCard } from "./player-card";
 import { DiceFace } from "./dice-face";
@@ -11,12 +22,16 @@ interface ResultViewProps {
   gameState: PublicGameState;
   playerId: string;
   onNextRound: () => Promise<void>;
+  onSurrender: () => Promise<void>;
+  isRanked: boolean;
 }
 
 export function ResultView({
   gameState,
   playerId,
   onNextRound,
+  onSurrender,
+  isRanked,
 }: ResultViewProps) {
   const challenge = gameState.lastChallengeResult;
   if (!challenge) return null;
@@ -29,6 +44,36 @@ export function ResultView({
 
   return (
     <div className="flex flex-col gap-5 p-4">
+      {/* ── Header avec Surrender ── */}
+      <div className="flex justify-end">
+        <AlertDialog>
+          <AlertDialogTrigger asChild>
+            <Button variant="destructive" size="sm" className="gap-1.5">
+              <Flag className="size-3.5" />
+              Surrender
+            </Button>
+          </AlertDialogTrigger>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Surrender the game?</AlertDialogTitle>
+              <AlertDialogDescription>
+                You will be eliminated and your opponent will win the game.
+                {isRanked && " Your ELO will be affected."}
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Cancel</AlertDialogCancel>
+              <AlertDialogAction
+                onClick={onSurrender}
+                className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              >
+                Confirm surrender
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+      </div>
+
       {/* ── Résultat du Challenge ── */}
       <div className="flex flex-col items-center gap-3 rounded-xl border bg-card p-5 text-center">
         {challenge.isChallengeCorrect ? (
@@ -88,16 +133,22 @@ export function ResultView({
           Dés révélés
         </span>
         <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-          {gameState.players.map((player) => (
-            <PlayerCard
-              key={player.id}
-              player={player}
-              isCurrentTurn={false}
-              isMe={player.id === playerId}
-              highlightFace={highlightFace}
-              showDice
-            />
-          ))}
+          {gameState.players.map((player) => {
+            const revealedValues = challenge.revealedDice?.[player.id];
+            const playerWithDice = revealedValues
+              ? { ...player, diceValues: [...revealedValues] }
+              : player;
+            return (
+              <PlayerCard
+                key={player.id}
+                player={playerWithDice}
+                isCurrentTurn={false}
+                isMe={player.id === playerId}
+                highlightFace={highlightFace}
+                showDice
+              />
+            );
+          })}
         </div>
       </div>
 

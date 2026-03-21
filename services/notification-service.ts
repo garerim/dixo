@@ -41,12 +41,18 @@ const gameStartedDataSchema = z.object({
   gameId: z.string().uuid(),
 });
 
+const achievementUnlockedDataSchema = z.object({
+  achievementId: z.string(),
+  icon: z.string(),
+});
+
 const notificationDataSchemas: Record<NotificationType, z.ZodSchema> = {
   friend_request_received: friendRequestDataSchema,
   friend_request_accepted: friendAcceptedDataSchema,
   message_received: messageReceivedDataSchema,
   game_invite_received: gameInviteDataSchema,
   game_started: gameStartedDataSchema,
+  achievement_unlocked: achievementUnlockedDataSchema,
 };
 
 function validateNotificationData(

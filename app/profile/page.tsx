@@ -41,6 +41,7 @@ import { useProfile } from "@/features/profile/hooks/use-profile";
 import { EloChart } from "@/features/profile/components/elo-chart";
 import { profileClient } from "@/features/profile/api/profile-client";
 import { useBilling } from "@/features/billing/hooks/use-billing";
+import { useAchievements, AchievementsList } from "@/features/achievements";
 import { getRankForElo, getNextRank, getEloProgressInRank } from "@/core/ranks";
 
 // =============================================================================
@@ -101,6 +102,7 @@ function ProfileContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { isLoading: billingLoading, openPortal } = useBilling();
+  const { achievements, unlockedCount, totalCount } = useAchievements();
 
   const [isEditingPseudo, setIsEditingPseudo] = useState(false);
   const [editPseudo, setEditPseudo] = useState("");
@@ -438,6 +440,22 @@ function ProfileContent() {
             </CardContent>
           </Card>
         </div>
+
+        {/* ── Achievements ── */}
+        <Card>
+          <CardHeader className="pb-2">
+            <CardTitle className="flex items-center gap-2 text-base">
+              <Trophy className="size-4 text-yellow-500" />
+              Achievements
+            </CardTitle>
+            <CardDescription>
+              {unlockedCount}/{totalCount} unlocked
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <AchievementsList achievements={achievements} />
+          </CardContent>
+        </Card>
 
         {/* ── Abonnement ── */}
         <Card>

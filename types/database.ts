@@ -78,6 +78,9 @@ export type ProfileRow = {
   best_win_streak: number;
   current_win_streak: number;
 
+  // Bluffs consécutifs (pour achievement Bluff Master)
+  consecutive_bluff_wins: number;
+
   // Personnalisation
   dice_skin: string | null;
 
@@ -168,7 +171,8 @@ export type NotificationType =
   | "friend_request_accepted"
   | "message_received"
   | "game_invite_received"
-  | "game_started";
+  | "game_started"
+  | "achievement_unlocked";
 
 /** Ligne de la table `notifications` */
 export type NotificationRow = {
@@ -180,6 +184,17 @@ export type NotificationRow = {
   data: Record<string, unknown>;
   is_read: boolean;
   created_at: string;
+};
+
+/** Ligne de la table `user_achievements` */
+export type UserAchievementRow = {
+  id: string;
+  user_id: string;
+  achievement_id: string;
+  progress: Record<string, unknown>;
+  unlocked_at: string | null;
+  created_at: string;
+  updated_at: string;
 };
 
 /** Types générés pour la base Supabase */
@@ -250,6 +265,12 @@ export interface Database {
         Row: NotificationRow;
         Insert: Omit<NotificationRow, "id" | "created_at">;
         Update: Partial<NotificationRow>;
+        Relationships: [];
+      };
+      user_achievements: {
+        Row: UserAchievementRow;
+        Insert: Omit<UserAchievementRow, "id" | "created_at" | "updated_at">;
+        Update: Partial<UserAchievementRow>;
         Relationships: [];
       };
     };
