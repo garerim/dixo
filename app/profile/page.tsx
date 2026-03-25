@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useState, useEffect, useRef } from "react";
+import { Suspense, useState, useEffect, useRef, useCallback } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import {
@@ -22,6 +22,8 @@ import {
   Shield,
   Medal,
   Gem,
+  Trash2,
+  Loader2 as Loader2Icon,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -36,6 +38,17 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Separator } from "@/components/ui/separator";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { useAuth } from "@/components/providers/auth-provider";
 import { useProfile } from "@/features/profile/hooks/use-profile";
 import { EloChart } from "@/features/profile/components/elo-chart";
@@ -108,6 +121,9 @@ function ProfileContent() {
   const [editPseudo, setEditPseudo] = useState("");
   const [isSaving, setIsSaving] = useState(false);
   const [isUploadingAvatar, setIsUploadingAvatar] = useState(false);
+  const [isDeletingAccount, setIsDeletingAccount] = useState(false);
+  const [deleteConfirmText, setDeleteConfirmText] = useState("");
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Redirection si pas connecté
@@ -210,6 +226,26 @@ function ProfileContent() {
     // Reset input
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
+    }
+  }
+
+  // ─── Delete account (RGPD) ───
+  async function handleDeleteAccount() {
+    setIsDeletingAccount(true);
+    const result = await profileClient.deleteAccount();
+
+    if (result.success) {
+      toast.success("Your account has been deleted.");
+      // Sign out client-side and redirect
+      const { signOut } = await import("@/lib/supabase/client").then((m) => {
+        const client = m.getSupabaseBrowserClient();
+        return { signOut: () => client.auth.signOut() };
+      });
+      await signOut();
+      router.replace("/");
+    } else {
+      toast.error(result.error ?? "Failed to delete account.");
+      setIsDeletingAccount(false);
     }
   }
 
@@ -577,6 +613,74 @@ function ProfileContent() {
               >
                 View leaderboard
               </Button>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* ── Danger zone — Delete account (RGPD) ── */}
+        <Card className="border-destructive/30">
+          <CardHeader className="pb-2">
+            <CardTitle className="flex items-center gap-2 text-base text-destructive">
+              <Trash2 className="size-4" />
+              Danger Zone
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="flex items-center justify-between gap-4">
+              <div>
+                <p className="font-medium">Delete my account</p>
+                <p className="text-sm text-muted-foreground">
+                  Permanently delete your account and all associated data. This action is irreversible.
+                </p>
+              </div>
+              <AlertDialog open={deleteDialogOpen} onOpenChange={(open) => {
+                setDeleteDialogOpen(open);
+                if (!open) setDeleteConfirmText("");
+              }}>
+                <AlertDialogTrigger asChild>
+                  <Button variant="destructive" size="sm">
+                    Delete account
+                  </Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      This will permanently delete your account and all your data:
+                      profile, game history, friends, messages, achievements, and ELO history.
+                      This action cannot be undone.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <div className="space-y-2">
+                    <p className="text-sm text-muted-foreground">
+                      Type <span className="font-bold text-foreground">DELETE</span> to confirm:
+                    </p>
+                    <Input
+                      value={deleteConfirmText}
+                      onChange={(e) => setDeleteConfirmText(e.target.value)}
+                      placeholder="DELETE"
+                      className="font-mono"
+                    />
+                  </div>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <Button
+                      variant="destructive"
+                      disabled={deleteConfirmText !== "DELETE" || isDeletingAccount}
+                      onClick={handleDeleteAccount}
+                    >
+                      {isDeletingAccount ? (
+                        <>
+                          <Loader2 className="mr-2 size-4 animate-spin" />
+                          Deleting...
+                        </>
+                      ) : (
+                        "Delete my account"
+                      )}
+                    </Button>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
             </div>
           </CardContent>
         </Card>

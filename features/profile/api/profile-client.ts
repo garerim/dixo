@@ -92,6 +92,11 @@ export const profileClient = {
     return fetchApi(`/elo-history${query}`, { method: "GET" });
   },
 
+  /** Supprime le compte et toutes les données (RGPD) */
+  deleteAccount(): Promise<ApiResponse<{ deleted: boolean }>> {
+    return fetchApi("/me", { method: "DELETE" });
+  },
+
   /** Upload avatar image */
   async uploadAvatar(file: File): Promise<ApiResponse<{ avatarUrl: string }>> {
     try {
