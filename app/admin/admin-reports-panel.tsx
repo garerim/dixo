@@ -90,16 +90,15 @@ export function AdminReportsPanel() {
   const totalPages = Math.ceil(count / PAGE_SIZE);
 
   return (
-    <div className="flex min-h-svh flex-col bg-background">
-      <header className="flex items-center gap-3 border-b px-6 py-4">
-        <Flag className="size-5 text-destructive" />
-        <h1 className="text-xl font-bold">Admin — Reports</h1>
-        <Badge variant="secondary" className="ml-auto">
-          {count} total
+    <div className="space-y-4">
+      <div className="flex items-center gap-3">
+        <Badge variant="secondary">
+          <Flag className="size-3 mr-1" />
+          {count} reports
         </Badge>
-      </header>
+      </div>
 
-      <main className="flex-1 overflow-auto p-6">
+      <div>
         {isLoading ? (
           <p className="text-center text-muted-foreground py-12">Loading...</p>
         ) : reports.length === 0 ? (
@@ -259,7 +258,7 @@ export function AdminReportsPanel() {
             </Button>
           </div>
         )}
-      </main>
+      </div>
     </div>
   );
 }

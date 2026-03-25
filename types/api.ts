@@ -410,3 +410,51 @@ export interface UserAchievement {
 }
 
 export type AchievementsListResponse = ApiResponse<UserAchievement[]>;
+
+// =============================================================================
+// Admin Dashboard
+// =============================================================================
+
+/** Statistiques globales pour le dashboard admin */
+export interface AdminStats {
+  totalUsers: number;
+  onlineUsers: number;
+  premiumUsers: number;
+  totalGames: number;
+  gamesToday: number;
+  activeGames: number;
+  pendingReports: number;
+}
+
+/** Utilisateur dans la liste admin */
+export interface AdminUser {
+  id: string;
+  pseudo: string;
+  avatarUrl: string | null;
+  elo1v1: number;
+  elo4p: number;
+  subscription: SubscriptionTier;
+  gamesPlayed: number;
+  gamesWon: number;
+  isAdmin: boolean;
+  isOnline: boolean;
+  createdAt: string;
+  lastSeenAt: string | null;
+}
+
+/** Partie dans la liste admin */
+export interface AdminGame {
+  id: string;
+  joinCode: string;
+  gameMode: string;
+  phase: string;
+  round: number;
+  playerCount: number;
+  hostPseudo: string | null;
+  winnerPseudo: string | null;
+  createdAt: string;
+}
+
+export type AdminStatsResponse = ApiResponse<AdminStats>;
+export type AdminUsersResponse = ApiResponse<{ rows: AdminUser[]; count: number }>;
+export type AdminGamesResponse = ApiResponse<{ rows: AdminGame[]; count: number }>;

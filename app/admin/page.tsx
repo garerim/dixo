@@ -1,10 +1,10 @@
 // =============================================================================
-// PAGE — /admin — Panneau d'administration des signalements
+// PAGE — /admin — Dashboard d'administration
 // =============================================================================
 
 import { redirect } from "next/navigation";
 import { getSupabaseServerClient, getSupabaseAdminClient } from "@/lib/supabase/server";
-import { AdminReportsPanel } from "./admin-reports-panel";
+import { AdminDashboard } from "./admin-dashboard";
 
 export default async function AdminPage() {
   // Check auth
@@ -23,5 +23,5 @@ export default async function AdminPage() {
 
   if (!profile?.is_admin) redirect("/");
 
-  return <AdminReportsPanel />;
+  return <AdminDashboard />;
 }
