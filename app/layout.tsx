@@ -6,6 +6,7 @@ import { AuthProvider } from "@/components/providers/auth-provider";
 import { InviteProvider } from "@/components/providers/invite-provider";
 import { SoundProvider } from "@/components/providers/sound-provider";
 import { NotificationProvider } from "@/components/providers/notification-provider";
+import { ServiceWorkerRegister } from "@/components/providers/sw-register";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -22,6 +23,13 @@ export const metadata: Metadata = {
   title: "Dixo — The dice bluffing game",
   description:
     "Bluff dice game, online, with friends or strangers.",
+  manifest: "/manifest.json",
+  themeColor: "#09090b",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+    title: "Dixo",
+  },
 };
 
 export default function RootLayout({
@@ -31,6 +39,9 @@ export default function RootLayout({
 }>) {
   return (
       <html lang="en" suppressHydrationWarning>
+      <head>
+        <link rel="apple-touch-icon" href="/icon-192.png" />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
@@ -49,6 +60,7 @@ export default function RootLayout({
               </InviteProvider>
             </NotificationProvider>
             <Toaster position="top-center" richColors />
+            <ServiceWorkerRegister />
           </AuthProvider>
         </ThemeProvider>
       </body>
