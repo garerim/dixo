@@ -89,8 +89,10 @@ function SkinsPageContent() {
       {/* Header */}
       <header className="flex items-center justify-between border-b px-4 py-3 sm:px-6">
         <div className="flex items-center gap-3">
-          <Button variant="ghost" size="icon" onClick={() => router.back()}>
-            <ArrowLeft className="size-5" />
+          <Button variant="ghost" size="icon" asChild>
+            <Link href="/">
+              <ArrowLeft className="size-5" />
+            </Link>
           </Button>
           <div className="flex items-center gap-2">
             <Dice5 className="size-5 text-primary" />

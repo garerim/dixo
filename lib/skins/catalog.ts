@@ -41,6 +41,24 @@ export const SKIN_CATALOG: SkinDefinition[] = [
     stripePriceId: process.env.NEXT_PUBLIC_STRIPE_SKIN_GOLD_RUBY_PRICE_ID ?? null,
     free: false,
   },
+  {
+    id: "star-night",
+    name: "Star Night",
+    description: "Dark dice with starry night patterns",
+    preview: "/dices-skins/star-night/dice-5.png",
+    price: 2.99,
+    stripePriceId: process.env.NEXT_PUBLIC_STRIPE_SKIN_STAR_NIGHT_PRICE_ID ?? null,
+    free: false,
+  },
+  {
+    id: "green-jade",
+    name: "Green Jade",
+    description: "Carved jade dice with golden inlays",
+    preview: "/dices-skins/green-jade/dice-5.png",
+    price: 2.99,
+    stripePriceId: process.env.NEXT_PUBLIC_STRIPE_SKIN_GREEN_JADE_PRICE_ID ?? null,
+    free: false,
+  },
 ];
 
 /** Get a skin definition by ID */
