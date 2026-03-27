@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -36,6 +37,8 @@ export function BiddingView({
   onSurrender,
   isRanked,
 }: BiddingViewProps) {
+  const t = useTranslations("game.bidding");
+  const tSurrender = useTranslations("game.surrender");
   const currentPlayer = gameState.players[gameState.currentPlayerIndex];
   const isMyTurn = currentPlayer?.id === playerId;
   const me = gameState.players.find((p) => p.id === playerId);
@@ -57,39 +60,38 @@ export function BiddingView({
       {/* ── Header du round ── */}
       <div className="flex items-center gap-2">
         <Badge variant="secondary" className="gap-1">
-          Round {gameState.round}
+          {t("round", { round: gameState.round })}
         </Badge>
         <Badge
           variant={isMyTurn ? "default" : "outline"}
           className="gap-1"
         >
           {isMyTurn
-            ? "Your turn!"
-            : `${currentPlayer?.displayName ?? "..."}'s turn`}
+            ? t("yourTurn")
+            : t("playerTurn", { name: currentPlayer?.displayName ?? "..." })}
         </Badge>
         <div className="ml-auto">
           <AlertDialog>
             <AlertDialogTrigger asChild>
               <Button variant="destructive" size="sm" className="gap-1.5">
                 <Flag className="size-3.5" />
-                Surrender
+                {tSurrender("button")}
               </Button>
             </AlertDialogTrigger>
             <AlertDialogContent>
               <AlertDialogHeader>
-                <AlertDialogTitle>Surrender the game?</AlertDialogTitle>
+                <AlertDialogTitle>{tSurrender("title")}</AlertDialogTitle>
                 <AlertDialogDescription>
-                  You will be eliminated and your opponent will win the game.
-                  {isRanked && " Your ELO will be affected."}
+                  {tSurrender("description", { eloNote: isRanked ? " Your ELO will be affected." : "" })}
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
-                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogCancel>{tSurrender("cancel")}</AlertDialogCancel>
                 <AlertDialogAction
                   onClick={onSurrender}
                   className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
                 >
-                  Confirm surrender
+                  {tSurrender("confirm")}
                 </AlertDialogAction>
               </AlertDialogFooter>
             </AlertDialogContent>
@@ -101,7 +103,7 @@ export function BiddingView({
       {me && me.diceValues.length > 0 && (
         <div className="flex flex-col items-center gap-2 rounded-xl border bg-card p-4">
           <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
-            Your dice
+            {t("yourDice")}
           </span>
           <DiceRow
             values={[...me.diceValues]}
@@ -145,7 +147,7 @@ export function BiddingView({
         <div className="flex flex-col gap-3 rounded-xl border border-dashed p-4">
           {gameState.currentBid && (
             <div className="flex items-center justify-center gap-2 rounded-lg bg-muted px-3 py-2 text-sm">
-              <span className="text-muted-foreground">Enchère actuelle :</span>
+              <span className="text-muted-foreground">{t("currentBid")}</span>
               <span className="font-bold">{gameState.currentBid.quantity} &times;</span>
               <DiceFace value={gameState.currentBid.faceValue} size="sm" />
             </div>
@@ -156,7 +158,7 @@ export function BiddingView({
               <span className="relative inline-flex size-2 rounded-full bg-primary" />
             </span>
             <span className="text-sm">
-              Waiting for {currentPlayer?.displayName}...
+              {t("waitingFor", { name: currentPlayer?.displayName ?? "..." })}
             </span>
           </div>
         </div>

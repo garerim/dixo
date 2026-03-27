@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { CheckCircle, XCircle, ArrowRight, Flag } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -33,6 +34,8 @@ export function ResultView({
   onSurrender,
   isRanked,
 }: ResultViewProps) {
+  const t = useTranslations("game.result");
+  const tSurrender = useTranslations("game.surrender");
   const challenge = gameState.lastChallengeResult;
   if (!challenge) return null;
 
@@ -50,24 +53,23 @@ export function ResultView({
           <AlertDialogTrigger asChild>
             <Button variant="destructive" size="sm" className="gap-1.5">
               <Flag className="size-3.5" />
-              Surrender
+              {tSurrender("button")}
             </Button>
           </AlertDialogTrigger>
           <AlertDialogContent>
             <AlertDialogHeader>
-              <AlertDialogTitle>Surrender the game?</AlertDialogTitle>
+              <AlertDialogTitle>{tSurrender("title")}</AlertDialogTitle>
               <AlertDialogDescription>
-                You will be eliminated and your opponent will win the game.
-                {isRanked && " Your ELO will be affected."}
+                {tSurrender("description", { eloNote: isRanked ? " Your ELO will be affected." : "" })}
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
-              <AlertDialogCancel>Cancel</AlertDialogCancel>
+              <AlertDialogCancel>{tSurrender("cancel")}</AlertDialogCancel>
               <AlertDialogAction
                 onClick={onSurrender}
                 className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
               >
-                Confirm surrender
+                {tSurrender("confirm")}
               </AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>
@@ -83,14 +85,14 @@ export function ResultView({
         )}
 
         <h2 className="text-xl font-bold">
-          {challenge.isChallengeCorrect ? "Challenge réussi !" : "Challenge raté !"}
+          {challenge.isChallengeCorrect ? t("challengeSuccess") : t("challengeFailed")}
         </h2>
 
         <p className="text-sm text-muted-foreground">
           <span className="font-medium text-foreground">
             {caller?.displayName}
           </span>{" "}
-          a contesté l&apos;enchère de{" "}
+          vs{" "}
           <span className="font-medium text-foreground">
             {bidder?.displayName}
           </span>
@@ -99,7 +101,7 @@ export function ResultView({
         {/* ── Enchère contestée vs Réalité ── */}
         <div className="flex items-center gap-4 pt-2">
           <div className="flex flex-col items-center gap-1 rounded-lg bg-muted px-4 py-3">
-            <span className="text-xs text-muted-foreground">Enchère</span>
+            <span className="text-xs text-muted-foreground">{t("bid")}</span>
             <div className="flex items-center gap-1.5">
               <span className="text-lg font-bold">
                 {challenge.contestedBid.quantity} &times;
@@ -111,7 +113,7 @@ export function ResultView({
           <span className="text-muted-foreground">vs</span>
 
           <div className="flex flex-col items-center gap-1 rounded-lg bg-muted px-4 py-3">
-            <span className="text-xs text-muted-foreground">Réalité</span>
+            <span className="text-xs text-muted-foreground">{t("reality")}</span>
             <div className="flex items-center gap-1.5">
               <span className="text-lg font-bold">
                 {challenge.actualCount} &times;
@@ -123,14 +125,14 @@ export function ResultView({
 
         {/* Qui perd */}
         <Badge variant="destructive" className="mt-2 gap-1 text-sm">
-          {loser?.displayName} perd un dé !
+          {t("losesDie", { name: loser?.displayName ?? "" })}
         </Badge>
       </div>
 
       {/* ── Tous les dés révélés ── */}
       <div className="flex flex-col gap-2">
         <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider text-center">
-          Dés révélés
+          {t("revealedDice")}
         </span>
         <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
           {gameState.players.map((player) => {
@@ -155,7 +157,7 @@ export function ResultView({
       {/* ── Bouton round suivant ── */}
       <Button size="lg" className="w-full gap-2" onClick={onNextRound}>
         <ArrowRight className="size-4" />
-        Round suivant
+        {t("nextRound")}
       </Button>
     </div>
   );

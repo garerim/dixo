@@ -5,6 +5,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import { useTranslations } from "next-intl";
 import { Send, MessageSquare, Flag } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -28,6 +29,7 @@ interface GameChatProps {
 }
 
 export function GameChat({ gameId, className, hideHeader = false, fullHeight = false }: GameChatProps) {
+  const t = useTranslations("game.chat");
   const { user } = useAuth();
   const [messageContent, setMessageContent] = useState("");
   const { messages, isLoading, actions } = useGameChat(gameId ?? null);
@@ -59,7 +61,7 @@ export function GameChat({ gameId, className, hideHeader = false, fullHeight = f
         className={className}
       >
         <MessageSquare className="size-4 mr-2" />
-        Chat ({messages.length})
+        {t("titleWithCount", { count: messages.length })}
       </Button>
     );
   }
@@ -70,7 +72,7 @@ export function GameChat({ gameId, className, hideHeader = false, fullHeight = f
         <CardHeader className="flex flex-row items-center justify-between border-b pb-3 flex-shrink-0">
           <CardTitle className="flex items-center gap-2 text-base">
             <MessageSquare className="size-4" />
-            Chat
+            {t("title")}
           </CardTitle>
           <Button
             variant="ghost"
@@ -89,11 +91,11 @@ export function GameChat({ gameId, className, hideHeader = false, fullHeight = f
         >
           {isLoading && messages.length === 0 ? (
             <p className="py-4 text-center text-sm text-muted-foreground">
-              Loading messages...
+              {t("loading")}
             </p>
           ) : messages.length === 0 ? (
             <p className="py-4 text-center text-sm text-muted-foreground">
-              No messages. Start the conversation!
+              {t("empty")}
             </p>
           ) : (
             <div className="space-y-3">
@@ -139,7 +141,7 @@ export function GameChat({ gameId, className, hideHeader = false, fullHeight = f
                               setReportTarget(msg);
                               setReportOpen(true);
                             }}
-                            title="Report message"
+                            title={t("report")}
                           >
                             <Flag className="size-3 text-muted-foreground hover:text-destructive" />
                           </button>
@@ -155,7 +157,7 @@ export function GameChat({ gameId, className, hideHeader = false, fullHeight = f
         <div className="border-t p-3 flex-shrink-0">
           <div className="flex gap-2">
             <Input
-              placeholder="Type a message..."
+              placeholder={t("placeholder")}
               value={messageContent}
               onChange={(e) => setMessageContent(e.target.value)}
               onKeyDown={(e) => {

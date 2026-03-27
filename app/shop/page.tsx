@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import {
   ArrowLeft,
@@ -31,6 +32,7 @@ export default function ShopPage() {
   const { user, profile, isLoading: authLoading } = useAuth();
   const { ownedSkinIds, isLoading: skinsLoading } = useOwnedSkins();
   const router = useRouter();
+  const t = useTranslations("shop");
   const [buyingId, setBuyingId] = useState<string | null>(null);
 
   if (authLoading || skinsLoading) {
@@ -61,7 +63,7 @@ export default function ShopPage() {
     if (result.success && result.data?.url) {
       window.location.assign(result.data.url);
     } else {
-      toast.error(result.error ?? "Unable to start checkout.");
+      toast.error(result.error ?? t("checkoutError"));
       setBuyingId(null);
     }
   }
@@ -76,13 +78,13 @@ export default function ShopPage() {
           </Button>
           <div className="flex items-center gap-2">
             <ShoppingBag className="size-5 text-primary" />
-            <h1 className="text-lg font-bold">Shop</h1>
+            <h1 className="text-lg font-bold">{t("title")}</h1>
           </div>
         </div>
         <Button variant="outline" size="sm" className="gap-2" asChild>
           <Link href="/skins">
             <Dice5 className="size-4" />
-            My Skins
+            {t("mySkins")}
           </Link>
         </Button>
       </header>
@@ -90,9 +92,9 @@ export default function ShopPage() {
       <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col gap-8 p-4 sm:p-6">
         {/* Intro */}
         <div className="text-center">
-          <h2 className="text-2xl font-bold tracking-tight">Dice Skins</h2>
+          <h2 className="text-2xl font-bold tracking-tight">{t("heading")}</h2>
           <p className="mt-1 text-muted-foreground">
-            Customize your dice and stand out at the table.
+            {t("description")}
           </p>
         </div>
 
@@ -100,7 +102,7 @@ export default function ShopPage() {
         {purchasableSkins.length === 0 ? (
           <div className="flex flex-col items-center gap-2 py-12 text-center text-muted-foreground">
             <ShoppingBag className="size-10" />
-            <p>No skins available yet. Check back soon!</p>
+            <p>{t("noSkins")}</p>
           </div>
         ) : (
           <div className="grid gap-4 sm:grid-cols-2">
@@ -128,7 +130,7 @@ export default function ShopPage() {
                       {owned ? (
                         <Badge variant="secondary" className="gap-1">
                           <Check className="size-3" />
-                          Owned
+                          {t("owned")}
                         </Badge>
                       ) : (
                         <Badge variant="outline" className="font-bold">
@@ -148,7 +150,7 @@ export default function ShopPage() {
                       >
                         <Link href="/skins">
                           <Dice5 className="size-4" />
-                          Equip in My Skins
+                          {t("equipInMySkins")}
                         </Link>
                       </Button>
                     ) : (
@@ -162,7 +164,7 @@ export default function ShopPage() {
                         ) : (
                           <ShoppingBag className="size-4" />
                         )}
-                        Buy for {skin.price.toFixed(2)} &euro;
+                        {t("buyFor", { price: skin.price.toFixed(2) })}
                       </Button>
                     )}
                   </CardContent>
@@ -174,7 +176,7 @@ export default function ShopPage() {
 
         {/* Footer note */}
         <p className="text-center text-xs text-muted-foreground">
-          Payments are handled securely by Stripe. All purchases are final.
+          {t("stripeNote")}
         </p>
       </main>
     </div>

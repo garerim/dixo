@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { Dice5 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -16,6 +17,7 @@ import { useAuth } from "@/components/providers/auth-provider";
 export default function LoginPage() {
   const { user, isLoading, signInWithGoogle } = useAuth();
   const router = useRouter();
+  const t = useTranslations("login");
 
   // Rediriger si déjà connecté
   useEffect(() => {
@@ -27,7 +29,7 @@ export default function LoginPage() {
   if (isLoading) {
     return (
       <div className="flex min-h-svh items-center justify-center">
-        <div className="animate-pulse text-muted-foreground">Loading...</div>
+        <div className="animate-pulse text-muted-foreground">{t("loading")}</div>
       </div>
     );
   }
@@ -38,17 +40,17 @@ export default function LoginPage() {
         <div className="flex size-16 items-center justify-center rounded-2xl bg-primary text-primary-foreground shadow-lg">
           <Dice5 className="size-9" />
         </div>
-        <h1 className="text-4xl font-bold tracking-tight">Dixo</h1>
+        <h1 className="text-4xl font-bold tracking-tight">{t("title")}</h1>
         <p className="text-muted-foreground text-center max-w-xs">
-          The online dice bluffing game — Bluff, bid, survive!
+          {t("subtitle")}
         </p>
       </div>
 
       <Card className="w-full max-w-sm">
         <CardHeader className="text-center">
-          <CardTitle>Login</CardTitle>
+          <CardTitle>{t("heading")}</CardTitle>
           <CardDescription>
-            Sign in to create or join a game
+            {t("description")}
           </CardDescription>
         </CardHeader>
         <CardContent className="flex flex-col gap-4">
@@ -75,13 +77,13 @@ export default function LoginPage() {
                 fill="#EA4335"
               />
             </svg>
-            Continue with Google
+            {t("continueWithGoogle")}
           </Button>
         </CardContent>
       </Card>
 
       <p className="mt-6 text-xs text-muted-foreground">
-        By signing in, you agree to play fair 🎲
+        {t("fairPlay")}
       </p>
     </div>
   );

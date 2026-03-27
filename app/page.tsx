@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { motion } from "framer-motion";
+import { useTranslations } from "next-intl";
 import {
   Dice5,
   Plus,
@@ -55,6 +56,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useAuth } from "@/components/providers/auth-provider";
+import { LanguageSelector } from "@/components/language-selector";
+import { LanguageButton } from "@/components/language-button";
 import { gameClient } from "@/features/game/api/game-client";
 import { useMatchmaking } from "@/features/matchmaking/hooks/use-matchmaking";
 import { NotificationBell } from "@/features/notifications";
@@ -63,6 +66,9 @@ import Link from "next/link";
 export default function HomePage() {
   const { user, profile, isLoading: authLoading, signOut } = useAuth();
   const router = useRouter();
+  const t = useTranslations("home");
+  const tc = useTranslations("common");
+  const tn = useTranslations("nav");
 
   const [joinCode, setJoinCode] = useState("");
   const [isCreating, setIsCreating] = useState(false);
@@ -110,9 +116,9 @@ export default function HomePage() {
       setCreatedCode(result.data.joinCode);
       setCreatedGameId(result.data.gameId);
       setShowCreateDialog(true);
-      toast.success("Game created!");
+      toast.success(t("gameCreated"));
     } else {
-      toast.error(result.error ?? "Unable to create the game.");
+      toast.error(result.error ?? t("unableToCreate"));
     }
     setIsCreating(false);
   }
@@ -130,13 +136,13 @@ export default function HomePage() {
   // ─── Cancel search ───
   async function handleCancelSearch() {
     await mmActions.cancel();
-    toast.info("Search cancelled.");
+    toast.info(t("searchCancelled"));
   }
 
   // ─── Join a game ───
   async function handleJoin() {
     if (joinCode.length !== 6) {
-      toast.error("The code must contain 6 characters.");
+      toast.error(t("codeMustBe6"));
       return;
     }
 
@@ -147,10 +153,10 @@ export default function HomePage() {
     });
 
     if (result.success && result.data) {
-      toast.success("You have joined the game!");
+      toast.success(t("joinedGame"));
       router.push(`/game/${result.data.gameId}`);
     } else {
-      toast.error(result.error ?? "Unable to join the game.");
+      toast.error(result.error ?? t("unableToJoin"));
     }
     setIsJoining(false);
   }
@@ -164,7 +170,7 @@ export default function HomePage() {
   function copyCode() {
     if (createdCode) {
       navigator.clipboard.writeText(createdCode);
-      toast.success("Code copied!");
+      toast.success(t("codeCopied"));
     }
   }
 
@@ -177,7 +183,7 @@ export default function HomePage() {
       <header className="flex items-center justify-between border-b px-4 py-3 sm:px-6">
         <div className="flex items-center gap-2">
           <Dice5 className="size-6 text-primary" />
-          <span className="text-lg font-bold tracking-tight">Dixo</span>
+          <span className="text-lg font-bold tracking-tight">{t("title")}</span>
         </div>
 
         <div className="flex items-center gap-3">
@@ -199,13 +205,13 @@ export default function HomePage() {
           <Button variant="ghost" size="sm" className="hidden gap-1.5 sm:flex" asChild>
             <Link href="/shop">
               <ShoppingBag className="size-4" />
-              Shop
+              {tc("shop")}
             </Link>
           </Button>
           <Button variant="ghost" size="sm" className="hidden gap-1.5 sm:flex" asChild>
             <Link href="/how-to-play">
               <BookOpen className="size-4" />
-              How to play
+              {tc("howToPlay")}
             </Link>
           </Button>
 
@@ -228,41 +234,43 @@ export default function HomePage() {
               </button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-56">
-              <DropdownMenuLabel>My Account</DropdownMenuLabel>
+              <DropdownMenuLabel>{tn("myAccount")}</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuItem onClick={() => router.push("/profile")}>
                 <User className="mr-2 size-4" />
-                <span>Profile</span>
+                <span>{tn("profile")}</span>
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => router.push("/friends")}>
                 <UserPlus className="mr-2 size-4" />
-                <span>Friends</span>
+                <span>{tn("friends")}</span>
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => router.push("/skins")}>
                 <Paintbrush className="mr-2 size-4" />
-                <span>Dice Skins</span>
+                <span>{tn("diceSkins")}</span>
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => router.push("/shop")} className="sm:hidden">
                 <ShoppingBag className="mr-2 size-4" />
-                <span>Shop</span>
+                <span>{tc("shop")}</span>
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => router.push("/how-to-play")} className="sm:hidden">
                 <BookOpen className="mr-2 size-4" />
-                <span>How to play</span>
+                <span>{tc("howToPlay")}</span>
               </DropdownMenuItem>
               {profile?.subscription === "free" && (
                 <>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={() => router.push("/pricing")}>
                     <Star className="mr-2 size-4 fill-yellow-400 text-yellow-400" />
-                    <span>Upgrade to Premium</span>
+                    <span>{tn("upgradePremium")}</span>
                   </DropdownMenuItem>
                 </>
               )}
               <DropdownMenuSeparator />
+              <LanguageSelector />
+              <DropdownMenuSeparator />
               <DropdownMenuItem onClick={signOut} className="text-destructive">
                 <LogOut className="mr-2 size-4" />
-                <span>Logout</span>
+                <span>{tn("logout")}</span>
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -277,10 +285,10 @@ export default function HomePage() {
             <Dice5 className="size-11" />
           </div>
           <h1 className="mt-2 text-3xl font-bold tracking-tight sm:text-4xl">
-            Dixo
+            {t("title")}
           </h1>
           <p className="max-w-md text-muted-foreground">
-            Bluff your opponents in this online dice bluffing game.
+            {t("subtitle")}
           </p>
         </div>
 
@@ -309,10 +317,10 @@ export default function HomePage() {
               <CardHeader className="pb-3">
                 <CardTitle className="flex items-center gap-2 text-base">
                   <Swords className="size-5 text-blue-500" />
-                  Normal Game
+                  {t("normalGame")}
                 </CardTitle>
                 <CardDescription>
-                  Quick matchmaking, no impact on your ELO
+                  {t("normalGameDesc")}
                 </CardDescription>
               </CardHeader>
               <CardContent className="grid grid-cols-2 gap-2">
@@ -322,7 +330,7 @@ export default function HomePage() {
                   onClick={() => handlePlayNormal(2)}
                 >
                   <Swords className="size-4" />
-                  1 vs 1
+                  {t("1v1")}
                 </Button>
                 <Button
                   variant="outline"
@@ -330,7 +338,7 @@ export default function HomePage() {
                   onClick={() => handlePlayNormal(4)}
                 >
                   <Users className="size-4" />
-                  4 players
+                  {t("4players")}
                 </Button>
               </CardContent>
             </Card>
@@ -340,10 +348,10 @@ export default function HomePage() {
               <CardHeader className="pb-3">
                 <CardTitle className="flex items-center gap-2 text-base">
                   <Trophy className="size-5 text-yellow-500" />
-                  Ranked Game
+                  {t("rankedGame")}
                 </CardTitle>
                 <CardDescription>
-                  Face players of your level, earn ELO
+                  {t("rankedGameDesc")}
                 </CardDescription>
               </CardHeader>
               <CardContent className="grid grid-cols-2 gap-2">
@@ -353,7 +361,7 @@ export default function HomePage() {
                   onClick={() => handlePlayRanked(2)}
                 >
                   <Swords className="size-4" />
-                  1 vs 1
+                  {t("1v1")}
                   {profile && (
                     <Badge variant="secondary" className="ml-auto text-xs">
                       {profile.elo1v1}
@@ -366,7 +374,7 @@ export default function HomePage() {
                   onClick={() => handlePlayRanked(4)}
                 >
                   <Users className="size-4" />
-                  4 players
+                  {t("4players")}
                   {profile && (
                     <Badge variant="secondary" className="ml-auto text-xs">
                       {profile.elo4p}
@@ -379,7 +387,7 @@ export default function HomePage() {
             <div className="flex items-center gap-3">
               <Separator className="flex-1" />
               <span className="text-xs text-muted-foreground">
-                or play with friends
+                {t("playWithFriends")}
               </span>
               <Separator className="flex-1" />
             </div>
@@ -399,13 +407,13 @@ export default function HomePage() {
                 ) : (
                   <Plus className="size-4" />
                 )}
-                Create a game
+                {t("createGame")}
               </Button>
 
               {/* Rejoindre */}
               <div className="flex gap-2">
                 <Input
-                  placeholder="CODE"
+                  placeholder={t("codePlaceholder")}
                   value={joinCode}
                   onChange={(e) => setJoinCode(e.target.value.toUpperCase())}
                   maxLength={6}
@@ -433,9 +441,9 @@ export default function HomePage() {
       <Dialog open={showCreateDialog} onOpenChange={setShowCreateDialog}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Game created!</DialogTitle>
+            <DialogTitle>{t("gameCreated")}</DialogTitle>
             <DialogDescription>
-              Share this code with your friends so they can join the game.
+              {t("shareCode")}
             </DialogDescription>
           </DialogHeader>
 
@@ -452,7 +460,7 @@ export default function HomePage() {
 
           <DialogFooter>
             <Button className="w-full" onClick={goToGame}>
-              Go to lobby
+              {t("goToLobby")}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -483,6 +491,8 @@ const staggerContainer = {
 function LandingPage() {
   const { signInWithGoogle } = useAuth();
   const router = useRouter();
+  const t = useTranslations("home");
+  const tc = useTranslations("common");
 
   return (
     <div className="flex min-h-svh flex-col bg-gradient-to-b from-background to-muted/30 overflow-x-hidden">
@@ -495,17 +505,18 @@ function LandingPage() {
       >
         <div className="flex items-center gap-2">
           <Dice5 className="size-6 text-primary" />
-          <span className="text-lg font-bold tracking-tight">Dixo</span>
+          <span className="text-lg font-bold tracking-tight">{t("title")}</span>
         </div>
         <div className="flex items-center gap-2">
           <Button variant="ghost" size="sm" asChild>
-            <Link href="/how-to-play">How to play</Link>
+            <Link href="/how-to-play">{tc("howToPlay")}</Link>
           </Button>
           <Button variant="ghost" size="sm" asChild>
-            <Link href="/pricing">Pricing</Link>
+            <Link href="/pricing">{tc("pricing")}</Link>
           </Button>
+          <LanguageButton />
           <Button size="sm" onClick={signInWithGoogle}>
-            Sign in
+            {tc("signIn")}
           </Button>
         </div>
       </motion.header>
@@ -541,23 +552,21 @@ function LandingPage() {
             transition={{ duration: 0.5 }}
             className="text-5xl font-extrabold tracking-tight sm:text-6xl"
           >
-            Dixo
+            {t("title")}
           </motion.h1>
           <motion.p
             variants={fadeUp}
             transition={{ duration: 0.5 }}
             className="text-xl font-medium text-muted-foreground sm:text-2xl"
           >
-            The online dice bluffing game
+            {t("heroTitle")}
           </motion.p>
           <motion.p
             variants={fadeUp}
             transition={{ duration: 0.5 }}
             className="max-w-md text-muted-foreground"
           >
-            Bluff your opponents, call their bluffs, and be
-            the last player standing. Free to play, online, with friends or
-            strangers.
+            {t("heroDescription")}
           </motion.p>
         </motion.div>
 
@@ -574,11 +583,11 @@ function LandingPage() {
               <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
               <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
             </svg>
-            Play for free
+            {t("playFree")}
           </Button>
           <Button size="lg" variant="outline" className="gap-2" asChild>
             <Link href="/how-to-play">
-              How to play
+              {tc("howToPlay")}
               <ChevronRight className="size-4" />
             </Link>
           </Button>
@@ -591,7 +600,7 @@ function LandingPage() {
           transition={{ duration: 0.5, delay: 0.9 }}
           className="text-xs text-muted-foreground"
         >
-          Free to play · No download · Sign in with Google
+          {t("freeNote")}
         </motion.p>
       </section>
 
@@ -604,7 +613,7 @@ function LandingPage() {
           transition={{ duration: 0.5 }}
           className="mb-8 text-center text-2xl font-bold"
         >
-          Pick your game mode
+          {t("gameModes")}
         </motion.h2>
         <motion.div
           initial="hidden"
@@ -618,12 +627,12 @@ function LandingPage() {
               <CardHeader className="pb-2">
                 <CardTitle className="flex items-center gap-2 text-base">
                   <Swords className="size-5 text-blue-500" />
-                  Normal
+                  {t("normalModeTitle")}
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 <p className="text-sm text-muted-foreground">
-                  Quick matchmaking against players of all levels. No ELO impact — just for fun.
+                  {t("normalModeDesc")}
                 </p>
               </CardContent>
             </Card>
@@ -633,12 +642,12 @@ function LandingPage() {
               <CardHeader className="pb-2">
                 <CardTitle className="flex items-center gap-2 text-base">
                   <Trophy className="size-5 text-yellow-500" />
-                  Ranked
+                  {t("rankedModeTitle")}
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 <p className="text-sm text-muted-foreground">
-                  ELO-based matchmaking. Win to climb the leaderboard, lose ELO if you bluff too hard.
+                  {t("rankedModeDesc")}
                 </p>
               </CardContent>
             </Card>
@@ -648,12 +657,12 @@ function LandingPage() {
               <CardHeader className="pb-2">
                 <CardTitle className="flex items-center gap-2 text-base">
                   <Shield className="size-5 text-purple-500" />
-                  Private
+                  {t("privateModeTitle")}
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 <p className="text-sm text-muted-foreground">
-                  Create a private game and invite friends with a 6-character code. Up to 6 players.
+                  {t("privateModeDesc")}
                 </p>
               </CardContent>
             </Card>
@@ -673,7 +682,7 @@ function LandingPage() {
           transition={{ duration: 0.5 }}
           className="mb-8 text-center text-2xl font-bold"
         >
-          How to play
+          {t("howToPlaySection")}
         </motion.h2>
         <motion.div
           initial="hidden"
@@ -685,26 +694,26 @@ function LandingPage() {
           {[
             {
               step: "1",
-              title: "Roll your dice",
-              desc: "Each player rolls their dice in secret at the start of every round. Only you can see your own dice.",
+              title: t("step1Title"),
+              desc: t("step1Desc"),
               icon: <Dice5 className="size-6 text-primary" />,
             },
             {
               step: "2",
-              title: "Place a bid",
-              desc: 'Bid on how many dice of a given face exist across ALL players\' dice combined. Example: "3 fours". Each bid must be higher than the previous.',
+              title: t("step2Title"),
+              desc: t("step2Desc"),
               icon: <Swords className="size-6 text-blue-500" />,
             },
             {
               step: "3",
-              title: "Call the bluff",
-              desc: 'Say "Challenge!" if you think the bid is impossible. All dice are revealed — if the bid was wrong, the bidder loses a die. Otherwise, you do.',
+              title: t("step3Title"),
+              desc: t("step3Desc"),
               icon: <Zap className="size-6 text-yellow-500" />,
             },
             {
               step: "4",
-              title: "Last one standing wins",
-              desc: "Players eliminated when they run out of dice. The last player with dice wins the game and gains ELO in Ranked mode.",
+              title: t("step4Title"),
+              desc: t("step4Desc"),
               icon: <Trophy className="size-6 text-green-500" />,
             },
           ].map(({ step, title, desc, icon }) => (
@@ -743,13 +752,13 @@ function LandingPage() {
               <Star className="size-8 fill-yellow-400 text-yellow-400" />
             </div>
             <div className="flex-1">
-              <h3 className="font-bold">Dixo Premium — €4.99/month</h3>
+              <h3 className="font-bold">{t("premiumBanner")}</h3>
               <p className="text-sm text-muted-foreground">
-                GIF avatars, Premium badge in-game, full ELO history, and more to come.
+                {t("premiumBannerDesc")}
               </p>
             </div>
             <Button variant="outline" asChild className="shrink-0">
-              <Link href="/pricing">See plans</Link>
+              <Link href="/pricing">{t("seePlans")}</Link>
             </Button>
           </CardContent>
         </Card>
@@ -763,8 +772,8 @@ function LandingPage() {
         transition={{ duration: 0.5 }}
         className="flex flex-col items-center gap-4 px-4 py-16 text-center"
       >
-        <h2 className="text-3xl font-bold">Ready to bluff?</h2>
-        <p className="text-muted-foreground">Join in seconds with your Google account.</p>
+        <h2 className="text-3xl font-bold">{t("readyToBluff")}</h2>
+        <p className="text-muted-foreground">{t("readyToBluffDesc")}</p>
         <Button size="lg" className="gap-2 px-10" onClick={signInWithGoogle}>
           <svg className="size-5" viewBox="0 0 24 24">
             <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/>
@@ -772,16 +781,16 @@ function LandingPage() {
             <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
             <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
           </svg>
-          Get started — it's free
+          {t("getStarted")}
         </Button>
       </motion.section>
 
       {/* ─── Footer ─── */}
       <footer className="border-t px-4 py-6 text-center text-xs text-muted-foreground">
         <div className="flex flex-wrap items-center justify-center gap-4">
-          <span>© 2026 Dixo</span>
-          <Link href="/how-to-play" className="hover:text-foreground transition-colors">How to play</Link>
-          <Link href="/pricing" className="hover:text-foreground transition-colors">Pricing</Link>
+          <span>{tc("copyright")}</span>
+          <Link href="/how-to-play" className="hover:text-foreground transition-colors">{tc("howToPlay")}</Link>
+          <Link href="/pricing" className="hover:text-foreground transition-colors">{tc("pricing")}</Link>
         </div>
       </footer>
     </div>
@@ -807,9 +816,12 @@ function SearchingView({
   elo: number;
   onCancel: () => void;
 }) {
+  const ts = useTranslations("search");
+  const tc = useTranslations("common");
+  const th = useTranslations("home");
   const isRanked = gameMode === "RANKED";
-  const modeLabel = isRanked ? "Ranked" : "Normal";
-  const formatLabel = playerCount === 2 ? "1v1" : "4 players";
+  const modeLabel = isRanked ? th("rankedGame") : th("normalGame");
+  const formatLabel = playerCount === 2 ? th("1v1") : th("4players");
 
   return (
     <Card className="w-full max-w-sm">
@@ -823,7 +835,7 @@ function SearchingView({
 
         <div className="text-center">
           <h3 className="text-lg font-semibold">
-            Searching for {playerCount === 2 ? "opponent" : "opponents"}...
+            {playerCount === 2 ? ts("searchingOpponent") : ts("searchingOpponents")}
           </h3>
           <p className="text-sm text-muted-foreground">
             {modeLabel} — {formatLabel}
@@ -834,19 +846,19 @@ function SearchingView({
         <div className="flex w-full justify-around rounded-lg bg-muted/50 px-4 py-3">
           <div className="text-center">
             <p className="text-2xl font-bold tabular-nums">{waitTime}</p>
-            <p className="text-xs text-muted-foreground">Wait time</p>
+            <p className="text-xs text-muted-foreground">{ts("waitTime")}</p>
           </div>
           <Separator orientation="vertical" className="h-auto" />
           <div className="text-center">
             <p className="text-2xl font-bold">{playersInQueue}</p>
-            <p className="text-xs text-muted-foreground">In queue</p>
+            <p className="text-xs text-muted-foreground">{ts("inQueue")}</p>
           </div>
           {isRanked && (
             <>
               <Separator orientation="vertical" className="h-auto" />
               <div className="text-center">
                 <p className="text-2xl font-bold">{elo}</p>
-                <p className="text-xs text-muted-foreground">ELO</p>
+                <p className="text-xs text-muted-foreground">{ts("elo")}</p>
               </div>
             </>
           )}
@@ -858,7 +870,7 @@ function SearchingView({
           onClick={onCancel}
         >
           <X className="size-4" />
-          Cancel
+          {tc("cancel")}
         </Button>
       </CardContent>
     </Card>

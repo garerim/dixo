@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import {
   UserPlus,
   UserCheck,
@@ -38,6 +39,8 @@ function timeAgo(dateString: string): string {
 }
 
 export function NotificationPanel() {
+  const t = useTranslations("notifications");
+  const tc = useTranslations("common");
   const {
     notifications,
     unreadCount,
@@ -92,7 +95,7 @@ export function NotificationPanel() {
     <div className="flex flex-col">
       {/* Header */}
       <div className="flex items-center justify-between border-b px-4 py-3">
-        <h3 className="text-sm font-semibold">Notifications</h3>
+        <h3 className="text-sm font-semibold">{t("title")}</h3>
         {unreadCount > 0 && (
           <Button
             variant="ghost"
@@ -101,7 +104,7 @@ export function NotificationPanel() {
             onClick={markAllAsRead}
           >
             <CheckCheck className="size-3" />
-            Mark all as read
+            {t("markAllRead")}
           </Button>
         )}
       </div>
@@ -111,7 +114,7 @@ export function NotificationPanel() {
         {notifications.length === 0 && !isLoading ? (
           <div className="flex flex-col items-center gap-2 p-6 text-center">
             <Bell className="size-8 text-muted-foreground/50" />
-            <p className="text-sm text-muted-foreground">No notifications yet</p>
+            <p className="text-sm text-muted-foreground">{t("empty")}</p>
           </div>
         ) : (
           <>
@@ -173,7 +176,7 @@ export function NotificationPanel() {
                   onClick={loadMore}
                   disabled={isLoading}
                 >
-                  {isLoading ? "Loading..." : "Load more"}
+                  {isLoading ? tc("loading") : t("loadMore")}
                 </Button>
               </div>
             )}

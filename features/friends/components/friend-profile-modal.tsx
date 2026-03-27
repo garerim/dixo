@@ -5,6 +5,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import {
   Dialog,
   DialogContent,
@@ -36,6 +37,8 @@ export function FriendProfileModal({
   open,
   onOpenChange,
 }: FriendProfileModalProps) {
+  const t = useTranslations("friendProfile");
+  const tc = useTranslations("common");
   const [reportOpen, setReportOpen] = useState(false);
 
   if (!friend) return null;
@@ -48,7 +51,7 @@ export function FriendProfileModal({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-h-[90vh] max-w-2xl overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>{friend.pseudo}'s Profile</DialogTitle>
+          <DialogTitle>{t("title", { name: friend.pseudo })}</DialogTitle>
         </DialogHeader>
 
         <div className="flex flex-col gap-4">
@@ -70,7 +73,7 @@ export function FriendProfileModal({
                 {/* Badges */}
                 <div className="flex flex-wrap items-center gap-2">
                   <Badge variant={friend.isOnline ? "default" : "secondary"}>
-                    {friend.isOnline ? "Online" : "Offline"}
+                    {friend.isOnline ? tc("online") : tc("offline")}
                   </Badge>
                   <Badge variant="outline" className="gap-1">
                     <Trophy className="size-3" />
@@ -90,19 +93,19 @@ export function FriendProfileModal({
             <CardHeader>
               <CardTitle className="flex items-center gap-2 text-base">
                 <Trophy className="size-4 text-yellow-500" />
-                Ranking
+                {t("ranking")}
               </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="flex gap-6">
                 <div>
                   <p className="text-3xl font-bold">{friend.elo1v1}</p>
-                  <p className="text-sm text-muted-foreground">ELO 1v1</p>
+                  <p className="text-sm text-muted-foreground">{t("elo1v1")}</p>
                 </div>
                 <Separator orientation="vertical" className="h-auto" />
                 <div>
                   <p className="text-3xl font-bold">{friend.elo4p}</p>
-                  <p className="text-sm text-muted-foreground">ELO 4 players</p>
+                  <p className="text-sm text-muted-foreground">{t("elo4p")}</p>
                 </div>
               </div>
             </CardContent>
@@ -118,7 +121,7 @@ export function FriendProfileModal({
             onClick={() => setReportOpen(true)}
           >
             <Flag className="size-3" />
-            Report
+            {t("report")}
           </Button>
         </div>
       </DialogContent>

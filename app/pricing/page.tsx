@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import {
   ArrowLeft,
@@ -23,23 +24,24 @@ import { Badge } from "@/components/ui/badge";
 import { useAuth } from "@/components/providers/auth-provider";
 import { useBilling } from "@/features/billing/hooks/use-billing";
 
-const FREE_FEATURES = [
-  "Normal & Ranked games",
-  "Friends system",
-  "In-game chat",
-  "ELO ranking (last 10 entries)",
-  "JPEG / PNG / WebP avatar",
-];
+const FREE_FEATURE_KEYS = [
+  "freeFeatures.normalRanked",
+  "freeFeatures.friends",
+  "freeFeatures.chat",
+  "freeFeatures.eloRanking",
+  "freeFeatures.avatar",
+] as const;
 
-const PREMIUM_FEATURES = [
-  "Everything in Free",
-  "GIF avatar support",
-  "Full ELO history (200+ entries)",
-  "Premium badge on your profile & in-game",
-];
+const PREMIUM_FEATURE_KEYS = [
+  "premiumFeatures.everythingInFree",
+  "premiumFeatures.gifAvatar",
+  "premiumFeatures.fullEloHistory",
+  "premiumFeatures.premiumBadge",
+] as const;
 
 export default function PricingPage() {
   const router = useRouter();
+  const t = useTranslations("pricing");
   const { profile } = useAuth();
   const { isLoading, checkout } = useBilling();
 
@@ -62,7 +64,7 @@ export default function PricingPage() {
         </Button>
         <div className="flex items-center gap-2">
           <Dice5 className="size-5 text-primary" />
-          <span className="text-lg font-bold tracking-tight">Pricing</span>
+          <span className="text-lg font-bold tracking-tight">{t("title")}</span>
         </div>
       </header>
 
@@ -70,10 +72,10 @@ export default function PricingPage() {
       <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col items-center gap-8 p-6">
         <div className="text-center">
           <h1 className="text-3xl font-bold tracking-tight">
-            Upgrade to Premium
+            {t("heading")}
           </h1>
           <p className="mt-2 text-muted-foreground">
-            Support Dixo and unlock exclusive perks.
+            {t("description")}
           </p>
         </div>
 
@@ -83,11 +85,11 @@ export default function PricingPage() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Zap className="size-5 text-muted-foreground" />
-                Free
+                {t("free")}
               </CardTitle>
-              <CardDescription>All the essentials, forever free.</CardDescription>
+              <CardDescription>{t("freeDesc")}</CardDescription>
               <p className="text-3xl font-bold">
-                €0
+                {t("freePrice")}
                 <span className="text-base font-normal text-muted-foreground">
                   /month
                 </span>
@@ -95,17 +97,17 @@ export default function PricingPage() {
             </CardHeader>
             <CardContent className="flex-1">
               <ul className="space-y-2">
-                {FREE_FEATURES.map((f) => (
-                  <li key={f} className="flex items-center gap-2 text-sm">
+                {FREE_FEATURE_KEYS.map((key) => (
+                  <li key={key} className="flex items-center gap-2 text-sm">
                     <Check className="size-4 shrink-0 text-muted-foreground" />
-                    {f}
+                    {t(key)}
                   </li>
                 ))}
               </ul>
             </CardContent>
             <CardFooter>
               <Button variant="outline" className="w-full" disabled>
-                Current plan
+                {t("currentPlan")}
               </Button>
             </CardFooter>
           </Card>
@@ -116,13 +118,13 @@ export default function PricingPage() {
               <div className="flex items-center justify-between">
                 <CardTitle className="flex items-center gap-2">
                   <Star className="size-5 fill-yellow-400 text-yellow-400" />
-                  Premium
+                  {t("premium")}
                 </CardTitle>
-                <Badge>Popular</Badge>
+                <Badge>{t("popular")}</Badge>
               </div>
-              <CardDescription>The full Dixo experience.</CardDescription>
+              <CardDescription>{t("premiumDesc")}</CardDescription>
               <p className="text-3xl font-bold">
-                €4.99
+                {t("premiumPrice")}
                 <span className="text-base font-normal text-muted-foreground">
                   /month
                 </span>
@@ -130,10 +132,10 @@ export default function PricingPage() {
             </CardHeader>
             <CardContent className="flex-1">
               <ul className="space-y-2">
-                {PREMIUM_FEATURES.map((f) => (
-                  <li key={f} className="flex items-center gap-2 text-sm">
+                {PREMIUM_FEATURE_KEYS.map((key) => (
+                  <li key={key} className="flex items-center gap-2 text-sm">
                     <Check className="size-4 shrink-0 text-primary" />
-                    {f}
+                    {t(key)}
                   </li>
                 ))}
               </ul>
@@ -142,7 +144,7 @@ export default function PricingPage() {
               {isPremium ? (
                 <Button className="w-full" disabled>
                   <Star className="mr-2 size-4" />
-                  You are Premium!
+                  {t("youArePremium")}
                 </Button>
               ) : (
                 <Button
@@ -155,7 +157,7 @@ export default function PricingPage() {
                   ) : (
                     <Star className="mr-2 size-4" />
                   )}
-                  Get Premium
+                  {t("getPremium")}
                 </Button>
               )}
             </CardFooter>
@@ -163,7 +165,7 @@ export default function PricingPage() {
         </div>
 
         <p className="text-center text-xs text-muted-foreground">
-          Cancel anytime from your profile. Payments are handled securely by Stripe.
+          {t("cancelNote")}
         </p>
       </main>
     </div>

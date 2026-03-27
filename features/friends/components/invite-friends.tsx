@@ -5,6 +5,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { UserPlus, Send, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -31,6 +32,8 @@ interface InviteFriendsProps {
 }
 
 export function InviteFriends({ gameCode, gameId, open, onOpenChange }: InviteFriendsProps) {
+  const t = useTranslations("invite");
+  const tc = useTranslations("common");
   const { user, profile } = useAuth();
   const { friends } = useFriends();
   const [invitedFriends, setInvitedFriends] = useState<Set<string>>(new Set());
@@ -61,9 +64,9 @@ export function InviteFriends({ gameCode, gameId, open, onOpenChange }: InviteFr
         }),
       ]);
       setInvitedFriends((prev) => new Set(prev).add(friend.id));
-      toast.success(`Invitation sent to ${friend.pseudo}!`);
+      toast.success(t("toasts.sent", { name: friend.pseudo }));
     } catch {
-      toast.error("Unable to send invitation.");
+      toast.error(t("toasts.error"));
     }
     setSending(null);
   };
@@ -74,17 +77,17 @@ export function InviteFriends({ gameCode, gameId, open, onOpenChange }: InviteFr
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <UserPlus className="size-5" />
-            Invite friends
+            {t("title")}
           </DialogTitle>
           <DialogDescription>
-            Send a real-time invitation to your friends
+            {t("description")}
           </DialogDescription>
         </DialogHeader>
 
         <ScrollArea className="max-h-[400px]">
           {acceptedFriends.length === 0 ? (
             <p className="py-8 text-center text-muted-foreground">
-              You don&apos;t have any friends yet.
+              {t("noFriends")}
             </p>
           ) : (
             <div className="space-y-2">
@@ -111,7 +114,7 @@ export function InviteFriends({ gameCode, gameId, open, onOpenChange }: InviteFr
                             variant={friend.isOnline ? "default" : "secondary"}
                             className="text-xs"
                           >
-                            {friend.isOnline ? "Online" : "Offline"}
+                            {friend.isOnline ? tc("online") : tc("offline")}
                           </Badge>
                         </div>
                       </div>
@@ -122,16 +125,16 @@ export function InviteFriends({ gameCode, gameId, open, onOpenChange }: InviteFr
                       disabled={isInvited || isSending}
                     >
                       {isSending ? (
-                        "Sending..."
+                        t("sending")
                       ) : isInvited ? (
                         <>
                           <Check className="size-4 mr-1" />
-                          Invited
+                          {t("invited")}
                         </>
                       ) : (
                         <>
                           <Send className="size-4 mr-1" />
-                          Invite
+                          {t("inviteButton")}
                         </>
                       )}
                     </Button>

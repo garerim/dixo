@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import {
   ArrowLeft,
@@ -28,6 +29,7 @@ function SkinsPageContent() {
   const { ownedSkinIds, isLoading: skinsLoading, refresh: refreshSkins } = useOwnedSkins();
   const router = useRouter();
   const searchParams = useSearchParams();
+  const t = useTranslations("skins");
   const [saving, setSaving] = useState(false);
   const [selectedSkin, setSelectedSkin] = useState<string | null | undefined>(undefined);
 
@@ -35,7 +37,7 @@ function SkinsPageContent() {
   const purchasedSkin = searchParams.get("purchased");
   useEffect(() => {
     if (purchasedSkin) {
-      toast.success("Skin purchased! You can now equip it.");
+      toast.success(t("purchased"));
       refreshSkins();
       // Clean up URL
       router.replace("/skins");
@@ -92,13 +94,13 @@ function SkinsPageContent() {
           </Button>
           <div className="flex items-center gap-2">
             <Dice5 className="size-5 text-primary" />
-            <h1 className="text-lg font-bold">Dice Skins</h1>
+            <h1 className="text-lg font-bold">{t("title")}</h1>
           </div>
         </div>
         <Button variant="outline" size="sm" className="gap-2" asChild>
           <Link href="/shop">
             <ShoppingBag className="size-4" />
-            Shop
+            {t("shop")}
           </Link>
         </Button>
       </header>
@@ -108,7 +110,7 @@ function SkinsPageContent() {
         <Card>
           <CardContent className="flex flex-col items-center gap-3 pt-6">
             <span className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
-              Preview
+              {t("preview")}
             </span>
             <div className="flex items-center gap-2">
               {[1, 2, 3, 4, 5, 6].map((v) => (
@@ -168,7 +170,7 @@ function SkinsPageContent() {
                     <span className="font-semibold">{skin.name}</span>
                     {isEquipped && (
                       <Badge variant="secondary" className="text-[10px] px-1.5 py-0">
-                        Equipped
+                        {t("equipped")}
                       </Badge>
                     )}
                   </div>
@@ -202,7 +204,7 @@ function SkinsPageContent() {
               ) : (
                 <Check className="size-4" />
               )}
-              Equip selected skin
+              {t("equip")}
             </Button>
           </div>
         )}

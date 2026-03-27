@@ -5,6 +5,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import { useTranslations } from "next-intl";
 import { Send, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -25,6 +26,8 @@ interface MessagesProps {
 }
 
 export function Messages({ friend }: MessagesProps) {
+  const t = useTranslations("messages");
+  const tc = useTranslations("common");
   const { user } = useAuth();
   const [messageContent, setMessageContent] = useState("");
   const { messages, isLoading, actions } = useMessages(friend?.id ?? null);
@@ -48,7 +51,7 @@ export function Messages({ friend }: MessagesProps) {
     return (
       <Card>
         <CardContent className="flex items-center justify-center py-12">
-          <p className="text-muted-foreground">Select a friend to start chatting</p>
+          <p className="text-muted-foreground">{t("selectFriend")}</p>
         </CardContent>
       </Card>
     );
@@ -65,7 +68,7 @@ export function Messages({ friend }: MessagesProps) {
           <div>
             <CardTitle className="text-base">{friend.pseudo}</CardTitle>
             <CardDescription>
-              {friend.isOnline ? "Online" : "Offline"}
+              {friend.isOnline ? tc("online") : tc("offline")}
             </CardDescription>
           </div>
         </div>
@@ -81,7 +84,7 @@ export function Messages({ friend }: MessagesProps) {
             </div>
           ) : messages.length === 0 ? (
             <p className="py-8 text-center text-muted-foreground">
-              No messages. Start the conversation!
+              {t("noMessages")}
             </p>
           ) : (
             <div className="space-y-4">
@@ -124,7 +127,7 @@ export function Messages({ friend }: MessagesProps) {
         <div className="border-t p-4">
           <div className="flex gap-2">
             <Input
-              placeholder="Type a message..."
+              placeholder={t("placeholder")}
               value={messageContent}
               onChange={(e) => setMessageContent(e.target.value)}
               onKeyDown={(e) => {

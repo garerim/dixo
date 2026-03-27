@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { Settings, Dice5, Timer, Users, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
@@ -29,6 +30,7 @@ export function GameSettingsPanel({
   currentPlayerCount,
   onUpdateSettings,
 }: GameSettingsPanelProps) {
+  const t = useTranslations("game.settings");
   const [isUpdating, setIsUpdating] = useState(false);
 
   async function update(settings: Omit<UpdateSettingsRequest, "gameId">) {
@@ -41,22 +43,22 @@ export function GameSettingsPanel({
   }
 
   const diceOptions = [3, 5, 7] as const;
-  const timerOptions = [
-    { value: null, label: "Off" },
-    { value: 15, label: "15s" },
-    { value: 30, label: "30s" },
-    { value: 60, label: "60s" },
-  ] as const;
+  const timerOptions: { value: 15 | 30 | 60 | null; label: string }[] = [
+    { value: null, label: t("timerOff") },
+    { value: 15, label: t("timer15") },
+    { value: 30, label: t("timer30") },
+    { value: 60, label: t("timer60") },
+  ];
   const maxPlayerOptions = [2, 3, 4, 5, 6] as const;
 
   return (
     <div className="w-full rounded-xl border bg-card p-4">
       <div className="mb-4 flex items-center gap-2">
         <Settings className="size-4 text-muted-foreground" />
-        <span className="text-sm font-medium">Game settings</span>
+        <span className="text-sm font-medium">{t("title")}</span>
         {!isHost && (
           <span className="ml-auto text-xs text-muted-foreground">
-            Only the host can edit
+            {t("hostOnly")}
           </span>
         )}
       </div>
@@ -66,7 +68,7 @@ export function GameSettingsPanel({
         <div className="flex items-center justify-between gap-3">
           <div className="flex items-center gap-2">
             <Dice5 className="size-3.5 text-muted-foreground" />
-            <Label className="text-sm">Dice per player</Label>
+            <Label className="text-sm">{t("dicePerPlayer")}</Label>
           </div>
           <div className="flex gap-1">
             {diceOptions.map((count) => (
@@ -89,7 +91,7 @@ export function GameSettingsPanel({
           <div className="flex items-center gap-2">
             <Sparkles className="size-3.5 text-muted-foreground" />
             <Label htmlFor="pacos-switch" className="text-sm">
-              Pacos (1s are wild)
+              {t("pacos")}
             </Label>
           </div>
           <Switch
@@ -104,7 +106,7 @@ export function GameSettingsPanel({
         <div className="flex items-center justify-between gap-3">
           <div className="flex items-center gap-2">
             <Timer className="size-3.5 text-muted-foreground" />
-            <Label className="text-sm">Turn timer</Label>
+            <Label className="text-sm">{t("turnTimer")}</Label>
           </div>
           <div className="flex gap-1">
             {timerOptions.map((option) => (
@@ -126,7 +128,7 @@ export function GameSettingsPanel({
         <div className="flex items-center justify-between gap-3">
           <div className="flex items-center gap-2">
             <Users className="size-3.5 text-muted-foreground" />
-            <Label className="text-sm">Max players</Label>
+            <Label className="text-sm">{t("maxPlayers")}</Label>
           </div>
           <div className="flex gap-1">
             {maxPlayerOptions.map((count) => (

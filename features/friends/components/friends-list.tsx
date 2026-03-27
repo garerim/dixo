@@ -5,6 +5,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import { useTranslations } from "next-intl";
 import { Loader2, UserPlus, MessageSquare, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -29,6 +30,8 @@ interface FriendsListProps {
 }
 
 export function FriendsList({ onSelectFriend, showAddFriend = true }: FriendsListProps) {
+  const t = useTranslations("friends");
+  const tc = useTranslations("common");
   const { user } = useAuth();
   const { friends, isLoading, actions } = useFriends();
   const [selectedFriend, setSelectedFriend] = useState<FriendInfo | null>(null);
@@ -103,10 +106,10 @@ export function FriendsList({ onSelectFriend, showAddFriend = true }: FriendsLis
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-base">
               <UserPlus className="size-4" />
-              Add a friend
+              {t("addFriend")}
             </CardTitle>
             <CardDescription>
-              Search for a user by their pseudo
+              {t("searchDescription")}
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -114,7 +117,7 @@ export function FriendsList({ onSelectFriend, showAddFriend = true }: FriendsLis
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
                 <Input
-                  placeholder="Search by pseudo..."
+                  placeholder={t("searchPlaceholder")}
                   value={searchInput}
                   onChange={(e) => setSearchInput(e.target.value)}
                   className="pl-9"
@@ -130,10 +133,10 @@ export function FriendsList({ onSelectFriend, showAddFriend = true }: FriendsLis
                     </div>
                   ) : searchResults.length === 0 ? (
                     <p className="py-4 text-center text-sm text-muted-foreground">
-                      No user found.
+                      {t("noUserFound")}
                       <br />
                       <span className="text-xs">
-                        (Maybe already a friend or your own profile)
+                        {t("alreadyFriendHint")}
                       </span>
                     </p>
                   ) : (
@@ -156,7 +159,7 @@ export function FriendsList({ onSelectFriend, showAddFriend = true }: FriendsLis
                                 variant={profile.isOnline ? "default" : "secondary"}
                                 className="text-xs"
                               >
-                                {profile.isOnline ? "Online" : "Offline"}
+                                {profile.isOnline ? tc("online") : tc("offline")}
                               </Badge>
                               <span className="text-xs text-muted-foreground">
                                 1v1: {profile.elo1v1} • 4p: {profile.elo4p}
@@ -170,7 +173,7 @@ export function FriendsList({ onSelectFriend, showAddFriend = true }: FriendsLis
                           disabled={isAlreadyFriend(profile.id)}
                         >
                           <UserPlus className="size-4 mr-1" />
-                          {isAlreadyFriend(profile.id) ? "Already friend" : "Add"}
+                          {isAlreadyFriend(profile.id) ? t("alreadyFriend") : t("add")}
                         </Button>
                       </div>
                     ))
@@ -186,7 +189,7 @@ export function FriendsList({ onSelectFriend, showAddFriend = true }: FriendsLis
       {pendingRequests.length > 0 && (
         <Card>
           <CardHeader>
-            <CardTitle className="text-base">Received requests</CardTitle>
+            <CardTitle className="text-base">{t("receivedRequests")}</CardTitle>
           </CardHeader>
           <CardContent className="space-y-2">
             {pendingRequests.map((friend) => (
@@ -201,7 +204,7 @@ export function FriendsList({ onSelectFriend, showAddFriend = true }: FriendsLis
                   </Avatar>
                   <div>
                     <p className="font-medium">{friend.pseudo}</p>
-                    <p className="text-xs text-muted-foreground">Pending</p>
+                    <p className="text-xs text-muted-foreground">{t("pending")}</p>
                   </div>
                 </div>
                 <div className="flex gap-2">
@@ -211,7 +214,7 @@ export function FriendsList({ onSelectFriend, showAddFriend = true }: FriendsLis
                       actions.respondToRequest(friend.friendshipId, true)
                     }
                   >
-                    Accept
+                    {t("accept")}
                   </Button>
                   <Button
                     size="sm"
@@ -220,7 +223,7 @@ export function FriendsList({ onSelectFriend, showAddFriend = true }: FriendsLis
                       actions.respondToRequest(friend.friendshipId, false)
                     }
                   >
-                    Decline
+                    {t("decline")}
                   </Button>
                 </div>
               </div>
@@ -232,9 +235,9 @@ export function FriendsList({ onSelectFriend, showAddFriend = true }: FriendsLis
       {/* ── Friends list ── */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-base">My friends ({acceptedFriends.length})</CardTitle>
+          <CardTitle className="text-base">{t("myFriends", { count: acceptedFriends.length })}</CardTitle>
           <CardDescription>
-            {pendingSent.length > 0 && `${pendingSent.length} pending request(s)`}
+            {pendingSent.length > 0 && t("pendingRequests", { count: pendingSent.length })}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -245,14 +248,14 @@ export function FriendsList({ onSelectFriend, showAddFriend = true }: FriendsLis
           ) : (
             <>
               <Input
-                placeholder="Search for a friend..."
+                placeholder={t("searchFriend")}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="mb-4"
               />
               {filteredFriends.length === 0 ? (
                 <p className="py-8 text-center text-muted-foreground">
-                  {searchQuery ? "No friend found." : "No friends yet."}
+                  {searchQuery ? t("noFriendFound") : t("noFriendsYet")}
                 </p>
               ) : (
                 <div className="space-y-2">
@@ -276,7 +279,7 @@ export function FriendsList({ onSelectFriend, showAddFriend = true }: FriendsLis
                           variant="outline"
                           onClick={() => handleViewProfile(friend)}
                         >
-                          Profile
+                          {t("profileAction")}
                         </Button>
                         {onSelectFriend && (
                           <Button
@@ -284,7 +287,7 @@ export function FriendsList({ onSelectFriend, showAddFriend = true }: FriendsLis
                             onClick={() => onSelectFriend(friend)}
                           >
                             <MessageSquare className="size-4 mr-1" />
-                            Message
+                            {t("message")}
                           </Button>
                         )}
                       </div>

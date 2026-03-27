@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { Copy, Loader2, Play, Users, Trophy, Swords, UserPlus, LogOut } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -19,6 +20,8 @@ interface LobbyViewProps {
 }
 
 export function LobbyView({ gameState, playerId, onStartGame, onUpdateSettings, onLeaveGame }: LobbyViewProps) {
+  const t = useTranslations("game.lobby");
+  const tPlayer = useTranslations("game.player");
   const [showInviteDialog, setShowInviteDialog] = useState(false);
   const me = gameState.players.find((p) => p.id === playerId);
   const isHost = me?.isHost ?? false;
@@ -27,7 +30,7 @@ export function LobbyView({ gameState, playerId, onStartGame, onUpdateSettings, 
 
   function copyCode() {
     navigator.clipboard.writeText(gameState.joinCode);
-    toast.success("Code copied!");
+    toast.success(t("codeCopied"));
   }
 
   return (
@@ -36,18 +39,18 @@ export function LobbyView({ gameState, playerId, onStartGame, onUpdateSettings, 
       {gameState.gameMode === "RANKED" ? (
         <Badge className="gap-1 bg-yellow-500/10 text-yellow-600">
           <Trophy className="size-3" />
-          Ranked game
+          {t("ranked")}
         </Badge>
       ) : gameState.gameMode === "NORMAL" ? (
         <Badge variant="secondary" className="gap-1">
           <Swords className="size-3" />
-          Normal game
+          {t("normal")}
         </Badge>
       ) : null}
 
       {/* ── Game code ── */}
       <div className="flex flex-col items-center gap-2">
-        <p className="text-sm text-muted-foreground">Game code</p>
+        <p className="text-sm text-muted-foreground">{t("gameCode")}</p>
         <button
           onClick={copyCode}
           className="group flex items-center gap-2 rounded-xl bg-muted px-6 py-3 transition-colors hover:bg-muted/80"
@@ -58,7 +61,7 @@ export function LobbyView({ gameState, playerId, onStartGame, onUpdateSettings, 
           <Copy className="size-4 text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100" />
         </button>
         <p className="text-xs text-muted-foreground">
-          Share this code with your friends
+          {t("shareCode")}
         </p>
         <Button
           variant="outline"
@@ -67,7 +70,7 @@ export function LobbyView({ gameState, playerId, onStartGame, onUpdateSettings, 
           onClick={() => setShowInviteDialog(true)}
         >
           <UserPlus className="size-4" />
-          Invite friends
+          {t("inviteFriends")}
         </Button>
       </div>
 
@@ -86,7 +89,7 @@ export function LobbyView({ gameState, playerId, onStartGame, onUpdateSettings, 
         <div className="mb-3 flex items-center gap-2">
           <Users className="size-4 text-muted-foreground" />
           <span className="text-sm font-medium">
-            Players ({playerCount}/{gameState.config.maxPlayers})
+            {t("players", { current: playerCount, max: gameState.config.maxPlayers })}
           </span>
         </div>
 
@@ -107,12 +110,12 @@ export function LobbyView({ gameState, playerId, onStartGame, onUpdateSettings, 
               </span>
               {player.isHost && (
                 <Badge variant="secondary" className="text-xs">
-                  Host
+                  {t("host")}
                 </Badge>
               )}
               {player.id === playerId && (
                 <Badge variant="outline" className="text-xs">
-                  You
+                  {tPlayer("you")}
                 </Badge>
               )}
             </div>
@@ -125,7 +128,7 @@ export function LobbyView({ gameState, playerId, onStartGame, onUpdateSettings, 
               className="flex items-center gap-3 rounded-lg border border-dashed px-3 py-2 text-muted-foreground"
             >
               <div className="size-6 rounded-full bg-muted" />
-              <span className="text-sm">Waiting...</span>
+              <span className="text-sm">{t("waiting")}</span>
             </div>
           ))}
         </div>
@@ -141,14 +144,14 @@ export function LobbyView({ gameState, playerId, onStartGame, onUpdateSettings, 
         >
           <Play className="size-4" />
           {canStart
-            ? "Start game"
-            : `Waiting for players (min. 2)`}
+            ? t("startGame")
+            : t("waitingForPlayers")}
         </Button>
       ) : (
         <div className="flex flex-col items-center gap-3">
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
             <Loader2 className="size-4 animate-spin" />
-            Waiting for host to start...
+            {t("waitingForHost")}
           </div>
           <Button
             variant="ghost"
@@ -156,11 +159,11 @@ export function LobbyView({ gameState, playerId, onStartGame, onUpdateSettings, 
             className="gap-2 text-muted-foreground"
             onClick={async () => {
               const ok = await onLeaveGame();
-              if (ok) toast.info("You left the game.");
+              if (ok) toast.info(t("leftGame"));
             }}
           >
             <LogOut className="size-3.5" />
-            Leave game
+            {t("leaveGame")}
           </Button>
         </div>
       )}

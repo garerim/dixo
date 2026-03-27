@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback, useRef } from "react";
+import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import {
   Trophy,
@@ -43,6 +44,7 @@ type RematchStatus =
   | "declined";        // Opponent declined
 
 export function GameOverView({ gameState, playerId }: GameOverViewProps) {
+  const t = useTranslations("game.gameOver");
   const router = useRouter();
   const winner = gameState.players.find((p) => p.id === gameState.winnerId);
   const isWinner = gameState.winnerId === playerId;
@@ -171,13 +173,13 @@ export function GameOverView({ gameState, playerId }: GameOverViewProps) {
 
       <div className="flex flex-col items-center gap-2 text-center">
         <h1 className="text-3xl font-bold">
-          {isWinner ? "You won!" : "Game over"}
+          {isWinner ? t("youWon") : t("gameOver")}
         </h1>
 
         {/* ── ELO Change personnel ── */}
         {isRanked && myEloChange && (
           <div className="flex items-center gap-2 rounded-lg border px-4 py-2">
-            <span className="text-sm text-muted-foreground">ELO</span>
+            <span className="text-sm text-muted-foreground">{t("elo")}</span>
             <span className="font-mono text-lg font-bold">
               {myEloChange.newElo}
             </span>
@@ -209,7 +211,7 @@ export function GameOverView({ gameState, playerId }: GameOverViewProps) {
             <div className="flex flex-col">
               <span className="text-lg font-bold">{winner.displayName}</span>
               <span className="text-sm text-muted-foreground">
-                Round {gameState.round} winner
+                {t("roundWinner", { round: gameState.round })}
               </span>
             </div>
             <Trophy className="size-6 text-amber-500" />
@@ -220,7 +222,7 @@ export function GameOverView({ gameState, playerId }: GameOverViewProps) {
       {/* ── Classement final ── */}
       <div className="w-full max-w-sm rounded-xl border bg-card p-4">
         <h3 className="mb-3 text-sm font-medium text-muted-foreground">
-          Final ranking
+          {t("finalRanking")}
         </h3>
         <div className="flex flex-col gap-2">
           {[...gameState.players]
@@ -246,7 +248,7 @@ export function GameOverView({ gameState, playerId }: GameOverViewProps) {
                         : "text-lg font-bold text-muted-foreground"
                     }
                   >
-                    #{index + 1}
+                    {t("rank", { rank: index + 1 })}
                   </span>
                   <Avatar className="size-8">
                     <AvatarImage
@@ -278,7 +280,7 @@ export function GameOverView({ gameState, playerId }: GameOverViewProps) {
                   )}
 
                   <span className="text-xs text-muted-foreground">
-                    {player.diceCount} die{player.diceCount !== 1 ? "s" : ""}
+                    {player.diceCount} {player.diceCount !== 1 ? t("dice") : t("die")}
                   </span>
                 </div>
               );
@@ -290,7 +292,7 @@ export function GameOverView({ gameState, playerId }: GameOverViewProps) {
       {isRanked && (
         <Badge variant="outline" className="gap-1">
           <Trophy className="size-3" />
-          Ranked game
+          {t("ranked")}
         </Badge>
       )}
 
@@ -312,7 +314,7 @@ export function GameOverView({ gameState, playerId }: GameOverViewProps) {
         onClick={() => router.push("/")}
       >
         <Home className="size-4" />
-        Back to home
+        {t("backToHome")}
       </Button>
     </div>
   );
@@ -337,6 +339,8 @@ function RematchSection({
   onAccept: () => void;
   onDecline: () => void;
 }) {
+  const t = useTranslations("game.gameOver");
+
   switch (status) {
     case "idle":
       return (
@@ -347,7 +351,7 @@ function RematchSection({
           onClick={onRequest}
         >
           <RotateCcw className="size-4" />
-          Rematch
+          {t("rematch")}
         </Button>
       );
 
@@ -356,7 +360,7 @@ function RematchSection({
         <div className="flex w-full max-w-sm flex-col items-center gap-2 rounded-xl border bg-card p-4">
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
             <Loader2 className="size-4 animate-spin" />
-            Waiting for {opponentName} to accept...
+            {t("waitingRematch", { name: opponentName })}
           </div>
         </div>
       );
@@ -365,12 +369,12 @@ function RematchSection({
       return (
         <div className="flex w-full max-w-sm flex-col items-center gap-3 rounded-xl border bg-card p-4">
           <p className="text-sm font-medium">
-            {requesterName} wants a rematch!
+            {t("rematchRequest", { name: requesterName })}
           </p>
           <div className="flex gap-2">
             <Button size="sm" className="gap-1.5" onClick={onAccept}>
               <Check className="size-3.5" />
-              Accept
+              {t("accept")}
             </Button>
             <Button
               size="sm"
@@ -379,7 +383,7 @@ function RematchSection({
               onClick={onDecline}
             >
               <X className="size-3.5" />
-              Decline
+              {t("decline")}
             </Button>
           </div>
         </div>
@@ -389,7 +393,7 @@ function RematchSection({
       return (
         <div className="flex w-full max-w-sm items-center justify-center gap-2 rounded-xl border bg-card p-4">
           <Loader2 className="size-4 animate-spin" />
-          <span className="text-sm">Creating rematch...</span>
+          <span className="text-sm">{t("creatingRematch")}</span>
         </div>
       );
 
@@ -397,7 +401,7 @@ function RematchSection({
       return (
         <div className="flex w-full max-w-sm items-center justify-center gap-2 rounded-xl border bg-muted/50 p-4">
           <span className="text-sm text-muted-foreground">
-            {opponentName} declined the rematch.
+            {t("rematchDeclined", { name: opponentName })}
           </span>
         </div>
       );

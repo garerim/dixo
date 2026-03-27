@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 
@@ -54,6 +55,8 @@ export function DiceFace({
   skin,
   className,
 }: DiceFaceProps) {
+  const t = useTranslations("game.dice");
+
   if (hidden) {
     return (
       <div
@@ -63,7 +66,7 @@ export function DiceFace({
           className,
         )}
       >
-        ?
+        {t("hidden")}
       </div>
     );
   }
@@ -79,11 +82,11 @@ export function DiceFace({
           highlighted && "ring-2 ring-primary ring-offset-1 ring-offset-background",
           className,
         )}
-        title={`Dé : ${value}`}
+        title={t("title", { value })}
       >
         <Image
           src={`/dices-skins/${skin}/dice-${value}.png`}
-          alt={`Dé ${value}`}
+          alt={t("alt", { value })}
           width={px}
           height={px}
           className="size-full object-cover"
@@ -106,7 +109,7 @@ export function DiceFace({
         value === 1 && "text-red-500",
         className,
       )}
-      title={`Dé : ${value}`}
+      title={t("title", { value })}
     >
       {/* Grille 3x3 : 9 cellules, on affiche un point là où il faut */}
       {Array.from({ length: 9 }).map((_, i) => {

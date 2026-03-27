@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
 import { Crown, Skull, Star } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -26,6 +27,7 @@ export function PlayerCard({
   showDice = false,
   className,
 }: PlayerCardProps) {
+  const t = useTranslations("game.player");
   const hasDice = player.diceValues.length > 0;
   const initials = player.displayName.slice(0, 2).toUpperCase();
 
@@ -63,7 +65,7 @@ export function PlayerCard({
             )}
             {isMe && (
               <Badge variant="outline" className="text-[10px] px-1.5 py-0">
-                Vous
+                {t("you")}
               </Badge>
             )}
           </div>
@@ -77,8 +79,8 @@ export function PlayerCard({
             )}
             <span className="text-xs text-muted-foreground">
               {player.isAlive
-                ? `${player.diceCount} dé${player.diceCount > 1 ? "s" : ""}`
-                : "Éliminé"}
+                ? (player.diceCount > 1 ? t("diceCount", { count: player.diceCount }) : t("dieCount", { count: player.diceCount }))
+                : t("eliminated")}
             </span>
           </div>
         </div>

@@ -7,6 +7,7 @@
 import { useState } from "react";
 import { ArrowLeft, MessageSquare, Users } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { FriendsList } from "@/features/friends/components/friends-list";
 import { Messages } from "@/features/messages/components/messages";
@@ -14,6 +15,7 @@ import type { FriendInfo } from "@/types/api";
 
 export default function FriendsPage() {
   const router = useRouter();
+  const t = useTranslations("friends");
   const [selectedFriend, setSelectedFriend] = useState<FriendInfo | null>(null);
 
   return (
@@ -25,7 +27,7 @@ export default function FriendsPage() {
         </Button>
         <div className="flex items-center gap-2">
           <Users className="size-5 text-primary" />
-          <span className="text-lg font-bold tracking-tight">Friends</span>
+          <span className="text-lg font-bold tracking-tight">{t("title")}</span>
         </div>
       </header>
 

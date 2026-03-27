@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
 import { Loader2, Minus, Plus, AlertTriangle } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -26,6 +27,7 @@ export function BidPanel({
   disabled = false,
   className,
 }: BidPanelProps) {
+  const t = useTranslations("game.bidPanel");
   const minQuantity = currentBid ? currentBid.quantity : 1;
   const [quantity, setQuantity] = useState(minQuantity);
   const [faceValue, setFaceValue] = useState(currentBid ? currentBid.faceValue : 2);
@@ -55,7 +57,7 @@ export function BidPanel({
       {/* ── Enchère actuelle ── */}
       {currentBid && (
         <div className="flex items-center gap-2 rounded-lg bg-muted px-3 py-2 text-sm">
-          <span className="text-muted-foreground">Enchère actuelle :</span>
+          <span className="text-muted-foreground">{t("currentBid")}</span>
           <span className="font-bold">{currentBid.quantity} &times;</span>
           <DiceFace value={currentBid.faceValue} size="sm" />
         </div>
@@ -64,7 +66,7 @@ export function BidPanel({
       {/* ── Sélection quantité ── */}
       <div className="flex flex-col gap-2">
         <label className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
-          Quantité
+          {t("quantity")}
         </label>
         <div className="flex items-center gap-2">
           <Button
@@ -93,7 +95,7 @@ export function BidPanel({
       {/* ── Sélection face ── */}
       <div className="flex flex-col gap-2">
         <label className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
-          Face du dé
+          {t("diceFace")}
         </label>
         <div className="flex items-center gap-2">
           {[1, 2, 3, 4, 5, 6].map((face) => (
@@ -126,7 +128,7 @@ export function BidPanel({
           {isSubmitting ? (
             <Loader2 className="size-4 animate-spin" />
           ) : null}
-          Miser {quantity} &times;
+          {t("placeBid", { quantity })}
           <DiceFace value={faceValue} size="sm" />
         </Button>
 
@@ -142,7 +144,7 @@ export function BidPanel({
             ) : (
               <AlertTriangle className="size-4" />
             )}
-            Challenge !
+            {t("challenge")}
           </Button>
         )}
       </div>

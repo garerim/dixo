@@ -2,6 +2,7 @@
 
 import { Suspense, useState, useEffect, useRef, useCallback } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import {
   ArrowLeft,
@@ -114,6 +115,7 @@ function ProfileContent() {
   const { profile, isLoading: profileLoading, actions } = useProfile();
   const router = useRouter();
   const searchParams = useSearchParams();
+  const t = useTranslations("profile");
   const { isLoading: billingLoading, openPortal } = useBilling();
   const { achievements, unlockedCount, totalCount } = useAchievements();
 
@@ -136,7 +138,7 @@ function ProfileContent() {
   // Toast de bienvenue après upgrade
   useEffect(() => {
     if (searchParams.get("upgraded") === "1") {
-      toast.success("Welcome to Premium! Your account has been upgraded.");
+      toast.success(t("toasts.upgradedWelcome"));
       // Nettoyer le query param sans rechargement
       router.replace("/profile");
       refreshProfile();
@@ -154,7 +156,7 @@ function ProfileContent() {
   if (!profile) {
     return (
       <div className="flex min-h-svh items-center justify-center text-muted-foreground">
-        Profile not found.
+        {t("stats.notFound")}
       </div>
     );
   }
@@ -169,12 +171,12 @@ function ProfileContent() {
     const result = await actions.updatePseudo(editPseudo.trim());
 
     if (result.success) {
-      toast.success("Pseudo updated!");
+      toast.success(t("toasts.pseudoUpdated"));
       setIsEditingPseudo(false);
       await refreshProfile();
     } else {
       // Use the specific error message from the API
-      toast.error(result.error ?? "Unable to update pseudo.");
+      toast.error(result.error ?? t("toasts.pseudoError"));
     }
     setIsSaving(false);
   }
@@ -197,9 +199,9 @@ function ProfileContent() {
 
     if (!allowedTypes.includes(file.type)) {
       if (file.type === "image/gif") {
-        toast.error("GIF avatars are reserved for Premium members.");
+        toast.error(t("toasts.gifPremiumOnly"));
       } else {
-        toast.error("Invalid file type. Only JPEG, PNG, and WebP images are allowed.");
+        toast.error(t("toasts.invalidFileType"));
       }
       return;
     }
@@ -207,7 +209,7 @@ function ProfileContent() {
     const isGif = file.type === "image/gif";
     const maxSize = isGif ? 10 * 1024 * 1024 : 5 * 1024 * 1024;
     if (file.size > maxSize) {
-      toast.error(isGif ? "File size exceeds 10MB limit." : "File size exceeds 5MB limit.");
+      toast.error(isGif ? t("toasts.fileTooLargeGif") : t("toasts.fileTooLarge"));
       return;
     }
 
@@ -215,11 +217,11 @@ function ProfileContent() {
     const result = await profileClient.uploadAvatar(file);
 
     if (result.success && result.data) {
-      toast.success("Avatar updated!");
+      toast.success(t("toasts.avatarUpdated"));
       // Refresh profile to get the new avatar URL
       await actions.refresh();
     } else {
-      toast.error(result.error ?? "Unable to upload avatar.");
+      toast.error(result.error ?? t("toasts.avatarError"));
     }
 
     setIsUploadingAvatar(false);
@@ -235,7 +237,7 @@ function ProfileContent() {
     const result = await profileClient.deleteAccount();
 
     if (result.success) {
-      toast.success("Your account has been deleted.");
+      toast.success(t("toasts.accountDeleted"));
       // Sign out client-side and redirect
       const { signOut } = await import("@/lib/supabase/client").then((m) => {
         const client = m.getSupabaseBrowserClient();
@@ -244,7 +246,7 @@ function ProfileContent() {
       await signOut();
       router.replace("/");
     } else {
-      toast.error(result.error ?? "Failed to delete account.");
+      toast.error(result.error ?? t("toasts.deleteError"));
       setIsDeletingAccount(false);
     }
   }
@@ -262,7 +264,7 @@ function ProfileContent() {
         </Button>
         <div className="flex items-center gap-2">
           <Dice5 className="size-5 text-primary" />
-          <span className="text-lg font-bold tracking-tight">My Profile</span>
+          <span className="text-lg font-bold tracking-tight">{t("title")}</span>
         </div>
       </header>
 
@@ -299,7 +301,7 @@ function ProfileContent() {
                 onClick={() => fileInputRef.current?.click()}
                 disabled={isUploadingAvatar}
                 className="absolute inset-0 flex items-center justify-center rounded-full bg-black/50 opacity-0 transition-opacity group-hover:opacity-100 disabled:opacity-50"
-                title="Change avatar"
+                title={t("preview")}
               >
                 {isUploadingAvatar ? (
                   <Loader2 className="size-6 animate-spin text-white" />
@@ -373,11 +375,12 @@ function ProfileContent() {
 
               {/* Member since */}
               <p className="text-xs text-muted-foreground">
-                Member since{" "}
-                {new Date(profile.createdAt).toLocaleDateString("en-US", {
-                  day: "numeric",
-                  month: "long",
-                  year: "numeric",
+                {t("memberSince", {
+                  date: new Date(profile.createdAt).toLocaleDateString("en-US", {
+                    day: "numeric",
+                    month: "long",
+                    year: "numeric",
+                  }),
                 })}
               </p>
             </div>
@@ -396,15 +399,15 @@ function ProfileContent() {
               <div className="flex items-center justify-between">
                 <span className="flex items-center gap-1.5 text-sm font-semibold">
                   <Zap className="size-3.5 text-yellow-500" />
-                  Level {profile.levelData.level}
+                  {t("level", { level: profile.levelData.level })}
                 </span>
                 <span className="text-xs text-muted-foreground">
-                  {profile.levelData.currentLevelXp} / {profile.levelData.xpToNextLevel} XP
+                  {t("xpProgress", { current: profile.levelData.currentLevelXp, max: profile.levelData.xpToNextLevel })}
                 </span>
               </div>
               <Progress value={profile.levelData.progress * 100} className="h-2.5" />
               <p className="text-xs text-muted-foreground">
-                {profile.levelData.totalXp} XP total
+                {t("xpTotal", { xp: profile.levelData.totalXp })}
               </p>
             </div>
           </CardContent>
@@ -417,25 +420,25 @@ function ProfileContent() {
             <CardHeader className="pb-2">
               <CardTitle className="flex items-center gap-2 text-base">
                 <Swords className="size-4 text-primary" />
-                Games
+                {t("stats.games")}
               </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-2 gap-4">
                 <StatItem
-                  label="Played"
+                  label={t("stats.played")}
                   value={profile.gamesPlayed.toString()}
                 />
                 <StatItem
-                  label="Won"
+                  label={t("stats.won")}
                   value={profile.gamesWon.toString()}
                 />
                 <StatItem
-                  label="Win Rate"
+                  label={t("stats.winRate")}
                   value={getWinRate(profile.gamesPlayed, profile.gamesWon)}
                 />
                 <StatItem
-                  label="Current streak"
+                  label={t("stats.currentStreak")}
                   value={profile.currentWinStreak.toString()}
                 />
               </div>
@@ -447,28 +450,28 @@ function ProfileContent() {
             <CardHeader className="pb-2">
               <CardTitle className="flex items-center gap-2 text-base">
                 <Target className="size-4 text-primary" />
-                Challenge
+                {t("stats.challenge")}
               </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-2 gap-4">
                 <StatItem
-                  label="Calls"
+                  label={t("stats.calls")}
                   value={profile.totalChallengeCalls.toString()}
                 />
                 <StatItem
-                  label="Successful"
+                  label={t("stats.successful")}
                   value={profile.totalChallengeSuccess.toString()}
                 />
                 <StatItem
-                  label="Accuracy"
+                  label={t("stats.accuracy")}
                   value={getChallengeSuccessRate(
                     profile.totalChallengeCalls,
                     profile.totalChallengeSuccess,
                   )}
                 />
                 <StatItem
-                  label="Best streak"
+                  label={t("stats.bestStreak")}
                   value={profile.bestWinStreak.toString()}
                   icon={<Flame className="size-3 text-orange-500" />}
                 />
@@ -482,10 +485,10 @@ function ProfileContent() {
           <CardHeader className="pb-2">
             <CardTitle className="flex items-center gap-2 text-base">
               <Trophy className="size-4 text-yellow-500" />
-              Achievements
+              {t("achievements.title")}
             </CardTitle>
             <CardDescription>
-              {unlockedCount}/{totalCount} unlocked
+              {t("achievements.progress", { unlocked: unlockedCount, total: totalCount })}
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -498,21 +501,21 @@ function ProfileContent() {
           <CardHeader className="pb-2">
             <CardTitle className="flex items-center gap-2 text-base">
               <Star className="size-4 text-yellow-400 fill-yellow-400" />
-              Subscription
+              {t("subscription.title")}
             </CardTitle>
           </CardHeader>
           <CardContent>
             {profile.subscription === "free" ? (
               <div className="flex items-center justify-between gap-4">
                 <div>
-                  <p className="font-medium">Free plan</p>
+                  <p className="font-medium">{t("subscription.freePlan")}</p>
                   <p className="text-sm text-muted-foreground">
-                    Upgrade to Premium to unlock GIF avatars, full ELO history and more.
+                    {t("subscription.upgradeDescription")}
                   </p>
                 </div>
                 <Button onClick={() => router.push("/pricing")}>
                   <Star className="mr-2 size-4" />
-                  Upgrade
+                  {t("subscription.upgrade")}
                 </Button>
               </div>
             ) : (
@@ -524,11 +527,12 @@ function ProfileContent() {
                   </p>
                   {profile.subscriptionExpiresAt && (
                     <p className="text-sm text-muted-foreground">
-                      Renews on{" "}
-                      {new Date(profile.subscriptionExpiresAt).toLocaleDateString("en-US", {
-                        day: "numeric",
-                        month: "long",
-                        year: "numeric",
+                      {t("subscription.renewsOn", {
+                        date: new Date(profile.subscriptionExpiresAt).toLocaleDateString("en-US", {
+                          day: "numeric",
+                          month: "long",
+                          year: "numeric",
+                        }),
                       })}
                     </p>
                   )}
@@ -543,7 +547,7 @@ function ProfileContent() {
                   ) : (
                     <ExternalLink className="mr-2 size-4" />
                   )}
-                  Manage subscription
+                  {t("subscription.manage")}
                 </Button>
               </div>
             )}
@@ -558,10 +562,10 @@ function ProfileContent() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-base">
               <Crown className="size-4 text-yellow-500" />
-              Ranking
+              {t("ranking.title")}
             </CardTitle>
             <CardDescription>
-              Your position in the ELO ranking
+              {t("ranking.description")}
             </CardDescription>
           </CardHeader>
           <CardContent className="flex flex-col gap-5">
@@ -582,7 +586,7 @@ function ProfileContent() {
                       <span className="flex items-center gap-2">
                         <span className={`font-bold ${rank.color}`}>{rank.label}</span>
                         <span className="text-xs text-muted-foreground">
-                          {mode === "1v1" ? "1v1" : "4 players"}
+                          {mode === "1v1" ? t("ranking.mode1v1") : t("ranking.mode4p")}
                         </span>
                       </span>
                       <span className="text-sm font-bold tabular-nums">{elo} ELO</span>
@@ -590,8 +594,8 @@ function ProfileContent() {
                     <Progress value={progress * 100} className="h-2" />
                     <p className="text-xs text-muted-foreground">
                       {next
-                        ? `${next.minElo - elo} ELO to ${next.label}`
-                        : "Highest rank reached"}
+                        ? t("ranking.eloToNext", { elo: next.minElo - elo, rank: next.label })
+                        : t("ranking.highestRank")}
                     </p>
                   </div>
                 </div>
@@ -604,14 +608,14 @@ function ProfileContent() {
                 size="sm"
                 onClick={() => router.push("/ranks")}
               >
-                View all ranks
+                {t("ranking.viewAllRanks")}
               </Button>
               <Button
                 variant="outline"
                 size="sm"
                 onClick={() => router.push("/leaderboard")}
               >
-                View leaderboard
+                {t("ranking.viewLeaderboard")}
               </Button>
             </div>
           </CardContent>
@@ -622,15 +626,15 @@ function ProfileContent() {
           <CardHeader className="pb-2">
             <CardTitle className="flex items-center gap-2 text-base text-destructive">
               <Trash2 className="size-4" />
-              Danger Zone
+              {t("dangerZone.title")}
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="flex items-center justify-between gap-4">
               <div>
-                <p className="font-medium">Delete my account</p>
+                <p className="font-medium">{t("dangerZone.deleteAccount")}</p>
                 <p className="text-sm text-muted-foreground">
-                  Permanently delete your account and all associated data. This action is irreversible.
+                  {t("dangerZone.deleteDescription")}
                 </p>
               </div>
               <AlertDialog open={deleteDialogOpen} onOpenChange={(open) => {
@@ -639,21 +643,19 @@ function ProfileContent() {
               }}>
                 <AlertDialogTrigger asChild>
                   <Button variant="destructive" size="sm">
-                    Delete account
+                    {t("dangerZone.deleteButton")}
                   </Button>
                 </AlertDialogTrigger>
                 <AlertDialogContent>
                   <AlertDialogHeader>
-                    <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                    <AlertDialogTitle>{t("dangerZone.confirmTitle")}</AlertDialogTitle>
                     <AlertDialogDescription>
-                      This will permanently delete your account and all your data:
-                      profile, game history, friends, messages, achievements, and ELO history.
-                      This action cannot be undone.
+                      {t("dangerZone.confirmDescription")}
                     </AlertDialogDescription>
                   </AlertDialogHeader>
                   <div className="space-y-2">
                     <p className="text-sm text-muted-foreground">
-                      Type <span className="font-bold text-foreground">DELETE</span> to confirm:
+                      {t.rich("dangerZone.typeToConfirm", { strong: (chunks) => <span className="font-bold text-foreground">{chunks}</span> })}
                     </p>
                     <Input
                       value={deleteConfirmText}
@@ -663,7 +665,7 @@ function ProfileContent() {
                     />
                   </div>
                   <AlertDialogFooter>
-                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <AlertDialogCancel>{t("dangerZone.cancel")}</AlertDialogCancel>
                     <Button
                       variant="destructive"
                       disabled={deleteConfirmText !== "DELETE" || isDeletingAccount}
@@ -672,10 +674,10 @@ function ProfileContent() {
                       {isDeletingAccount ? (
                         <>
                           <Loader2 className="mr-2 size-4 animate-spin" />
-                          Deleting...
+                          {t("dangerZone.deleting")}
                         </>
                       ) : (
-                        "Delete my account"
+                        t("dangerZone.deleteAccount")
                       )}
                     </Button>
                   </AlertDialogFooter>

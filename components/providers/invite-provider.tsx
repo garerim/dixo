@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { Dice5 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -14,6 +15,7 @@ import {
 } from "@/lib/realtime/invite-channel";
 
 export function InviteProvider({ children }: { children: React.ReactNode }) {
+  const t = useTranslations("inviteProvider");
   const { user, profile } = useAuth();
   const router = useRouter();
   const unsubscribeRef = useRef<(() => void) | null>(null);
@@ -29,14 +31,14 @@ export function InviteProvider({ children }: { children: React.ReactNode }) {
       profile?.pseudo ?? user.user_metadata?.full_name ?? "Player";
 
     unsubscribeRef.current = subscribeToInvites(user.id, (invite) => {
-      showInviteToast(invite, displayName, router);
+      showInviteToast(invite, displayName, router, t);
     });
 
     return () => {
       unsubscribeRef.current?.();
       unsubscribeRef.current = null;
     };
-  }, [user, profile, router]);
+  }, [user, profile, router, t]);
 
   return <>{children}</>;
 }
@@ -45,6 +47,7 @@ function showInviteToast(
   invite: GameInvitePayload,
   displayName: string,
   router: ReturnType<typeof useRouter>,
+  t: ReturnType<typeof useTranslations>,
 ) {
   toast.custom(
     (toastId) => (
@@ -58,12 +61,11 @@ function showInviteToast(
 
         <div className="flex min-w-0 flex-1 flex-col gap-0.5">
           <p className="text-sm font-medium">
-            <span className="font-semibold">{invite.senderPseudo}</span>{" "}
-            invites you to a game
+            {t("inviteMessage", { name: invite.senderPseudo })}
           </p>
           <div className="flex items-center gap-1 text-xs text-muted-foreground">
             <Dice5 className="size-3" />
-            <span>Code: {invite.joinCode}</span>
+            <span>{t("code", { code: invite.joinCode })}</span>
           </div>
         </div>
 
@@ -74,7 +76,7 @@ function showInviteToast(
             className="h-8 px-3 text-xs"
             onClick={() => toast.dismiss(toastId)}
           >
-            Decline
+            {t("decline")}
           </Button>
           <Button
             size="sm"
@@ -88,11 +90,11 @@ function showInviteToast(
               if (result.success && result.data) {
                 router.push(`/game/${result.data.gameId}`);
               } else {
-                toast.error(result.error ?? "Unable to join the game.");
+                toast.error(result.error ?? t("joinError"));
               }
             }}
           >
-            Accept
+            {t("accept")}
           </Button>
         </div>
       </div>

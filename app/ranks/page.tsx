@@ -1,8 +1,11 @@
+"use client";
+
 // =============================================================================
 // PAGE — /ranks — Rank Tiers Description
 // =============================================================================
 
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import {
   ArrowLeft,
   Shield,
@@ -35,11 +38,11 @@ function getRankIcon(icon: string, className: string) {
   }
 }
 
-function RankCard({ rank, index }: { rank: RankDefinition; index: number }) {
+function RankCard({ rank, index, t }: { rank: RankDefinition; index: number; t: ReturnType<typeof useTranslations<"ranksPage">> }) {
   const eloRange =
     rank.maxElo === null
-      ? `${rank.minElo}+`
-      : `${rank.minElo} – ${rank.maxElo}`;
+      ? t("eloRangeOpen", { min: rank.minElo })
+      : t("eloRange", { min: rank.minElo, max: rank.maxElo });
 
   return (
     <Card className={`${rank.borderColor} border`}>
@@ -76,6 +79,9 @@ function RankCard({ rank, index }: { rank: RankDefinition; index: number }) {
 // =============================================================================
 
 export default function RanksPage() {
+  const t = useTranslations("ranksPage");
+  const tc = useTranslations("common");
+
   return (
     <div className="flex min-h-svh flex-col bg-gradient-to-b from-background to-muted/30">
       {/* ─── Header ─── */}
@@ -87,7 +93,7 @@ export default function RanksPage() {
         </Button>
         <div className="flex items-center gap-2">
           <TrendingUp className="size-5 text-primary" />
-          <span className="text-lg font-bold tracking-tight">Ranks</span>
+          <span className="text-lg font-bold tracking-tight">{t("title")}</span>
         </div>
       </header>
 
@@ -95,33 +101,32 @@ export default function RanksPage() {
         {/* ─── Hero ─── */}
         <div className="text-center">
           <h1 className="text-3xl font-extrabold tracking-tight sm:text-4xl">
-            Competitive Ranks
+            {t("heading")}
           </h1>
           <p className="mt-3 text-muted-foreground">
-            Climb the ladder from Bronze to Master. Your rank is based on your
-            ELO rating, updated after each ranked game.
+            {t("description")}
           </p>
         </div>
 
         {/* ─── How it works ─── */}
         <div className="flex flex-col gap-3 rounded-xl border bg-card p-5">
-          <h2 className="font-semibold">How does it work?</h2>
+          <h2 className="font-semibold">{t("howItWorks")}</h2>
           <ul className="flex flex-col gap-2 text-sm text-muted-foreground">
             <li className="flex items-start gap-2">
               <span className="mt-0.5 size-1.5 shrink-0 rounded-full bg-primary" />
-              Every player starts at <strong className="text-foreground">1,000 ELO</strong> (Bronze).
+              {t.rich("rule1", { strong: (chunks) => <strong className="text-foreground">{chunks}</strong> })}
             </li>
             <li className="flex items-start gap-2">
               <span className="mt-0.5 size-1.5 shrink-0 rounded-full bg-primary" />
-              Win ranked games to gain ELO, lose them to drop.
+              {t("rule2")}
             </li>
             <li className="flex items-start gap-2">
               <span className="mt-0.5 size-1.5 shrink-0 rounded-full bg-primary" />
-              Separate ELO for <strong className="text-foreground">1v1</strong> and <strong className="text-foreground">4-player</strong> modes.
+              {t.rich("rule3", { strong: (chunks) => <strong className="text-foreground">{chunks}</strong> })}
             </li>
             <li className="flex items-start gap-2">
               <span className="mt-0.5 size-1.5 shrink-0 rounded-full bg-primary" />
-              Your rank updates instantly after each game.
+              {t("rule4")}
             </li>
           </ul>
         </div>
@@ -129,28 +134,28 @@ export default function RanksPage() {
         {/* ─── Rank list ─── */}
         <div className="flex flex-col gap-3">
           {RANK_DEFINITIONS.map((rank, idx) => (
-            <RankCard key={rank.tier} rank={rank} index={idx} />
+            <RankCard key={rank.tier} rank={rank} index={idx} t={t} />
           ))}
         </div>
 
         {/* ─── CTA ─── */}
         <div className="flex flex-col items-center gap-4 rounded-2xl border bg-card p-8 text-center">
           <Crown className="size-10 text-yellow-500" />
-          <h2 className="text-xl font-bold">Ready to climb?</h2>
+          <h2 className="text-xl font-bold">{t("readyToClimb")}</h2>
           <p className="text-sm text-muted-foreground">
-            Play ranked games to earn ELO and unlock higher tiers.
+            {t("readyToClimbDesc")}
           </p>
           <div className="flex flex-wrap items-center justify-center gap-3">
             <Button asChild>
               <Link href="/">
-                Play ranked
+                {t("playRanked")}
                 <ChevronRight className="ml-1 size-4" />
               </Link>
             </Button>
             <Button variant="outline" asChild>
               <Link href="/leaderboard">
                 <TrendingUp className="mr-2 size-4" />
-                Leaderboard
+                {tc("leaderboard")}
               </Link>
             </Button>
           </div>
@@ -160,12 +165,12 @@ export default function RanksPage() {
       {/* ─── Footer ─── */}
       <footer className="border-t px-4 py-6 text-center text-xs text-muted-foreground">
         <div className="flex flex-wrap items-center justify-center gap-4">
-          <span>&copy; 2026 Dixo</span>
+          <span>{tc("copyright")}</span>
           <Link href="/pricing" className="hover:text-foreground transition-colors">
-            Pricing
+            {tc("pricing")}
           </Link>
           <Link href="/how-to-play" className="hover:text-foreground transition-colors">
-            How to play
+            {tc("howToPlay")}
           </Link>
         </div>
       </footer>
