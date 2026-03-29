@@ -203,6 +203,12 @@ export default function HomePage() {
 
           {/* Header links */}
           <Button variant="ghost" size="sm" className="hidden gap-1.5 sm:flex" asChild>
+            <Link href="/tournaments">
+              <Trophy className="size-4 text-yellow-500" />
+              {tc("tournaments")}
+            </Link>
+          </Button>
+          <Button variant="ghost" size="sm" className="hidden gap-1.5 sm:flex" asChild>
             <Link href="/shop">
               <ShoppingBag className="size-4" />
               {tc("shop")}
@@ -247,6 +253,10 @@ export default function HomePage() {
               <DropdownMenuItem onClick={() => router.push("/skins")}>
                 <Paintbrush className="mr-2 size-4" />
                 <span>{tn("diceSkins")}</span>
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => router.push("/tournaments")} className="sm:hidden">
+                <Trophy className="mr-2 size-4 text-yellow-500" />
+                <span>{tc("tournaments")}</span>
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => router.push("/shop")} className="sm:hidden">
                 <ShoppingBag className="mr-2 size-4" />
@@ -507,15 +517,15 @@ function LandingPage() {
           <Dice5 className="size-6 text-primary" />
           <span className="text-lg font-bold tracking-tight">{t("title")}</span>
         </div>
-        <div className="flex items-center gap-2">
-          <Button variant="ghost" size="sm" asChild>
+        <div className="flex items-center gap-1 sm:gap-2">
+          <Button variant="ghost" size="sm" className="hidden sm:inline-flex" asChild>
             <Link href="/how-to-play">{tc("howToPlay")}</Link>
           </Button>
-          <Button variant="ghost" size="sm" asChild>
+          <Button variant="ghost" size="sm" className="hidden sm:inline-flex" asChild>
             <Link href="/pricing">{tc("pricing")}</Link>
           </Button>
           <LanguageButton />
-          <Button size="sm" onClick={signInWithGoogle}>
+          <Button size="sm" className="shrink-0" onClick={signInWithGoogle}>
             {tc("signIn")}
           </Button>
         </div>

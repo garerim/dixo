@@ -19,6 +19,7 @@ export class EloHistoryRepository {
     elo: number;
     delta: number;
     gameId: string | null;
+    tournamentId?: string | null;
     rankedMode: string;
   }): Promise<EloHistoryRow | null> {
     const { data, error } = await this.supabase
@@ -28,6 +29,7 @@ export class EloHistoryRepository {
         elo: entry.elo,
         delta: entry.delta,
         game_id: entry.gameId,
+        tournament_id: entry.tournamentId ?? null,
         ranked_mode: entry.rankedMode,
       })
       .select("*")

@@ -20,6 +20,8 @@ export interface SkinDefinition {
   stripePriceId: string | null;
   /** If true, everyone owns this skin by default */
   free: boolean;
+  /** If false, skin can only be earned (e.g. tournament reward), not purchased */
+  purchasable: boolean;
 }
 
 export const SKIN_CATALOG: SkinDefinition[] = [
@@ -31,6 +33,7 @@ export const SKIN_CATALOG: SkinDefinition[] = [
     price: 0,
     stripePriceId: null,
     free: true,
+    purchasable: true,
   },
   {
     id: "gold-ruby",
@@ -40,6 +43,7 @@ export const SKIN_CATALOG: SkinDefinition[] = [
     price: 2.99,
     stripePriceId: process.env.NEXT_PUBLIC_STRIPE_SKIN_GOLD_RUBY_PRICE_ID ?? null,
     free: false,
+    purchasable: true,
   },
   {
     id: "star-night",
@@ -49,6 +53,7 @@ export const SKIN_CATALOG: SkinDefinition[] = [
     price: 2.99,
     stripePriceId: process.env.NEXT_PUBLIC_STRIPE_SKIN_STAR_NIGHT_PRICE_ID ?? null,
     free: false,
+    purchasable: true,
   },
   {
     id: "green-jade",
@@ -58,10 +63,21 @@ export const SKIN_CATALOG: SkinDefinition[] = [
     price: 2.99,
     stripePriceId: process.env.NEXT_PUBLIC_STRIPE_SKIN_GREEN_JADE_PRICE_ID ?? null,
     free: false,
+    purchasable: true,
   },
 ];
 
 /** Get a skin definition by ID */
 export function getSkinById(id: string | null): SkinDefinition | undefined {
   return SKIN_CATALOG.find((s) => s.id === id);
+}
+
+/** Get all skins available in the shop (purchasable, non-free) */
+export function getShopSkins(): SkinDefinition[] {
+  return SKIN_CATALOG.filter((s) => s.purchasable && !s.free && s.id !== null);
+}
+
+/** Get all tournament-exclusive skins */
+export function getTournamentSkins(): SkinDefinition[] {
+  return SKIN_CATALOG.filter((s) => !s.purchasable && !s.free);
 }

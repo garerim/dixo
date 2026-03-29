@@ -48,7 +48,7 @@ export default function ShopPage() {
     return null;
   }
 
-  const purchasableSkins = SKIN_CATALOG.filter((s) => !s.free && s.id !== null);
+  const purchasableSkins = SKIN_CATALOG.filter((s) => s.purchasable && !s.free && s.id !== null);
 
   function isOwned(skinId: string): boolean {
     return ownedSkinIds.includes(skinId);

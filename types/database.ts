@@ -81,6 +81,10 @@ export type ProfileRow = {
   // Bluffs consécutifs (pour achievement Bluff Master)
   consecutive_bluff_wins: number;
 
+  // Tournois
+  tournaments_played: number;
+  tournaments_won: number;
+
   // Personnalisation
   dice_skin: string | null;
 
@@ -104,6 +108,7 @@ export type EloHistoryRow = {
   elo: number;
   delta: number;
   game_id: string | null;
+  tournament_id: string | null;
   /** Mode classé ('1v1' ou '4p') */
   ranked_mode: string;
   created_at: string;
@@ -197,6 +202,68 @@ export type UserAchievementRow = {
   updated_at: string;
 };
 
+/** Statut de tournoi */
+export type TournamentStatusDB =
+  | "registration"
+  | "starting"
+  | "in_progress"
+  | "completed"
+  | "cancelled";
+
+/** Format de tournoi */
+export type TournamentFormatDB = "single_elimination" | "double_elimination";
+
+/** Ligne de la table `tournaments` */
+export type TournamentRow = {
+  id: string;
+  name: string;
+  format: TournamentFormatDB;
+  status: TournamentStatusDB;
+  max_participants: number;
+  game_config: Record<string, unknown>;
+  registration_deadline: string;
+  started_at: string | null;
+  completed_at: string | null;
+  bracket: Record<string, unknown>;
+  current_round: number;
+  created_by: string;
+  winner_id: string | null;
+  reward_skin_id: string | null;
+  elo_bonus_winner: number;
+  elo_bonus_finalist: number;
+  elo_bonus_semifinalist: number;
+  is_automatic: boolean;
+  created_at: string;
+  updated_at: string;
+};
+
+/** Ligne de la table `tournament_participants` */
+export type TournamentParticipantRow = {
+  id: string;
+  tournament_id: string;
+  user_id: string;
+  seed: number | null;
+  is_eliminated: boolean;
+  final_placement: number | null;
+  registered_at: string;
+};
+
+/** Ligne de la table `tournament_matches` */
+export type TournamentMatchRow = {
+  id: string;
+  tournament_id: string;
+  game_id: string | null;
+  round: number;
+  match_index: number;
+  bracket_side: string;
+  player1_id: string | null;
+  player2_id: string | null;
+  winner_id: string | null;
+  status: string;
+  created_at: string;
+  updated_at: string;
+};
+
 /** Types générés pour la base Supabase */
 export interface Database {
   public: {
@@ -271,6 +338,39 @@ export interface Database {
         Row: UserAchievementRow;
         Insert: Omit<UserAchievementRow, "id" | "created_at" | "updated_at">;
         Update: Partial<UserAchievementRow>;
+        Relationships: [];
+      };
+      tournaments: {
+        Row: TournamentRow;
+        Insert: Omit<TournamentRow, "id" | "created_at" | "updated_at"> & {
+          started_at?: string | null;
+          completed_at?: string | null;
+          winner_id?: string | null;
+          reward_skin_id?: string | null;
+        };
+        Update: Partial<TournamentRow>;
+        Relationships: [];
+      };
+      tournament_participants: {
+        Row: TournamentParticipantRow;
+        Insert: Omit<TournamentParticipantRow, "id" | "registered_at" | "seed" | "is_eliminated" | "final_placement"> & {
+          seed?: number | null;
+          is_eliminated?: boolean;
+          final_placement?: number | null;
+        };
+        Update: Partial<TournamentParticipantRow>;
+        Relationships: [];
+      };
+      tournament_matches: {
+        Row: TournamentMatchRow;
+        Insert: Omit<TournamentMatchRow, "id" | "created_at" | "updated_at"> & {
+          game_id?: string | null;
+          player1_id?: string | null;
+          player2_id?: string | null;
+          winner_id?: string | null;
+          status?: string;
+        };
+        Update: Partial<TournamentMatchRow>;
         Relationships: [];
       };
     };

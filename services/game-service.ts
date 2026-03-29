@@ -32,6 +32,7 @@ import { ProfileRepository } from "@/lib/database/profile-repository";
 import { EloService } from "./elo-service";
 import { AchievementService } from "./achievement-service";
 import { sanitizeGameStateForPlayer } from "./game-state-sanitizer";
+import { TournamentService } from "./tournament-service";
 
 // =============================================================================
 // Types de résultats
@@ -348,6 +349,13 @@ export class GameService {
         new AchievementService()
           .checkAndUnlock(result.state, result.state.lastChallengeResult)
           .catch((err) => console.error("[Achievements] check failed:", err));
+
+        // Avancer le bracket de tournoi si c'est un match de tournoi (fire-and-forget)
+        if (result.state.winnerId) {
+          new TournamentService()
+            .onGameCompleted(gameId, result.state.winnerId)
+            .catch((err) => console.error("[Tournament] onGameCompleted failed:", err));
+        }
       }
 
       await this.repository.update(result.state);
@@ -445,6 +453,13 @@ export class GameService {
           new AchievementService()
             .checkAndUnlock(result.state, result.state.lastChallengeResult)
             .catch((err) => console.error("[Achievements] check failed:", err));
+
+          // Avancer le bracket de tournoi si c'est un match de tournoi (fire-and-forget)
+          if (result.state.winnerId) {
+            new TournamentService()
+              .onGameCompleted(gameId, result.state.winnerId)
+              .catch((err) => console.error("[Tournament] onGameCompleted failed:", err));
+          }
         } catch (statsError) {
           console.error("Erreur mise à jour des stats après abandon:", statsError);
           // On ne bloque pas l'abandon si les stats échouent

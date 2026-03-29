@@ -19,6 +19,7 @@
     "ranks": "Ranks",
     "leaderboard": "Leaderboard",
     "shop": "Shop",
+    "tournaments": "Tournaments",
     "play": "Play now",
     "signIn": "Sign in"
   },
@@ -477,5 +478,32 @@
     "french": "Français",
     "english": "English",
     "spanish": "Español"
+  },
+  "tournament": {
+    "title": "Tournaments",
+    "description": "Compete in daily tournaments for ELO bonuses and exclusive rewards.",
+    "noTournaments": "No tournaments available right now. Check back soon!",
+    "registrationOpen": "Registration open",
+    "inProgress": "In progress",
+    "completed": "Completed",
+    "cancelled": "Cancelled",
+    "register": "Register",
+    "unregister": "Unregister",
+    "registerError": "Unable to register for the tournament.",
+    "unregisterError": "Unable to unregister from the tournament.",
+    "bracket": "Bracket",
+    "round": "Round {round}",
+    "finals": "Finals",
+    "semifinals": "Semifinals",
+    "quarterfinals": "Quarterfinals",
+    "participants": "{count}/{max} participants",
+    "startsIn": "Starts in",
+    "eloBonus": "+{bonus} ELO for the winner",
+    "skinReward": "Exclusive skin",
+    "winner": "Winner",
+    "format": {
+      "single_elimination": "Single Elimination",
+      "double_elimination": "Double Elimination"
+    }
   }
 }
