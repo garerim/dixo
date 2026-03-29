@@ -10,6 +10,7 @@ import type { PrivateMessage } from "@/types/api";
 import { messagesClient } from "../api/messages-client";
 import { getSupabaseBrowserClient } from "@/lib/supabase/client";
 import { useAuth } from "@/components/providers/auth-provider";
+import { useSound } from "@/components/providers/sound-provider";
 
 interface UseMessagesReturn {
   messages: PrivateMessage[];
@@ -24,6 +25,7 @@ interface UseMessagesReturn {
 
 export function useMessages(friendId: string | null): UseMessagesReturn {
   const { user } = useAuth();
+  const { playSound } = useSound();
   const [messages, setMessages] = useState<PrivateMessage[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -90,6 +92,8 @@ export function useMessages(friendId: string | null): UseMessagesReturn {
               setMessages((prev) => {
                 // Éviter les doublons
                 if (prev.some((m) => m.id === message.id)) return prev;
+                // Play sound for incoming messages
+                playSound("message");
                 return [...prev, message];
               });
               // Marquer comme lu automatiquement

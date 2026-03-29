@@ -12,6 +12,7 @@ import type { GameMessage } from "@/types/api";
 import { gameClient } from "../api/game-client";
 import { getSupabaseBrowserClient } from "@/lib/supabase/client";
 import { useAuth } from "@/components/providers/auth-provider";
+import { useSound } from "@/components/providers/sound-provider";
 
 interface UseGameChatReturn {
   messages: GameMessage[];
@@ -25,6 +26,7 @@ interface UseGameChatReturn {
 
 export function useGameChat(gameId: string | null): UseGameChatReturn {
   const { user } = useAuth();
+  const { playSound } = useSound();
   const [messages, setMessages] = useState<GameMessage[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -91,6 +93,10 @@ export function useGameChat(gameId: string | null): UseGameChatReturn {
             setMessages((prev) => {
               // Éviter les doublons
               if (prev.some((m) => m.id === message.id)) return prev;
+              // Play sound for messages from other players
+              if (message.userId !== user?.id) {
+                playSound("message");
+              }
               return [...prev, message];
             });
           }
