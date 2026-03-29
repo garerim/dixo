@@ -4,26 +4,28 @@
 
 export type SoundName =
   | "dice-roll"
-  | "bid-place"
-  | "challenge"
   | "round-win"
-  | "round-loss"
+  | "round-win2"
+  | "round-win3"
   | "game-victory"
   | "game-defeat"
-  | "your-turn";
+  | "player-join"
+  | "player-leave"
+  | "message";
 
 const SOUND_MAP: Record<SoundName, string> = {
   "dice-roll": "/sounds/dice-roll.mp3",
-  "bid-place": "/sounds/bid-place.mp3",
-  challenge: "/sounds/challenge.mp3",
   "round-win": "/sounds/round-win.mp3",
-  "round-loss": "/sounds/round-loss.mp3",
+  "round-win2": "/sounds/round-win2.wav",
+  "round-win3": "/sounds/round-win3.wav",
   "game-victory": "/sounds/game-victory.mp3",
   "game-defeat": "/sounds/game-defeat.mp3",
-  "your-turn": "/sounds/your-turn.mp3",
+  "player-join": "/sounds/player-join.mp3",
+  "player-leave": "/sounds/player-leave.mp3",
+  message: "/sounds/message.mp3",
 };
 
-const MUSIC_PATH = "/sounds/bg-music.mp3";
+const MUSIC_PATH = "/sounds/bg-heist.mp3";
 
 export class SoundManager {
   private static instance: SoundManager | null = null;

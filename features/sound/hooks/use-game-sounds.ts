@@ -33,19 +33,17 @@ export function useGameSounds(
       return; // Don't stack sounds
     }
 
-    // ── Challenge called ──
-    if (prev.phase !== "CHALLENGE" && gameState.phase === "CHALLENGE") {
-      playSound("challenge");
-      return;
-    }
-
     // ── Result phase → win or loss ──
     if (prev.phase !== "RESULT" && gameState.phase === "RESULT") {
       if (gameState.lastChallengeResult) {
+        // Pick a random round-win variant for variety
+        const winSounds = ["round-win", "round-win2", "round-win3"] as const;
+        const randomWin =
+          winSounds[Math.floor(Math.random() * winSounds.length)];
         playSound(
           gameState.lastChallengeResult.loserId === playerId
-            ? "round-loss"
-            : "round-win",
+            ? "game-defeat"
+            : randomWin,
         );
       }
       return;
@@ -59,31 +57,13 @@ export function useGameSounds(
       return;
     }
 
-    // ── New bid placed by someone else ──
-    if (
-      gameState.currentBid &&
-      gameState.phase === "BIDDING" &&
-      prev.currentBid !== gameState.currentBid
-    ) {
-      // Check if it's a different bid (by comparing values since objects are new each time)
-      const prevBid = prev.currentBid;
-      const currBid = gameState.currentBid;
-      if (
-        !prevBid ||
-        prevBid.quantity !== currBid.quantity ||
-        prevBid.faceValue !== currBid.faceValue
-      ) {
-        playSound("bid-place");
+    // ── Player count changed (join/leave) ──
+    if (gameState.phase === "LOBBY" && prev.players && gameState.players) {
+      if (gameState.players.length > prev.players.length) {
+        playSound("player-join");
+      } else if (gameState.players.length < prev.players.length) {
+        playSound("player-leave");
       }
-    }
-
-    // ── My turn notification ──
-    if (
-      gameState.phase === "BIDDING" &&
-      prev.currentPlayerIndex !== gameState.currentPlayerIndex &&
-      gameState.players[gameState.currentPlayerIndex]?.id === playerId
-    ) {
-      playSound("your-turn");
     }
   }, [gameState, playerId, playSound]);
 }
