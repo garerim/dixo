@@ -77,7 +77,9 @@
     "codeMustBe6": "Le code doit contenir 6 caractères.",
     "joinedGame": "Vous avez rejoint la partie !",
     "unableToCreate": "Impossible de créer la partie.",
-    "unableToJoin": "Impossible de rejoindre la partie."
+    "unableToJoin": "Impossible de rejoindre la partie.",
+    "training": "ou entraînez-vous",
+    "trainVsBots": "S'entraîner contre des bots"
   },
   "search": {
     "searchingOpponent": "Recherche d'un adversaire...",
@@ -505,5 +507,28 @@
       "single_elimination": "Élimination directe",
       "double_elimination": "Double élimination"
     }
+  },
+  "training": {
+    "title": "Mode Entraînement",
+    "subtitle": "Entraînez-vous contre des bots pour améliorer vos compétences.",
+    "mode": "Mode de jeu",
+    "1v1": "1 contre 1 Bot",
+    "4players": "1 contre 3 Bots",
+    "difficulty": "Difficulté",
+    "easy": "Facile",
+    "easyDesc": "Joue à l'instinct, bluffe rarement.",
+    "medium": "Moyen",
+    "mediumDesc": "Utilise les probabilités, jeu équilibré.",
+    "hard": "Difficile",
+    "hardDesc": "Bluffe stratégiquement, lit le jeu.",
+    "settings": "Paramètres",
+    "diceCount": "Dés par joueur",
+    "pacosWild": "Pacos sauvages (les 1 sont des jokers)",
+    "start": "Lancer l'entraînement",
+    "badge": "Entraînement",
+    "playAgain": "Rejouer",
+    "changeDifficulty": "Changer les paramètres",
+    "backToMenu": "Retour au menu",
+    "botThinking": "Le bot réfléchit..."
   }
 }

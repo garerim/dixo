@@ -26,6 +26,7 @@ import {
   BookOpen,
   Paintbrush,
   ShoppingBag,
+  Bot,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -443,6 +444,25 @@ export default function HomePage() {
                 </Button>
               </div>
             </div>
+
+            {/* ── Training vs Bots ── */}
+            <div className="flex items-center gap-3">
+              <Separator className="flex-1" />
+              <span className="text-xs text-muted-foreground">
+                {t("training")}
+              </span>
+              <Separator className="flex-1" />
+            </div>
+
+            <Button
+              size="lg"
+              variant="outline"
+              className="w-full gap-2"
+              onClick={() => router.push("/training")}
+            >
+              <Bot className="size-4" />
+              {t("trainVsBots")}
+            </Button>
           </div>
         )}
       </main>

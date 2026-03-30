@@ -77,7 +77,9 @@
     "codeMustBe6": "El código debe contener 6 caracteres.",
     "joinedGame": "¡Te has unido a la partida!",
     "unableToCreate": "No se pudo crear la partida.",
-    "unableToJoin": "No se pudo unir a la partida."
+    "unableToJoin": "No se pudo unir a la partida.",
+    "training": "o entrena solo",
+    "trainVsBots": "Entrenar contra bots"
   },
   "search": {
     "searchingOpponent": "Buscando oponente...",
@@ -505,5 +507,28 @@
       "single_elimination": "Eliminación directa",
       "double_elimination": "Doble eliminación"
     }
+  },
+  "training": {
+    "title": "Modo Entrenamiento",
+    "subtitle": "Practica contra bots para mejorar tus habilidades.",
+    "mode": "Modo de juego",
+    "1v1": "1 contra 1 Bot",
+    "4players": "1 contra 3 Bots",
+    "difficulty": "Dificultad",
+    "easy": "Fácil",
+    "easyDesc": "Juega por instinto, rara vez fanfarronea.",
+    "medium": "Medio",
+    "mediumDesc": "Usa probabilidades, juego equilibrado.",
+    "hard": "Difícil",
+    "hardDesc": "Fanfarronea estratégicamente, lee el juego.",
+    "settings": "Configuración",
+    "diceCount": "Dados por jugador",
+    "pacosWild": "Pacos salvajes (los 1 son comodines)",
+    "start": "Iniciar entrenamiento",
+    "badge": "Entrenamiento",
+    "playAgain": "Jugar de nuevo",
+    "changeDifficulty": "Cambiar configuración",
+    "backToMenu": "Volver al menú",
+    "botThinking": "El bot está pensando..."
   }
 }

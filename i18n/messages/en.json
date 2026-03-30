@@ -77,7 +77,9 @@
     "codeMustBe6": "The code must contain 6 characters.",
     "joinedGame": "You have joined the game!",
     "unableToCreate": "Unable to create the game.",
-    "unableToJoin": "Unable to join the game."
+    "unableToJoin": "Unable to join the game.",
+    "training": "or train solo",
+    "trainVsBots": "Train vs Bots"
   },
   "search": {
     "searchingOpponent": "Searching for opponent...",
@@ -505,5 +507,28 @@
       "single_elimination": "Single Elimination",
       "double_elimination": "Double Elimination"
     }
+  },
+  "training": {
+    "title": "Training Mode",
+    "subtitle": "Practice against bots to sharpen your skills.",
+    "mode": "Game Mode",
+    "1v1": "1 vs 1 Bot",
+    "4players": "1 vs 3 Bots",
+    "difficulty": "Difficulty",
+    "easy": "Easy",
+    "easyDesc": "Plays by instinct, rarely bluffs.",
+    "medium": "Medium",
+    "mediumDesc": "Uses probability, balanced play.",
+    "hard": "Hard",
+    "hardDesc": "Bluffs strategically, reads the game.",
+    "settings": "Settings",
+    "diceCount": "Dice per player",
+    "pacosWild": "Pacos are wild (1s are jokers)",
+    "start": "Start Training",
+    "badge": "Training",
+    "playAgain": "Play Again",
+    "changeDifficulty": "Change Settings",
+    "backToMenu": "Back to Menu",
+    "botThinking": "Bot is thinking..."
   }
 }
