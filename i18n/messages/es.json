@@ -79,7 +79,8 @@
     "unableToCreate": "No se pudo crear la partida.",
     "unableToJoin": "No se pudo unir a la partida.",
     "training": "o entrena solo",
-    "trainVsBots": "Entrenar contra bots"
+    "trainVsBots": "Entrenar contra bots",
+    "tutorial": "Tutorial"
   },
   "search": {
     "searchingOpponent": "Buscando oponente...",
@@ -98,11 +99,11 @@
   },
   "profile": {
     "title": "Mi perfil",
-    "memberSince": "Miembro desde",
+    "memberSince": "Miembro desde {date}",
     "preview": "Vista previa",
     "level": "Nivel {level}",
-    "xpProgress": "{currentXP} / {xpToNextLevel} XP",
-    "xpTotal": "{totalXP} XP en total",
+    "xpProgress": "{current} / {max} XP",
+    "xpTotal": "{xp} XP en total",
     "stats": {
       "games": "Partidas",
       "played": "Jugadas",
@@ -113,29 +114,30 @@
       "calls": "Llamadas",
       "successful": "Exitosas",
       "accuracy": "Precisión",
-      "bestStreak": "Mejor racha"
+      "bestStreak": "Mejor racha",
+      "notFound": "Perfil no encontrado."
     },
     "achievements": {
       "title": "Logros",
-      "progress": "{unlockedCount}/{totalCount} desbloqueados"
+      "progress": "{unlocked}/{total} desbloqueados"
     },
     "subscription": {
       "title": "Suscripción",
       "freePlan": "Plan gratuito",
-      "upgradeDesc": "Pasa a Premium para desbloquear avatares GIF, historial ELO completo y más.",
+      "upgradeDescription": "Pasa a Premium para desbloquear avatares GIF, historial ELO completo y más.",
       "upgrade": "Pasar a Premium",
       "premium": "Premium",
-      "renewsOn": "Se renueva el",
+      "renewsOn": "Se renueva el {date}",
       "manage": "Gestionar suscripción"
     },
     "ranking": {
       "title": "Clasificación",
       "description": "Tu posición en la clasificación ELO",
-      "1v1": "1v1",
-      "4players": "4 jugadores",
-      "eloToNextRank": "ELO para {nextRank}",
+      "mode1v1": "1v1",
+      "mode4p": "4 jugadores",
+      "eloToNext": "{elo} ELO para {rank}",
       "highestRank": "Rango más alto alcanzado",
-      "viewRanks": "Ver todos los rangos",
+      "viewAllRanks": "Ver todos los rangos",
       "viewLeaderboard": "Ver clasificación"
     },
     "dangerZone": {
@@ -145,24 +147,22 @@
       "deleteButton": "Eliminar cuenta",
       "confirmTitle": "¿Estás absolutamente seguro?",
       "confirmDescription": "Esto eliminará permanentemente tu cuenta y todos tus datos: perfil, historial de partidas, amigos, mensajes, logros e historial ELO. Esta acción no se puede deshacer.",
-      "typeDelete": "Escribe ELIMINAR para confirmar:",
-      "deletePlaceholder": "ELIMINAR",
-      "confirmDelete": "Eliminar mi cuenta",
+      "typeToConfirm": "Escribe <strong>DELETE</strong> para confirmar:",
+      "cancel": "Cancelar",
       "deleting": "Eliminando..."
     },
     "toasts": {
-      "welcomePremium": "¡Bienvenido a Premium! Tu cuenta ha sido mejorada.",
+      "upgradedWelcome": "¡Bienvenido a Premium! Tu cuenta ha sido mejorada.",
       "pseudoUpdated": "¡Pseudo actualizado!",
       "pseudoError": "No se pudo actualizar el pseudo.",
       "gifPremiumOnly": "Los avatares GIF están reservados para miembros Premium.",
       "invalidFileType": "Tipo de archivo inválido. Solo se aceptan archivos JPEG, PNG y WebP.",
-      "fileTooLarge10": "El archivo supera el límite de 10 MB.",
-      "fileTooLarge5": "El archivo supera el límite de 5 MB.",
+      "fileTooLargeGif": "El archivo supera el límite de 10 MB.",
+      "fileTooLarge": "El archivo supera el límite de 5 MB.",
       "avatarUpdated": "¡Avatar actualizado!",
       "avatarError": "No se pudo subir el avatar.",
       "accountDeleted": "Tu cuenta ha sido eliminada.",
-      "deleteError": "Error al eliminar la cuenta.",
-      "profileNotFound": "Perfil no encontrado."
+      "deleteError": "Error al eliminar la cuenta."
     }
   },
   "friends": {
@@ -530,5 +530,38 @@
     "changeDifficulty": "Cambiar configuración",
     "backToMenu": "Volver al menú",
     "botThinking": "El bot está pensando..."
+  },
+  "tutorial": {
+    "badge": "Tutorial",
+    "continue": "Continuar",
+    "skip": "Saltar tutorial",
+    "congratulations": "¡Tutorial completado!",
+    "completedDesc": "¡Ya sabes jugar a Dixo! Practica contra bots o desafía a jugadores reales en línea.",
+    "goToTraining": "Entrenar contra bots",
+    "goToHome": "Jugar en línea",
+    "restartTutorial": "Reiniciar tutorial",
+    "preparingGame": "Preparando tu partida tutorial...",
+    "steps": {
+      "welcome": "¡Bienvenido a Dixo! Este tutorial interactivo te enseñará a jugar a Dixo paso a paso. Jugarás un 1 contra 1 contra un bot amigable.",
+      "seeDice": "Estos son tus dados. ¡Solo tú puedes verlos — los dados de tu oponente están ocultos!",
+      "explainDice": "Tienes dos 3 y un 5. En Dixo, apuestas sobre cuántos dados de cierta cara existen entre TODOS los jugadores.",
+      "firstBid": "¡Haz tu primera apuesta! Como tienes dos 3, apuesta \"2 treses\" — esto significa que crees que hay al menos 2 treses entre los 6 dados. Pon cantidad 2 y cara 3.",
+      "firstBidHint": "Intenta poner cantidad 2 y cara 3.",
+      "botRaises": "El bot subió a \"3 treses\". ¡Cree (o está faroleando!) que hay al menos tres 3 en total entre todos los dados.",
+      "raiseOrChallenge": "Puedes subir la apuesta o desafiar si crees que farolea. Subamos a \"3 cincos\" — pon cantidad 3 y cara 5.",
+      "raiseOrChallengeHint": "Intenta poner cantidad 3 y cara 5.",
+      "botOverbids": "El bot subió a \"4 cincos\". ¡Es atrevido! Solo hay 6 dados en total. Solo tienes un 5... ¿crees que realmente hay cuatro 5?",
+      "callChallenge": "¡Parece un farol! Haz clic en el botón Desafiar para desenmascararlo y revelar todos los dados.",
+      "resultExplain": "¡Tenías razón! Se revelan todos los dados y solo había 1 cinco, no 4. El farolero (el bot) pierde un dado como castigo.",
+      "pacosExplain": "Regla importante: los 1 se llaman \"Pacos\" y son comodines — ¡cuentan como cualquier cara! Tenlo en cuenta al contar dados.",
+      "round2Start": "¡Nueva ronda! Tienes un 1 (Paco/comodín), un 4 y un 6. El Paco cuenta como cualquier cara, así que tienes efectivamente dos 4 (el 4 + el Paco).",
+      "botOpensR2": "El perdedor de la ronda anterior empieza. El bot abre con 1× cara 3. ¡Ahora te toca subir la apuesta!",
+      "bidWithPacos": "Como tu Paco cuenta como un 4, sube a \"2 cuatros\". Pon cantidad 2 y cara 4.",
+      "bidWithPacosHint": "Intenta poner cantidad 2 y cara 4.",
+      "botChallenges": "¡El bot desafió tu apuesta! Veamos quién tenía razón...",
+      "pacoResult": "¡Había en realidad 4 cuatros en total (tu 4 + tu Paco como comodín + los dos 4 del bot). Tu apuesta de 2 era correcta — ¡el bot pierde otro dado!",
+      "freePlay": "¡Dominas lo básico! Termina la partida por tu cuenta. El bot solo tiene 1 dado — ¡estás ganando! Juega libremente hasta el final.",
+      "complete": "¡Felicidades! Has completado el tutorial. Sabes apostar, subir, desafiar y usar los Pacos. ¡Es hora de jugar de verdad!"
+    }
   }
 }

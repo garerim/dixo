@@ -101,7 +101,7 @@ export function BiddingView({
 
       {/* ── My dice ── */}
       {me && me.diceValues.length > 0 && (
-        <div className="flex flex-col items-center gap-2 rounded-xl border bg-card p-4">
+        <div data-tutorial-id="my-dice" className="flex flex-col items-center gap-2 rounded-xl border bg-card p-4">
           <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
             {t("yourDice")}
           </span>
@@ -133,18 +133,20 @@ export function BiddingView({
 
       {/* ── Bidding panel (if it's my turn) ── */}
       {isMyTurn && me?.isAlive && (
-        <BidPanel
-          currentBid={gameState.currentBid}
-          totalDice={totalDice}
-          onPlaceBid={onPlaceBid}
-          onCallChallenge={onCallChallenge}
-          canChallenge={canChallenge}
-        />
+        <div data-tutorial-id="bid-panel">
+          <BidPanel
+            currentBid={gameState.currentBid}
+            totalDice={totalDice}
+            onPlaceBid={onPlaceBid}
+            onCallChallenge={onCallChallenge}
+            canChallenge={canChallenge}
+          />
+        </div>
       )}
 
       {/* ── Waiting (if not my turn) ── */}
       {!isMyTurn && (
-        <div className="flex flex-col gap-3 rounded-xl border border-dashed p-4">
+        <div data-tutorial-id="current-bid" className="flex flex-col gap-3 rounded-xl border border-dashed p-4">
           {gameState.currentBid && (
             <div className="flex items-center justify-center gap-2 rounded-lg bg-muted px-3 py-2 text-sm">
               <span className="text-muted-foreground">{t("currentBid")}</span>

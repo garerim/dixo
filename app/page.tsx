@@ -27,6 +27,7 @@ import {
   Paintbrush,
   ShoppingBag,
   Bot,
+  GraduationCap,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -454,15 +455,26 @@ export default function HomePage() {
               <Separator className="flex-1" />
             </div>
 
-            <Button
-              size="lg"
-              variant="outline"
-              className="w-full gap-2"
-              onClick={() => router.push("/training")}
-            >
-              <Bot className="size-4" />
-              {t("trainVsBots")}
-            </Button>
+            <div className="grid gap-3 sm:grid-cols-2">
+              <Button
+                size="lg"
+                variant="outline"
+                className="gap-2"
+                onClick={() => router.push("/training")}
+              >
+                <Bot className="size-4" />
+                {t("trainVsBots")}
+              </Button>
+              <Button
+                size="lg"
+                variant="outline"
+                className="gap-2"
+                onClick={() => router.push("/tutorial/play")}
+              >
+                <GraduationCap className="size-4" />
+                {t("tutorial")}
+              </Button>
+            </div>
           </div>
         )}
       </main>

@@ -79,7 +79,8 @@
     "unableToCreate": "Unable to create the game.",
     "unableToJoin": "Unable to join the game.",
     "training": "or train solo",
-    "trainVsBots": "Train vs Bots"
+    "trainVsBots": "Train vs Bots",
+    "tutorial": "Tutorial"
   },
   "search": {
     "searchingOpponent": "Searching for opponent...",
@@ -98,11 +99,11 @@
   },
   "profile": {
     "title": "My Profile",
-    "memberSince": "Member since",
+    "memberSince": "Member since {date}",
     "preview": "Preview",
     "level": "Level {level}",
-    "xpProgress": "{currentXP} / {xpToNextLevel} XP",
-    "xpTotal": "{totalXP} XP total",
+    "xpProgress": "{current} / {max} XP",
+    "xpTotal": "{xp} XP total",
     "stats": {
       "games": "Games",
       "played": "Played",
@@ -113,29 +114,30 @@
       "calls": "Calls",
       "successful": "Successful",
       "accuracy": "Accuracy",
-      "bestStreak": "Best streak"
+      "bestStreak": "Best streak",
+      "notFound": "Profile not found."
     },
     "achievements": {
       "title": "Achievements",
-      "progress": "{unlockedCount}/{totalCount} unlocked"
+      "progress": "{unlocked}/{total} unlocked"
     },
     "subscription": {
       "title": "Subscription",
       "freePlan": "Free plan",
-      "upgradeDesc": "Upgrade to Premium to unlock GIF avatars, full ELO history and more.",
+      "upgradeDescription": "Upgrade to Premium to unlock GIF avatars, full ELO history and more.",
       "upgrade": "Upgrade",
       "premium": "Premium",
-      "renewsOn": "Renews on",
+      "renewsOn": "Renews on {date}",
       "manage": "Manage subscription"
     },
     "ranking": {
       "title": "Ranking",
       "description": "Your position in the ELO ranking",
-      "1v1": "1v1",
-      "4players": "4 players",
-      "eloToNextRank": "ELO to {nextRank}",
+      "mode1v1": "1v1",
+      "mode4p": "4 players",
+      "eloToNext": "{elo} ELO to {rank}",
       "highestRank": "Highest rank reached",
-      "viewRanks": "View all ranks",
+      "viewAllRanks": "View all ranks",
       "viewLeaderboard": "View leaderboard"
     },
     "dangerZone": {
@@ -145,24 +147,22 @@
       "deleteButton": "Delete account",
       "confirmTitle": "Are you absolutely sure?",
       "confirmDescription": "This will permanently delete your account and all your data: profile, game history, friends, messages, achievements, and ELO history. This action cannot be undone.",
-      "typeDelete": "Type DELETE to confirm:",
-      "deletePlaceholder": "DELETE",
-      "confirmDelete": "Delete my account",
+      "typeToConfirm": "Type <strong>DELETE</strong> to confirm:",
+      "cancel": "Cancel",
       "deleting": "Deleting..."
     },
     "toasts": {
-      "welcomePremium": "Welcome to Premium! Your account has been upgraded.",
+      "upgradedWelcome": "Welcome to Premium! Your account has been upgraded.",
       "pseudoUpdated": "Pseudo updated!",
       "pseudoError": "Unable to update pseudo.",
       "gifPremiumOnly": "GIF avatars are reserved for Premium members.",
       "invalidFileType": "Invalid file type. Only JPEG, PNG, and WebP images are allowed.",
-      "fileTooLarge10": "File size exceeds 10MB limit.",
-      "fileTooLarge5": "File size exceeds 5MB limit.",
+      "fileTooLargeGif": "File size exceeds 10MB limit.",
+      "fileTooLarge": "File size exceeds 5MB limit.",
       "avatarUpdated": "Avatar updated!",
       "avatarError": "Unable to upload avatar.",
       "accountDeleted": "Your account has been deleted.",
-      "deleteError": "Failed to delete account.",
-      "profileNotFound": "Profile not found."
+      "deleteError": "Failed to delete account."
     }
   },
   "friends": {
@@ -530,5 +530,38 @@
     "changeDifficulty": "Change Settings",
     "backToMenu": "Back to Menu",
     "botThinking": "Bot is thinking..."
+  },
+  "tutorial": {
+    "badge": "Tutorial",
+    "continue": "Continue",
+    "skip": "Skip tutorial",
+    "congratulations": "Tutorial Complete!",
+    "completedDesc": "You now know how to play Dixo! Practice against bots or challenge real players online.",
+    "goToTraining": "Train vs Bots",
+    "goToHome": "Play Online",
+    "restartTutorial": "Restart Tutorial",
+    "preparingGame": "Preparing your tutorial game...",
+    "steps": {
+      "welcome": "Welcome to Dixo! This interactive tutorial will teach you how to play Dixo step by step. You'll play a 1v1 game against a friendly bot.",
+      "seeDice": "These are your dice. Only you can see them — your opponent's dice are hidden!",
+      "explainDice": "You have two 3s and one 5. In Dixo, you'll bet on how many dice of a certain face exist across ALL players combined.",
+      "firstBid": "Let's place your first bid! Since you have two 3s, bid \"2 threes\" — this means you think there are at least 2 threes among all 6 dice. Set quantity to 2 and face to 3.",
+      "firstBidHint": "Try setting quantity to 2 and face to 3.",
+      "botRaises": "The bot raised to \"3 threes\". They think (or are bluffing!) that there are at least three 3s total among all dice.",
+      "raiseOrChallenge": "Now you can either raise the bid higher, or challenge if you think they're bluffing. Let's raise to \"3 fives\" — set quantity to 3 and face to 5.",
+      "raiseOrChallengeHint": "Try setting quantity to 3 and face to 5.",
+      "botOverbids": "The bot raised to \"4 fives\". That's bold! There are only 6 dice total. You only have one 5... do you think there are really four 5s?",
+      "callChallenge": "This looks like a bluff! Click the Challenge button to call them out and reveal all dice.",
+      "resultExplain": "You were right! All dice are revealed and there was only 1 five, not 4. The bluffer (the bot) loses a die as punishment.",
+      "pacosExplain": "Important rule: 1s are called \"Pacos\" and they're wild — they count as any face! Keep this in mind when counting dice.",
+      "round2Start": "New round! You have a 1 (Paco/wild), a 4, and a 6. The Paco counts as any face, so you effectively have two 4s (the 4 + the Paco).",
+      "botOpensR2": "The loser of the previous round goes first. The bot opens with 1× face 3. Now it's your turn to raise!",
+      "bidWithPacos": "Since your Paco counts as a 4, raise to \"2 fours\". Set quantity to 2 and face to 4.",
+      "bidWithPacosHint": "Try setting quantity to 2 and face to 4.",
+      "botChallenges": "The bot challenged your bid! Let's see who was right...",
+      "pacoResult": "There were actually 4 fours total (your 4 + your Paco as wild + the bot's two 4s). Your bid of 2 was easily correct — the bot loses another die!",
+      "freePlay": "You've got the basics! Now finish the game on your own. The bot only has 1 die left — you're winning! Play freely until the end.",
+      "complete": "Congratulations! You've completed the tutorial. You know how to bid, raise, challenge, and use Pacos. Time to play for real!"
+    }
   }
 }

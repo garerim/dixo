@@ -77,7 +77,7 @@ export function ResultView({
       </div>
 
       {/* ── Résultat du Challenge ── */}
-      <div className="flex flex-col items-center gap-3 rounded-xl border bg-card p-5 text-center">
+      <div data-tutorial-id="result-panel" className="flex flex-col items-center gap-3 rounded-xl border bg-card p-5 text-center">
         {challenge.isChallengeCorrect ? (
           <CheckCircle className="size-10 text-green-500" />
         ) : (

@@ -79,7 +79,8 @@
     "unableToCreate": "Impossible de créer la partie.",
     "unableToJoin": "Impossible de rejoindre la partie.",
     "training": "ou entraînez-vous",
-    "trainVsBots": "S'entraîner contre des bots"
+    "trainVsBots": "S'entraîner contre des bots",
+    "tutorial": "Tutoriel"
   },
   "search": {
     "searchingOpponent": "Recherche d'un adversaire...",
@@ -98,11 +99,11 @@
   },
   "profile": {
     "title": "Mon profil",
-    "memberSince": "Membre depuis",
+    "memberSince": "Membre depuis le {date}",
     "preview": "Aperçu",
     "level": "Niveau {level}",
-    "xpProgress": "{currentXP} / {xpToNextLevel} XP",
-    "xpTotal": "{totalXP} XP au total",
+    "xpProgress": "{current} / {max} XP",
+    "xpTotal": "{xp} XP au total",
     "stats": {
       "games": "Parties",
       "played": "Jouées",
@@ -113,29 +114,30 @@
       "calls": "Appels",
       "successful": "Réussis",
       "accuracy": "Précision",
-      "bestStreak": "Meilleure série"
+      "bestStreak": "Meilleure série",
+      "notFound": "Profil introuvable."
     },
     "achievements": {
       "title": "Succès",
-      "progress": "{unlockedCount}/{totalCount} débloqués"
+      "progress": "{unlocked}/{total} débloqués"
     },
     "subscription": {
       "title": "Abonnement",
       "freePlan": "Plan gratuit",
-      "upgradeDesc": "Passez Premium pour débloquer les avatars GIF, l'historique ELO complet et plus encore.",
+      "upgradeDescription": "Passez Premium pour débloquer les avatars GIF, l'historique ELO complet et plus encore.",
       "upgrade": "Passer Premium",
       "premium": "Premium",
-      "renewsOn": "Renouvellement le",
+      "renewsOn": "Renouvellement le {date}",
       "manage": "Gérer l'abonnement"
     },
     "ranking": {
       "title": "Classement",
       "description": "Votre position au classement ELO",
-      "1v1": "1v1",
-      "4players": "4 joueurs",
-      "eloToNextRank": "ELO avant {nextRank}",
-      "highestRank": "Meilleur rang atteint",
-      "viewRanks": "Voir tous les rangs",
+      "mode1v1": "1v1",
+      "mode4p": "4 joueurs",
+      "eloToNext": "{elo} ELO avant {rank}",
+      "highestRank": "Rang le plus élevé atteint",
+      "viewAllRanks": "Voir tous les rangs",
       "viewLeaderboard": "Voir le classement"
     },
     "dangerZone": {
@@ -145,24 +147,22 @@
       "deleteButton": "Supprimer le compte",
       "confirmTitle": "Êtes-vous absolument sûr ?",
       "confirmDescription": "Cela supprimera définitivement votre compte et toutes vos données : profil, historique de parties, amis, messages, succès et historique ELO. Cette action est irréversible.",
-      "typeDelete": "Tapez SUPPRIMER pour confirmer :",
-      "deletePlaceholder": "SUPPRIMER",
-      "confirmDelete": "Supprimer mon compte",
+      "typeToConfirm": "Tapez <strong>DELETE</strong> pour confirmer :",
+      "cancel": "Annuler",
       "deleting": "Suppression..."
     },
     "toasts": {
-      "welcomePremium": "Bienvenue dans Premium ! Votre compte a été mis à niveau.",
+      "upgradedWelcome": "Bienvenue dans Premium ! Votre compte a été mis à niveau.",
       "pseudoUpdated": "Pseudo mis à jour !",
       "pseudoError": "Impossible de mettre à jour le pseudo.",
       "gifPremiumOnly": "Les avatars GIF sont réservés aux membres Premium.",
       "invalidFileType": "Type de fichier invalide. Seuls les fichiers JPEG, PNG et WebP sont acceptés.",
-      "fileTooLarge10": "Le fichier dépasse la limite de 10 Mo.",
-      "fileTooLarge5": "Le fichier dépasse la limite de 5 Mo.",
+      "fileTooLargeGif": "Le fichier dépasse la limite de 10 Mo.",
+      "fileTooLarge": "Le fichier dépasse la limite de 5 Mo.",
       "avatarUpdated": "Avatar mis à jour !",
       "avatarError": "Impossible de télécharger l'avatar.",
       "accountDeleted": "Votre compte a été supprimé.",
-      "deleteError": "Échec de la suppression du compte.",
-      "profileNotFound": "Profil introuvable."
+      "deleteError": "Échec de la suppression du compte."
     }
   },
   "friends": {
@@ -530,5 +530,38 @@
     "changeDifficulty": "Changer les paramètres",
     "backToMenu": "Retour au menu",
     "botThinking": "Le bot réfléchit..."
+  },
+  "tutorial": {
+    "badge": "Tutoriel",
+    "continue": "Continuer",
+    "skip": "Passer le tutoriel",
+    "congratulations": "Tutoriel terminé !",
+    "completedDesc": "Vous savez maintenant jouer à Dixo ! Entraînez-vous contre des bots ou défiez de vrais joueurs en ligne.",
+    "goToTraining": "S'entraîner contre des bots",
+    "goToHome": "Jouer en ligne",
+    "restartTutorial": "Recommencer le tutoriel",
+    "preparingGame": "Préparation de votre partie tutoriel...",
+    "steps": {
+      "welcome": "Bienvenue sur Dixo ! Ce tutoriel interactif va vous apprendre à jouer à Dixo étape par étape. Vous allez jouer un 1 contre 1 contre un bot sympathique.",
+      "seeDice": "Voici vos dés. Vous seul pouvez les voir — les dés de votre adversaire sont cachés !",
+      "explainDice": "Vous avez deux 3 et un 5. À Dixo, vous pariez sur le nombre de dés d'une certaine face parmi TOUS les joueurs.",
+      "firstBid": "Placez votre première enchère ! Puisque vous avez deux 3, enchérissez « 2 trois » — cela signifie que vous pensez qu'il y a au moins 2 trois parmi les 6 dés. Mettez quantité 2 et face 3.",
+      "firstBidHint": "Essayez de mettre quantité 2 et face 3.",
+      "botRaises": "Le bot a monté à « 3 trois ». Il pense (ou bluffe !) qu'il y a au moins trois 3 au total parmi tous les dés.",
+      "raiseOrChallenge": "Vous pouvez soit surenchérir, soit contester si vous pensez qu'il bluffe. Surenchérissons à « 3 cinq » — mettez quantité 3 et face 5.",
+      "raiseOrChallengeHint": "Essayez de mettre quantité 3 et face 5.",
+      "botOverbids": "Le bot a monté à « 4 cinq ». C'est audacieux ! Il n'y a que 6 dés au total. Vous n'avez qu'un seul 5... pensez-vous vraiment qu'il y a quatre 5 ?",
+      "callChallenge": "Ça ressemble à un bluff ! Cliquez sur le bouton Challenge pour le démasquer et révéler tous les dés.",
+      "resultExplain": "Vous aviez raison ! Tous les dés sont révélés et il n'y avait qu'un seul 5, pas 4. Le bluffeur (le bot) perd un dé en punition.",
+      "pacosExplain": "Règle importante : les 1 s'appellent « Pacos » et sont des jokers — ils comptent comme n'importe quelle face ! Gardez ça en tête pour compter les dés.",
+      "round2Start": "Nouvelle manche ! Vous avez un 1 (Paco/joker), un 4 et un 6. Le Paco compte comme n'importe quelle face, donc vous avez effectivement deux 4 (le 4 + le Paco).",
+      "botOpensR2": "Le perdant de la manche précédente commence. Le bot ouvre avec 1× face 3. C'est maintenant à vous de surenchérir !",
+      "bidWithPacos": "Puisque votre Paco compte comme un 4, surenchérissez « 2 quatre ». Mettez quantité 2 et face 4.",
+      "bidWithPacosHint": "Essayez de mettre quantité 2 et face 4.",
+      "botChallenges": "Le bot a contesté votre enchère ! Voyons qui avait raison...",
+      "pacoResult": "Il y avait en fait 4 quatre au total (votre 4 + votre Paco en joker + les deux 4 du bot). Votre enchère de 2 était largement correcte — le bot perd encore un dé !",
+      "freePlay": "Vous maîtrisez les bases ! Terminez la partie par vous-même. Le bot n'a plus qu'un seul dé — vous êtes en train de gagner ! Jouez librement jusqu'à la fin.",
+      "complete": "Félicitations ! Vous avez terminé le tutoriel. Vous savez enchérir, surenchérir, contester et utiliser les Pacos. Place au vrai jeu !"
+    }
   }
 }

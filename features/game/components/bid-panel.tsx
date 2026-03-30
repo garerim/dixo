@@ -134,6 +134,7 @@ export function BidPanel({
 
         {canChallenge && (
           <Button
+            data-tutorial-id="challenge-button"
             variant="destructive"
             className="gap-2"
             onClick={handleChallenge}
