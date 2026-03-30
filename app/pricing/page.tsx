@@ -90,9 +90,6 @@ export default function PricingPage() {
               <CardDescription>{t("freeDesc")}</CardDescription>
               <p className="text-3xl font-bold">
                 {t("freePrice")}
-                <span className="text-base font-normal text-muted-foreground">
-                  /month
-                </span>
               </p>
             </CardHeader>
             <CardContent className="flex-1">
@@ -125,9 +122,6 @@ export default function PricingPage() {
               <CardDescription>{t("premiumDesc")}</CardDescription>
               <p className="text-3xl font-bold">
                 {t("premiumPrice")}
-                <span className="text-base font-normal text-muted-foreground">
-                  /month
-                </span>
               </p>
             </CardHeader>
             <CardContent className="flex-1">

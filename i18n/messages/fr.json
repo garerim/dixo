@@ -239,17 +239,17 @@
     "getPremium": "Passer Premium",
     "cancelNote": "Résiliable à tout moment depuis votre profil. Paiements sécurisés par Stripe.",
     "freeFeatures": {
-      "games": "Parties normales et classées",
+      "normalRanked": "Parties normales et classées",
       "friends": "Système d'amis",
       "chat": "Chat en partie",
-      "eloHistory": "Classement ELO (10 dernières entrées)",
+      "eloRanking": "Classement ELO (10 dernières entrées)",
       "avatar": "Avatar JPEG / PNG / WebP"
     },
     "premiumFeatures": {
-      "everything": "Tout le plan gratuit",
-      "gif": "Support des avatars GIF",
-      "fullHistory": "Historique ELO complet (200+ entrées)",
-      "badge": "Badge Premium sur votre profil et en jeu"
+      "everythingInFree": "Tout le plan gratuit",
+      "gifAvatar": "Support des avatars GIF",
+      "fullEloHistory": "Historique ELO complet (200+ entrées)",
+      "premiumBadge": "Badge Premium sur votre profil et en jeu"
     }
   },
   "shop": {

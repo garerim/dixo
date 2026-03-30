@@ -239,17 +239,17 @@
     "getPremium": "Obtener Premium",
     "cancelNote": "Cancela en cualquier momento desde tu perfil. Pagos seguros con Stripe.",
     "freeFeatures": {
-      "games": "Partidas normales y clasificatorias",
+      "normalRanked": "Partidas normales y clasificatorias",
       "friends": "Sistema de amigos",
       "chat": "Chat en partida",
-      "eloHistory": "Clasificación ELO (últimas 10 entradas)",
+      "eloRanking": "Clasificación ELO (últimas 10 entradas)",
       "avatar": "Avatar JPEG / PNG / WebP"
     },
     "premiumFeatures": {
-      "everything": "Todo del plan gratuito",
-      "gif": "Soporte de avatares GIF",
-      "fullHistory": "Historial ELO completo (200+ entradas)",
-      "badge": "Insignia Premium en tu perfil y en partida"
+      "everythingInFree": "Todo del plan gratuito",
+      "gifAvatar": "Soporte de avatares GIF",
+      "fullEloHistory": "Historial ELO completo (200+ entradas)",
+      "premiumBadge": "Insignia Premium en tu perfil y en partida"
     }
   },
   "shop": {

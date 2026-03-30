@@ -239,17 +239,17 @@
     "getPremium": "Get Premium",
     "cancelNote": "Cancel anytime from your profile. Payments are handled securely by Stripe.",
     "freeFeatures": {
-      "games": "Normal & Ranked games",
+      "normalRanked": "Normal & Ranked games",
       "friends": "Friends system",
       "chat": "In-game chat",
-      "eloHistory": "ELO ranking (last 10 entries)",
+      "eloRanking": "ELO ranking (last 10 entries)",
       "avatar": "JPEG / PNG / WebP avatar"
     },
     "premiumFeatures": {
-      "everything": "Everything in Free",
-      "gif": "GIF avatar support",
-      "fullHistory": "Full ELO history (200+ entries)",
-      "badge": "Premium badge on your profile & in-game"
+      "everythingInFree": "Everything in Free",
+      "gifAvatar": "GIF avatar support",
+      "fullEloHistory": "Full ELO history (200+ entries)",
+      "premiumBadge": "Premium badge on your profile & in-game"
     }
   },
   "shop": {
