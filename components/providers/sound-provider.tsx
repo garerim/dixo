@@ -78,18 +78,18 @@ function loadPrefs(): SoundPreferences {
 }
 
 export function SoundProvider({ children }: { children: ReactNode }) {
-  const [prefs, setPrefs] = useState<SoundPreferences>(loadPrefs);
+  const [prefs, setPrefs] = useState<SoundPreferences>(DEFAULT_PREFS);
   const managerRef = useRef<SoundManager | null>(null);
 
-  // Sync manager with preferences on mount
+  // Hydrate from localStorage + sync manager on mount
   useEffect(() => {
+    const stored = loadPrefs();
+    setPrefs(stored);
     managerRef.current = SoundManager.getInstance();
-    managerRef.current.setSfxVolume(prefs.sfxVolume);
-    managerRef.current.setMusicVolume(prefs.musicVolume);
-    managerRef.current.setMuted(prefs.isMuted);
-    managerRef.current.setMusicEnabled(prefs.musicEnabled);
-    // Only run once on mount — prefs are synced via persistPrefs after that
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    managerRef.current.setSfxVolume(stored.sfxVolume);
+    managerRef.current.setMusicVolume(stored.musicVolume);
+    managerRef.current.setMuted(stored.isMuted);
+    managerRef.current.setMusicEnabled(stored.musicEnabled);
   }, []);
 
   // Persist prefs to localStorage
