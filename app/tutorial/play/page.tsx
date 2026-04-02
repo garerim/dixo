@@ -108,9 +108,9 @@ export default function TutorialPlayPage() {
           <BiddingView
             gameState={gameState}
             playerId={PLAYER_ID}
-            onPlaceBid={actions.placeBid}
-            onCallChallenge={actions.callChallenge}
-            onSurrender={() => {}}
+            onPlaceBid={async (q, f) => { actions.placeBid(q, f); }}
+            onCallChallenge={async () => { actions.callChallenge(); }}
+            onSurrender={async () => {}}
             isRanked={false}
           />
         );
@@ -121,8 +121,8 @@ export default function TutorialPlayPage() {
           <ResultView
             gameState={gameState}
             playerId={PLAYER_ID}
-            onNextRound={isFreePlay ? actions.nextRound : () => {}}
-            onSurrender={() => {}}
+            onNextRound={isFreePlay ? async () => { actions.nextRound(); } : async () => {}}
+            onSurrender={async () => {}}
             isRanked={false}
           />
         );
