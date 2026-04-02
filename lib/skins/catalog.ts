@@ -31,7 +31,7 @@ export const SKIN_CATALOG: SkinDefinition[] = [
     description: "Default dice style",
     preview: null,
     price: 0,
-    stripePriceId: null, 
+    stripePriceId: null,
     free: true,
     purchasable: true,
   },
