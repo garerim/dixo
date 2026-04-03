@@ -315,11 +315,11 @@
       "avgGameValue": "5 – 15 min"
     },
     "objective": {
-      "title": "Objectif",
+      "title": "Quel est l'objectif du jeu ?",
       "description": "Être le <strong>dernier joueur avec des dés</strong>. À chaque manche, les joueurs enchérissent et bluffent. Perdez un challenge, perdez un dé. Plus de dés, vous êtes éliminé."
     },
     "steps": {
-      "title": "Un tour, étape par étape",
+      "title": "Comment se déroule un tour ?",
       "step1Title": "Lancez vos dés en secret",
       "step1": "Au début de chaque manche, chaque joueur lance ses dés sous son gobelet et regarde le résultat. <strong>Vous seul pouvez voir vos propres dés.</strong> Les autres joueurs voient uniquement combien de dés il vous reste.",
       "step2Title": "Faites une enchère",
@@ -336,19 +336,19 @@
       "step5": "Un nouveau tour commence. Les joueurs avec 0 dés sont éliminés. Le jeu continue jusqu'à ce qu'il ne reste qu'un joueur."
     },
     "paco": {
-      "title": "Le Paco — Dé joker",
+      "title": "Qu'est-ce que le Paco (dé joker) ?",
       "description": "Dans Dixo, les dés montrant un <yellow>1 (Paco)</yellow> sont des jokers. Ils comptent comme <strong>n'importe quelle face</strong> lors de la résolution d'une enchère sur les faces normales (2–6).",
       "example": "Exemple : L'enchère est <strong>« 4 cinq »</strong>. Il y a 3 cinq et 2 Pacos en jeu → total réel = 5 → l'enchère est correcte.",
       "biddingOnPacos": "<strong>Enchérir sur les Pacos :</strong> Quand vous enchérissez sur la face 1 directement (<em>ex: « 2 Pacos »</em>), les Pacos ne sont plus jokers — seuls les vrais 1 comptent. Pour passer d'une enchère normale à une enchère Paco, la quantité doit être au moins <strong>la moitié (arrondie au supérieur)</strong> de la quantité précédente.",
       "switchingBack": "<strong>Revenir aux faces normales :</strong> Passer d'une enchère Paco à une enchère normale nécessite une quantité d'au moins le double de la quantité Paco + 1. Exemple : « 2 Pacos » → enchère normale minimum = <strong>« 5 [n'importe quelle face] »</strong>."
     },
     "dice": {
-      "title": "Les dés",
+      "title": "Que signifient les faces des dés ?",
       "paco": "Paco (joker)",
       "face": "Face {value}"
     },
     "gameModes": {
-      "title": "Modes de jeu",
+      "title": "Quels modes de jeu sont disponibles ?",
       "normalTitle": "Normal",
       "normalDesc": "Parties décontractées avec matchmaking automatique. Pas d'ELO en jeu — parfait pour apprendre ou s'échauffer.",
       "rankedTitle": "Classée",
@@ -357,11 +357,11 @@
       "privateDesc": "Créez une partie et partagez le code à 6 caractères avec vos amis. Jusqu'à 6 joueurs, sans impact ELO."
     },
     "elo": {
-      "title": "Classement ELO",
+      "title": "Comment fonctionne le classement ELO ?",
       "description": "Dixo utilise un <strong>ELO séparé</strong> pour les parties classées 1v1 et 4 joueurs. Les deux commencent à 1 000. L'ELO est calculé selon la probabilité de victoire attendue face à votre adversaire. Plus l'écart est grand, plus vous gagnez (ou perdez) en cas de surprise. Le classement est visible sur le <link>classement public</link>."
     },
     "tips": {
-      "title": "Conseils stratégiques",
+      "title": "Quelles sont les meilleures stratégies ?",
       "tip1": "<strong>Comptez à partir de vos propres dés.</strong> Si vous avez 2 cinq et qu'il y a 10 dés en jeu, attendez-vous statistiquement à ~1,7 cinq supplémentaires. Utilisez cela pour calibrer vos enchères.",
       "tip2": "<strong>Ne challengez pas toujours une grosse enchère.</strong> Parfois, laisser passer une enchère risquée force votre adversaire à surenchérir jusqu'à se tromper. Choisissez vos challenges avec soin.",
       "tip3": "<strong>Enchérissez sur les Pacos pour relâcher la pression.</strong> Passer à une enchère Paco divise la quantité requise par deux — utile quand vous êtes forcé de faire une enchère que vous ne pouvez pas honnêtement augmenter.",

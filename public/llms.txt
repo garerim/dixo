@@ -1,0 +1,26 @@
+# Dixo
+
+> Dixo is a free-to-play online multiplayer implementation of Liar's Dice (Perudo),
+> playable in a browser with no download required. 2 to 6 players bluff and bid
+> on hidden dice rolls; the last player with dice wins.
+
+## Key pages
+
+- [How to play](https://dixo-game.com/how-to-play): Full rules, Paco (wild die) mechanics, game modes, and ELO ranking explanation.
+- [Pricing](https://dixo-game.com/pricing): Free plan vs. Dixo Premium (4.99 EUR/month).
+- [Leaderboard](https://dixo-game.com/leaderboard): Live global ELO rankings for 1v1 and 4-player formats.
+- [Ranks](https://dixo-game.com/ranks): ELO tier descriptions (Bronze through Diamond).
+- [Tournaments](https://dixo-game.com/tournaments): Automated tournaments twice daily, 8 players, single elimination.
+- [Training](https://dixo-game.com/training): Practice against AI bots before playing ranked.
+- [Skins](https://dixo-game.com/skins): Dice skin catalog and customization.
+
+## About
+
+- Game: Liar's Dice / Perudo — classic bluffing dice game digitized for online play
+- Players per game: 2 to 6
+- Dice per player: 5 (standard) or 1 (Paco-only final round)
+- Game modes: Normal (unranked), Ranked (ELO-based), Private (invite code)
+- ELO system: Dual tracking — separate ratings for 1v1 and 4-player formats, starting at 1,000
+- Premium: 4.99 EUR/month — GIF avatars, full ELO history, Premium badge
+- Platform: Web browser only, mobile-friendly PWA
+- Languages: English, French, Spanish

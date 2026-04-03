@@ -315,11 +315,11 @@
       "avgGameValue": "5 – 15 min"
     },
     "objective": {
-      "title": "Objetivo",
+      "title": "¿Cuál es el objetivo del juego?",
       "description": "Ser el <strong>último jugador con dados</strong>. Cada ronda, los jugadores apuestan y farolean. Pierde un challenge, pierde un dado. Sin dados, quedas eliminado."
     },
     "steps": {
-      "title": "Una ronda, paso a paso",
+      "title": "¿Cómo funciona una ronda?",
       "step1Title": "Lanza tus dados en secreto",
       "step1": "Al inicio de cada ronda, cada jugador lanza sus dados dentro de su cubilete y mira el resultado. <strong>Solo tú puedes ver tus propios dados.</strong> Los demás jugadores solo ven cuántos dados te quedan.",
       "step2Title": "Haz una apuesta",
@@ -336,19 +336,19 @@
       "step5": "Comienza una nueva ronda. Los jugadores con 0 dados son eliminados. El juego continúa hasta que quede un solo jugador."
     },
     "paco": {
-      "title": "El Paco — Dado comodín",
+      "title": "¿Qué es el Paco (dado comodín)?",
       "description": "En Dixo, los dados que muestran un <yellow>1 (Paco)</yellow> son comodines. Cuentan como <strong>cualquier cara</strong> al resolver una apuesta sobre caras normales (2–6).",
       "example": "Ejemplo: La apuesta es <strong>\"4 cincos\"</strong>. Hay 3 cincos y 2 Pacos en juego → total real = 5 → la apuesta es correcta.",
       "biddingOnPacos": "<strong>Apostar sobre Pacos:</strong> Cuando apuestas sobre la cara 1 directamente (<em>ej: \"2 Pacos\"</em>), los Pacos ya no son comodines — solo cuentan los 1 reales. Para cambiar de una apuesta normal a una apuesta Paco, la cantidad debe ser al menos <strong>la mitad (redondeada hacia arriba)</strong> de la cantidad anterior.",
       "switchingBack": "<strong>Volver a caras normales:</strong> Pasar de una apuesta Paco a una apuesta normal requiere una cantidad de al menos el doble de la cantidad Paco + 1. Ejemplo: \"2 Pacos\" → apuesta normal mínima = <strong>\"5 [cualquier cara]\"</strong>."
     },
     "dice": {
-      "title": "Los dados",
+      "title": "¿Qué significan las caras de los dados?",
       "paco": "Paco (comodín)",
       "face": "Cara {value}"
     },
     "gameModes": {
-      "title": "Modos de juego",
+      "title": "¿Qué modos de juego hay disponibles?",
       "normalTitle": "Normal",
       "normalDesc": "Partidas casuales con emparejamiento automático. Sin ELO en juego — perfecto para aprender o calentar.",
       "rankedTitle": "Clasificatoria",
@@ -357,11 +357,11 @@
       "privateDesc": "Crea una partida y comparte el código de 6 caracteres con tus amigos. Hasta 6 jugadores, sin impacto ELO."
     },
     "elo": {
-      "title": "Clasificación ELO",
+      "title": "¿Cómo funciona la clasificación ELO?",
       "description": "Dixo usa un <strong>ELO separado</strong> para partidas clasificatorias 1v1 y 4 jugadores. Ambos comienzan en 1.000. El ELO se calcula según la probabilidad de victoria esperada contra tu oponente. Cuanto mayor sea la diferencia, más ganas (o pierdes) en caso de sorpresa. La clasificación es visible en la <link>tabla pública</link>."
     },
     "tips": {
-      "title": "Consejos estratégicos",
+      "title": "¿Cuáles son las mejores estrategias?",
       "tip1": "<strong>Cuenta desde tus propios dados.</strong> Si tienes 2 cincos y hay 10 dados en juego, estadísticamente espera ~1,7 cincos más. Usa esto para calibrar tus apuestas.",
       "tip2": "<strong>No siempre desafíes una apuesta grande.</strong> A veces dejar pasar una apuesta arriesgada obliga a tu oponente a seguir subiendo hasta equivocarse. Elige tus challenges con cuidado.",
       "tip3": "<strong>Apuesta sobre Pacos para aliviar la presión.</strong> Cambiar a una apuesta Paco divide la cantidad requerida por la mitad — útil cuando estás obligado a hacer una apuesta que no puedes subir honestamente.",

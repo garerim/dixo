@@ -315,11 +315,11 @@
       "avgGameValue": "5 – 15 min"
     },
     "objective": {
-      "title": "Objective",
+      "title": "What is the goal of Liar's Dice?",
       "description": "Be the <strong>last player with dice</strong>. Each round, players bid and bluff. Lose a challenge, lose a die. Run out of dice, you're out."
     },
     "steps": {
-      "title": "A Round, Step by Step",
+      "title": "How does a round work?",
       "step1Title": "Roll your dice in secret",
       "step1": "At the start of each round, every player rolls their dice inside their cup and peeks at the result. <strong>Only you can see your own dice.</strong> Other players see only how many dice you have left.",
       "step2Title": "Make a bid",
@@ -336,19 +336,19 @@
       "step5": "A new round begins. Players with 0 dice are eliminated. Play continues until one player remains."
     },
     "paco": {
-      "title": "The Paco — Wild Dice",
+      "title": "What is the Paco (wild die)?",
       "description": "In Dixo, dice showing a <yellow>1 (Paco)</yellow> are wild. They count as <strong>any face value</strong> when resolving a bid on normal faces (2–6).",
       "example": "Example: The bid is <strong>\"4 fives\"</strong>. There are 3 fives and 2 Pacos in play → actual count = 5 → bid is correct.",
       "biddingOnPacos": "<strong>Bidding on Pacos:</strong> When you bid on face 1 directly (<em>e.g. \"2 Pacos\"</em>), Pacos are no longer wild — only actual 1s count. To switch from a normal bid to a Paco bid, the quantity must be at least <strong>half (rounded up)</strong> of the previous bid quantity.",
       "switchingBack": "<strong>Switching back to normal faces:</strong> Going from a Paco bid back to a normal face bid requires the quantity to be at least double the Paco quantity + 1. Example: \"2 Pacos\" → minimum normal bid is <strong>\"5 [any face]\"</strong>."
     },
     "dice": {
-      "title": "The Dice",
+      "title": "What do the dice faces mean?",
       "paco": "Paco (wild)",
       "face": "Face {value}"
     },
     "gameModes": {
-      "title": "Game Modes",
+      "title": "What game modes are available?",
       "normalTitle": "Normal",
       "normalDesc": "Casual games with automatic matchmaking. No ELO at stake — perfect for learning or warming up.",
       "rankedTitle": "Ranked",
@@ -357,11 +357,11 @@
       "privateDesc": "Create a game and share the 6-character code with friends. Up to 6 players, no ELO impact."
     },
     "elo": {
-      "title": "ELO Ranking",
+      "title": "How does the ELO ranking work?",
       "description": "Dixo uses a <strong>separate ELO</strong> for 1v1 and 4-player ranked games. Both start at 1,000. ELO is calculated based on the expected win probability vs. your opponent. The further apart your ratings, the more you gain (or lose) for an upset. Ranking is visible on the <link>public leaderboard</link>."
     },
     "tips": {
-      "title": "Strategy Tips",
+      "title": "What are the best strategies?",
       "tip1": "<strong>Count from your own dice.</strong> If you hold 2 fives and there are 10 dice in play, statistically expect ~1.7 more fives from other players. Use this to calibrate your bids.",
       "tip2": "<strong>Don't always challenge a big bid.</strong> Sometimes letting a risky bid pass forces your opponent to keep raising until they overreach. Pick your challenges carefully.",
       "tip3": "<strong>Bid on Pacos to reset the pressure.</strong> Switching to a Paco bid cuts the required quantity in half — useful when you're forced to make a bid you can't honestly raise.",
