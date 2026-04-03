@@ -12,6 +12,7 @@ import {
   ShoppingBag,
 } from "lucide-react";
 import Link from "next/link";
+import { MainHeader } from "@/components/main-header";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -71,24 +72,7 @@ export default function ShopPage() {
 
   return (
     <div className="flex min-h-svh flex-col bg-gradient-to-b from-background to-muted/30">
-      {/* Header */}
-      <header className="flex items-center justify-between border-b px-4 py-3 sm:px-6">
-        <div className="flex items-center gap-3">
-          <Button variant="ghost" size="icon" onClick={() => router.back()}>
-            <ArrowLeft className="size-5" />
-          </Button>
-          <div className="flex items-center gap-2">
-            <ShoppingBag className="size-5 text-primary" />
-            <h1 className="text-lg font-bold">{t("title")}</h1>
-          </div>
-        </div>
-        <Button variant="outline" size="sm" className="gap-2" asChild>
-          <Link href="/skins">
-            <Dice5 className="size-4" />
-            {t("mySkins")}
-          </Link>
-        </Button>
-      </header>
+      <MainHeader />
 
       <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col gap-8 p-4 sm:p-6">
         {/* Intro */}

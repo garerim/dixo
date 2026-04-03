@@ -13,6 +13,7 @@ import {
   ShoppingBag,
 } from "lucide-react";
 import Image from "next/image";
+import { MainHeader } from "@/components/main-header";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -86,26 +87,7 @@ function SkinsPageContent() {
 
   return (
     <div className="flex min-h-svh flex-col bg-gradient-to-b from-background to-muted/30">
-      {/* Header */}
-      <header className="flex items-center justify-between border-b px-4 py-3 sm:px-6">
-        <div className="flex items-center gap-3">
-          <Button variant="ghost" size="icon" asChild>
-            <Link href="/">
-              <ArrowLeft className="size-5" />
-            </Link>
-          </Button>
-          <div className="flex items-center gap-2">
-            <Dice5 className="size-5 text-primary" />
-            <h1 className="text-lg font-bold">{t("title")}</h1>
-          </div>
-        </div>
-        <Button variant="outline" size="sm" className="gap-2" asChild>
-          <Link href="/shop">
-            <ShoppingBag className="size-4" />
-            {t("shop")}
-          </Link>
-        </Button>
-      </header>
+      <MainHeader />
 
       <main className="mx-auto flex w-full max-w-2xl flex-1 flex-col gap-6 p-4">
         {/* Preview */}
