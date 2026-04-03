@@ -127,7 +127,12 @@ export default async function RootLayout({
                   description:
                     "Dixo is a free online multiplayer Liar's Dice game (Perudo). Bluff your opponents about the dice on the table, call their bluffs, and be the last player standing. Play ranked or casual games with friends or strangers.",
                   url: BASE_URL,
-                  image: `${BASE_URL}/icon-512.png`,
+                  image: {
+                    "@type": "ImageObject",
+                    url: `${BASE_URL}/icon-512.png`,
+                    width: 512,
+                    height: 512,
+                  },
                   genre: [
                     "Strategy",
                     "Bluffing",

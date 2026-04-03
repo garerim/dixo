@@ -19,6 +19,38 @@ export const metadata: Metadata = {
   },
 };
 
+const ranksJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "@id": `${BASE_URL}/ranks#webpage`,
+  name: "Dixo ELO Rank Tiers — Bronze to Diamond",
+  description:
+    "Explore all Dixo ELO rank tiers. Learn how the dual ranking system works for 1v1 and 4-player ranked matches.",
+  url: `${BASE_URL}/ranks`,
+  isPartOf: { "@id": `${BASE_URL}/#website` },
+  about: { "@id": `${BASE_URL}/#game` },
+  breadcrumb: {
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: BASE_URL },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Ranks",
+        item: `${BASE_URL}/ranks`,
+      },
+    ],
+  },
+};
+
 export default function RanksPage() {
-  return <RanksClient />;
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(ranksJsonLd) }}
+      />
+      <RanksClient />
+    </>
+  );
 }

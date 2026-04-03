@@ -134,8 +134,16 @@ const howToPlayJsonLd = {
   description:
     "Complete rules for Dixo (Liar's Dice / Perudo): learn how bidding works, the Paco wild die rule, challenge resolution, game modes, and strategy tips.",
   url: `${BASE_URL}/how-to-play`,
-  image: `${BASE_URL}/icon-512.png`,
+  image: {
+    "@type": "ImageObject",
+    url: `${BASE_URL}/icon-512.png`,
+    width: 512,
+    height: 512,
+  },
+  datePublished: "2025-01-01",
+  dateModified: "2026-04-03",
   inLanguage: "en",
+  author: { "@id": `${BASE_URL}/#organization` },
   about: { "@id": `${BASE_URL}/#game` },
   publisher: { "@id": `${BASE_URL}/#organization` },
   isPartOf: { "@id": `${BASE_URL}/#website` },

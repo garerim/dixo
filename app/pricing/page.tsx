@@ -31,6 +31,8 @@ const pricingJsonLd = {
       item: {
         "@type": "Product",
         name: "Dixo Free",
+        url: `${BASE_URL}/pricing`,
+        image: `${BASE_URL}/icon-512.png`,
         description:
           "Free access to Dixo online Liar's Dice. Includes ranked and casual games, friends, chat, ELO ranking, and avatar customisation.",
         brand: { "@type": "Brand", name: "Dixo" },
@@ -49,6 +51,8 @@ const pricingJsonLd = {
       item: {
         "@type": "Product",
         name: "Dixo Premium",
+        url: `${BASE_URL}/pricing`,
+        image: `${BASE_URL}/icon-512.png`,
         description:
           "Dixo Premium unlocks GIF avatars, a Premium badge visible in-game and on your profile, and full ELO history access. 4.99 EUR per month, cancel anytime.",
         brand: { "@type": "Brand", name: "Dixo" },
