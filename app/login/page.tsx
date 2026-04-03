@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { Dice5 } from "lucide-react";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -37,9 +37,7 @@ export default function LoginPage() {
   return (
     <div className="flex min-h-svh flex-col items-center justify-center bg-gradient-to-b from-background to-muted/30 p-4">
       <div className="mb-8 flex flex-col items-center gap-3">
-        <div className="flex size-16 items-center justify-center rounded-2xl bg-primary text-primary-foreground shadow-lg">
-          <Dice5 className="size-9" />
-        </div>
+        <Image src="/logo-dixo.png" alt="Dixo" width={64} height={64} className="size-16 drop-shadow-lg" />
         <h1 className="text-4xl font-bold tracking-tight">{t("title")}</h1>
         <p className="text-muted-foreground text-center max-w-xs">
           {t("subtitle")}
