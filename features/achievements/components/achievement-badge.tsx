@@ -5,6 +5,7 @@
 "use client";
 
 import type { UserAchievement } from "@/types/api";
+import { useTranslations } from "next-intl";
 import {
   Swords,
   Theater,
@@ -34,6 +35,7 @@ interface AchievementBadgeProps {
 }
 
 export function AchievementBadge({ achievement }: AchievementBadgeProps) {
+  const t = useTranslations("achievements");
   const Icon = ICON_MAP[achievement.icon] ?? Medal;
 
   return (
@@ -46,7 +48,7 @@ export function AchievementBadge({ achievement }: AchievementBadgeProps) {
         </TooltipTrigger>
         <TooltipContent>
           <p className="font-semibold">{achievement.name}</p>
-          <p className="text-xs text-muted-foreground">{achievement.description}</p>
+          <p className="text-xs text-muted-foreground">{t(`desc_${achievement.achievementId}`)}</p>
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>

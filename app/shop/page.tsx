@@ -33,6 +33,7 @@ export default function ShopPage() {
   const { ownedSkinIds, isLoading: skinsLoading } = useOwnedSkins();
   const router = useRouter();
   const t = useTranslations("shop");
+  const ts = useTranslations("skins");
   const [buyingId, setBuyingId] = useState<string | null>(null);
 
   if (authLoading || skinsLoading) {
@@ -138,7 +139,7 @@ export default function ShopPage() {
                         </Badge>
                       )}
                     </div>
-                    <CardDescription>{skin.description}</CardDescription>
+                    <CardDescription>{ts(skin.descriptionKey)}</CardDescription>
                   </CardHeader>
 
                   <CardContent>

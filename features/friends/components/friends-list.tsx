@@ -6,7 +6,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { useTranslations } from "next-intl";
-import { Loader2, UserPlus, MessageSquare, Search } from "lucide-react";
+import { Loader2, UserPlus, MessageSquare, Search, Check, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -210,6 +210,7 @@ export function FriendsList({ onSelectFriend, showAddFriend = true }: FriendsLis
                 <div className="flex gap-2">
                   <Button
                     size="sm"
+                    className="hidden sm:inline-flex"
                     onClick={() =>
                       actions.respondToRequest(friend.friendshipId, true)
                     }
@@ -219,11 +220,31 @@ export function FriendsList({ onSelectFriend, showAddFriend = true }: FriendsLis
                   <Button
                     size="sm"
                     variant="outline"
+                    className="hidden sm:inline-flex"
                     onClick={() =>
                       actions.respondToRequest(friend.friendshipId, false)
                     }
                   >
                     {t("decline")}
+                  </Button>
+                  <Button
+                    size="icon"
+                    className="sm:hidden size-8"
+                    onClick={() =>
+                      actions.respondToRequest(friend.friendshipId, true)
+                    }
+                  >
+                    <Check className="size-4" />
+                  </Button>
+                  <Button
+                    size="icon"
+                    variant="outline"
+                    className="sm:hidden size-8"
+                    onClick={() =>
+                      actions.respondToRequest(friend.friendshipId, false)
+                    }
+                  >
+                    <X className="size-4" />
                   </Button>
                 </div>
               </div>

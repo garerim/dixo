@@ -6,6 +6,7 @@
 
 import { useState } from "react";
 import { toast } from "sonner";
+import { useTranslations } from "next-intl";
 import {
   Dialog,
   DialogContent,
@@ -26,12 +27,12 @@ import {
 import { reportClient } from "../api/report-client";
 import type { ReportRow } from "@/types/database";
 
-const REASONS: { value: ReportRow["reason"]; label: string }[] = [
-  { value: "inappropriate_content", label: "Inappropriate content" },
-  { value: "harassment", label: "Harassment" },
-  { value: "cheating", label: "Cheating" },
-  { value: "spam", label: "Spam" },
-  { value: "other", label: "Other" },
+const REASON_KEYS: { value: ReportRow["reason"]; labelKey: string }[] = [
+  { value: "inappropriate_content", labelKey: "inappropriateContent" },
+  { value: "harassment", labelKey: "harassment" },
+  { value: "cheating", labelKey: "cheating" },
+  { value: "spam", labelKey: "spam" },
+  { value: "other", labelKey: "other" },
 ];
 
 interface ReportDialogProps {
@@ -49,6 +50,7 @@ export function ReportDialog({
   targetId,
   targetLabel,
 }: ReportDialogProps) {
+  const t = useTranslations("report");
   const [reason, setReason] = useState<ReportRow["reason"] | "">("");
   const [description, setDescription] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -68,17 +70,17 @@ export function ReportDialog({
       });
 
       if (res.success) {
-        toast.success("Report submitted. Thank you for helping keep the community safe.");
+        toast.success(t("success"));
         onOpenChange(false);
         setReason("");
         setDescription("");
       } else if (res.error?.includes("Too many")) {
-        toast.error("Too many reports. Please wait before submitting another.");
+        toast.error(t("tooMany"));
       } else {
-        toast.error("Failed to submit report. Please try again.");
+        toast.error(t("error"));
       }
     } catch {
-      toast.error("Failed to submit report. Please try again.");
+      toast.error(t("error"));
     } finally {
       setIsSubmitting(false);
     }
@@ -89,24 +91,26 @@ export function ReportDialog({
       <DialogContent className="max-w-md">
         <DialogHeader>
           <DialogTitle>
-            Report {reportType === "player" ? targetLabel : "message"}
+            {reportType === "player"
+              ? t("title", { target: targetLabel })
+              : t("titleMessage")}
           </DialogTitle>
         </DialogHeader>
 
         <div className="flex flex-col gap-4 py-2">
           <div className="flex flex-col gap-2">
-            <Label htmlFor="reason">Reason</Label>
+            <Label htmlFor="reason">{t("reason")}</Label>
             <Select
               value={reason}
               onValueChange={(v) => setReason(v as ReportRow["reason"])}
             >
               <SelectTrigger id="reason">
-                <SelectValue placeholder="Select a reason..." />
+                <SelectValue placeholder={t("selectReason")} />
               </SelectTrigger>
               <SelectContent>
-                {REASONS.map((r) => (
+                {REASON_KEYS.map((r) => (
                   <SelectItem key={r.value} value={r.value}>
-                    {r.label}
+                    {t(r.labelKey)}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -115,12 +119,12 @@ export function ReportDialog({
 
           <div className="flex flex-col gap-2">
             <Label htmlFor="description">
-              Additional details{" "}
-              <span className="text-muted-foreground">(optional)</span>
+              {t("additionalDetails")}{" "}
+              <span className="text-muted-foreground">{t("optional")}</span>
             </Label>
             <Textarea
               id="description"
-              placeholder="Provide more context..."
+              placeholder={t("placeholder")}
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               maxLength={500}
@@ -135,14 +139,14 @@ export function ReportDialog({
 
         <DialogFooter>
           <Button variant="ghost" onClick={() => onOpenChange(false)}>
-            Cancel
+            {t("cancel")}
           </Button>
           <Button
             variant="destructive"
             onClick={handleSubmit}
             disabled={!reason || isSubmitting}
           >
-            {isSubmitting ? "Submitting..." : "Submit Report"}
+            {isSubmitting ? t("submitting") : t("submit")}
           </Button>
         </DialogFooter>
       </DialogContent>

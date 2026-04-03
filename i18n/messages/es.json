@@ -140,6 +140,14 @@
       "viewAllRanks": "Ver todos los rangos",
       "viewLeaderboard": "Ver clasificación"
     },
+    "eloChart": {
+      "title": "Evolución ELO",
+      "rankedGames": "{count} partida(s) clasificatoria(s)",
+      "noRankedGames": "Sin partidas clasificatorias",
+      "mode1v1": "1v1",
+      "mode4p": "4 jugadores",
+      "playRanked": "¡Juega partidas clasificatorias en modo {mode} para ver tu progreso!"
+    },
     "dangerZone": {
       "title": "Zona de peligro",
       "deleteAccount": "Eliminar mi cuenta",
@@ -264,13 +272,50 @@
     "stripeNote": "Pagos seguros con Stripe. Todas las compras son definitivas.",
     "checkoutError": "No se pudo iniciar el pago."
   },
+  "achievements": {
+    "desc_FIRST_BLOOD": "Gana tu primera partida",
+    "desc_BLUFF_MASTER": "Farolea con éxito 10 desafíos seguidos",
+    "desc_PACO_KING": "Gana un desafío donde solo contaron los Pacos",
+    "desc_UNTOUCHABLE": "Gana una partida sin perder un solo dado",
+    "desc_VETERAN": "Juega 100 partidas",
+    "desc_DIAMOND": "Alcanza 1500 ELO en cualquier modo",
+    "unlocked": "Desbloqueado el {date}"
+  },
+  "report": {
+    "title": "Reportar {target}",
+    "titleMessage": "Reportar mensaje",
+    "reason": "Razón",
+    "selectReason": "Selecciona una razón...",
+    "inappropriateContent": "Contenido inapropiado",
+    "harassment": "Acoso",
+    "cheating": "Trampa",
+    "spam": "Spam",
+    "other": "Otro",
+    "additionalDetails": "Detalles adicionales",
+    "optional": "(opcional)",
+    "placeholder": "Proporciona más contexto...",
+    "submit": "Enviar reporte",
+    "submitting": "Enviando...",
+    "cancel": "Cancelar",
+    "success": "Reporte enviado. Gracias por ayudar a mantener la comunidad segura.",
+    "tooMany": "Demasiados reportes. Espera antes de enviar otro.",
+    "error": "Error al enviar el reporte. Inténtalo de nuevo."
+  },
   "skins": {
     "title": "Skins de dados",
     "shop": "Tienda",
     "preview": "Vista previa",
     "equipped": "Equipado",
     "equip": "Equipar skin seleccionado",
-    "purchased": "¡Skin comprado! Ya puedes equiparlo."
+    "purchased": "¡Skin comprado! Ya puedes equiparlo.",
+    "name_classic": "Clásico",
+    "name_gold-ruby": "Oro y Rubí",
+    "name_star-night": "Noche Estrellada",
+    "name_green-jade": "Jade Verde",
+    "desc_classic": "Estilo de dados por defecto",
+    "desc_gold-ruby": "Dados dorados elegantes con puntos de rubí",
+    "desc_star-night": "Dados oscuros con patrones de noche estrellada",
+    "desc_green-jade": "Dados de jade tallados con incrustaciones doradas"
   },
   "leaderboard": {
     "title": "Clasificación",
@@ -298,7 +343,13 @@
     "eloRangeOpen": "{min}+",
     "readyToClimb": "¿Listo para subir?",
     "readyToClimbDesc": "Juega partidas clasificatorias para ganar ELO y desbloquear rangos superiores.",
-    "playRanked": "Jugar clasificatoria"
+    "playRanked": "Jugar clasificatoria",
+    "rank_bronze": "¡Bienvenido a Dixo! Aprende lo básico, practica tus faroles y empieza a subir.",
+    "rank_silver": "Conoces lo básico. Es hora de afinar tu estrategia y superar a tus oponentes.",
+    "rank_gold": "Jugador sólido. Tus lecturas mejoran y tus faroles son convincentes.",
+    "rank_platinum": "Territorio de élite. Sabes leer la mesa y cuándo arriesgar.",
+    "rank_diamond": "Nivel top. Tus oponentes temen tus desafíos y respetan tus apuestas.",
+    "rank_master": "La cima. Estás entre los mejores jugadores de Dixo del mundo."
   },
   "howToPlayPage": {
     "title": "Cómo jugar",

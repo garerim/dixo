@@ -140,6 +140,14 @@
       "viewAllRanks": "Voir tous les rangs",
       "viewLeaderboard": "Voir le classement"
     },
+    "eloChart": {
+      "title": "Évolution ELO",
+      "rankedGames": "{count} partie(s) classée(s)",
+      "noRankedGames": "Aucune partie classée",
+      "mode1v1": "1v1",
+      "mode4p": "4 joueurs",
+      "playRanked": "Jouez des parties classées en mode {mode} pour voir votre progression !"
+    },
     "dangerZone": {
       "title": "Zone de danger",
       "deleteAccount": "Supprimer mon compte",
@@ -264,13 +272,50 @@
     "stripeNote": "Paiements sécurisés par Stripe. Tous les achats sont définitifs.",
     "checkoutError": "Impossible de lancer le paiement."
   },
+  "achievements": {
+    "desc_FIRST_BLOOD": "Gagner votre première partie",
+    "desc_BLUFF_MASTER": "Réussir 10 bluffs consécutifs",
+    "desc_PACO_KING": "Gagner un challenge où seuls les Pacos comptaient",
+    "desc_UNTOUCHABLE": "Gagner une partie sans perdre un seul dé",
+    "desc_VETERAN": "Jouer 100 parties",
+    "desc_DIAMOND": "Atteindre 1500 ELO dans n'importe quel mode",
+    "unlocked": "Débloqué le {date}"
+  },
+  "report": {
+    "title": "Signaler {target}",
+    "titleMessage": "Signaler le message",
+    "reason": "Raison",
+    "selectReason": "Sélectionner une raison...",
+    "inappropriateContent": "Contenu inapproprié",
+    "harassment": "Harcèlement",
+    "cheating": "Triche",
+    "spam": "Spam",
+    "other": "Autre",
+    "additionalDetails": "Détails supplémentaires",
+    "optional": "(optionnel)",
+    "placeholder": "Donnez plus de contexte...",
+    "submit": "Envoyer le signalement",
+    "submitting": "Envoi en cours...",
+    "cancel": "Annuler",
+    "success": "Signalement envoyé. Merci de contribuer à la sécurité de la communauté.",
+    "tooMany": "Trop de signalements. Veuillez patienter avant d'en envoyer un autre.",
+    "error": "Échec de l'envoi du signalement. Veuillez réessayer."
+  },
   "skins": {
     "title": "Skins de dés",
     "shop": "Boutique",
     "preview": "Aperçu",
     "equipped": "Équipé",
     "equip": "Équiper le skin sélectionné",
-    "purchased": "Skin acheté ! Vous pouvez maintenant l'équiper."
+    "purchased": "Skin acheté ! Vous pouvez maintenant l'équiper.",
+    "name_classic": "Classique",
+    "name_gold-ruby": "Or & Rubis",
+    "name_star-night": "Nuit Étoilée",
+    "name_green-jade": "Jade Vert",
+    "desc_classic": "Style de dés par défaut",
+    "desc_gold-ruby": "Dés dorés élégants avec des points rubis",
+    "desc_star-night": "Dés sombres avec des motifs de nuit étoilée",
+    "desc_green-jade": "Dés en jade sculptés avec des incrustations dorées"
   },
   "leaderboard": {
     "title": "Classement",
@@ -298,7 +343,13 @@
     "eloRangeOpen": "{min}+",
     "readyToClimb": "Prêt à grimper ?",
     "readyToClimbDesc": "Jouez des parties classées pour gagner de l'ELO et débloquer des rangs supérieurs.",
-    "playRanked": "Jouer en classé"
+    "playRanked": "Jouer en classé",
+    "rank_bronze": "Bienvenue sur Dixo ! Apprenez les bases, entraînez vos bluffs et commencez à grimper.",
+    "rank_silver": "Vous connaissez les bases. Il est temps d'affiner votre stratégie et de surpasser vos adversaires.",
+    "rank_gold": "Joueur solide. Vos lectures s'améliorent et vos bluffs sont convaincants.",
+    "rank_platinum": "Territoire d'élite. Vous savez lire la table et quand tenter votre chance.",
+    "rank_diamond": "Top niveau. Vos adversaires craignent vos challenges et respectent vos enchères.",
+    "rank_master": "Le sommet. Vous faites partie des meilleurs joueurs de Dixo au monde."
   },
   "howToPlayPage": {
     "title": "Comment jouer",

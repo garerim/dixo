@@ -140,6 +140,14 @@
       "viewAllRanks": "View all ranks",
       "viewLeaderboard": "View leaderboard"
     },
+    "eloChart": {
+      "title": "ELO Evolution",
+      "rankedGames": "{count} ranked game(s)",
+      "noRankedGames": "No ranked games yet",
+      "mode1v1": "1v1",
+      "mode4p": "4 players",
+      "playRanked": "Play ranked games in {mode} mode to see your progress!"
+    },
     "dangerZone": {
       "title": "Danger Zone",
       "deleteAccount": "Delete my account",
@@ -264,13 +272,50 @@
     "stripeNote": "Payments are handled securely by Stripe. All purchases are final.",
     "checkoutError": "Unable to start checkout."
   },
+  "achievements": {
+    "desc_FIRST_BLOOD": "Win your first game",
+    "desc_BLUFF_MASTER": "Successfully bluff 10 challenges in a row",
+    "desc_PACO_KING": "Win a challenge where only Pacos counted",
+    "desc_UNTOUCHABLE": "Win a game without losing a single die",
+    "desc_VETERAN": "Play 100 games",
+    "desc_DIAMOND": "Reach 1500 ELO in any mode",
+    "unlocked": "Unlocked {date}"
+  },
+  "report": {
+    "title": "Report {target}",
+    "titleMessage": "Report message",
+    "reason": "Reason",
+    "selectReason": "Select a reason...",
+    "inappropriateContent": "Inappropriate content",
+    "harassment": "Harassment",
+    "cheating": "Cheating",
+    "spam": "Spam",
+    "other": "Other",
+    "additionalDetails": "Additional details",
+    "optional": "(optional)",
+    "placeholder": "Provide more context...",
+    "submit": "Submit Report",
+    "submitting": "Submitting...",
+    "cancel": "Cancel",
+    "success": "Report submitted. Thank you for helping keep the community safe.",
+    "tooMany": "Too many reports. Please wait before submitting another.",
+    "error": "Failed to submit report. Please try again."
+  },
   "skins": {
     "title": "Dice Skins",
     "shop": "Shop",
     "preview": "Preview",
     "equipped": "Equipped",
     "equip": "Equip selected skin",
-    "purchased": "Skin purchased! You can now equip it."
+    "purchased": "Skin purchased! You can now equip it.",
+    "name_classic": "Classic",
+    "name_gold-ruby": "Gold Ruby",
+    "name_star-night": "Star Night",
+    "name_green-jade": "Green Jade",
+    "desc_classic": "Default dice style",
+    "desc_gold-ruby": "Elegant gold dice with ruby dots",
+    "desc_star-night": "Dark dice with starry night patterns",
+    "desc_green-jade": "Carved jade dice with golden inlays"
   },
   "leaderboard": {
     "title": "Leaderboard",
@@ -298,7 +343,13 @@
     "eloRangeOpen": "{min}+",
     "readyToClimb": "Ready to climb?",
     "readyToClimbDesc": "Play ranked games to earn ELO and unlock higher tiers.",
-    "playRanked": "Play ranked"
+    "playRanked": "Play ranked",
+    "rank_bronze": "Welcome to Dixo! Learn the ropes, practice your bluffs, and start climbing.",
+    "rank_silver": "You know the basics. Time to sharpen your strategy and outsmart your opponents.",
+    "rank_gold": "Solid player. Your reads are getting better, and your bluffs are convincing.",
+    "rank_platinum": "Elite territory. You can read the table and know when to push your luck.",
+    "rank_diamond": "Top tier. Your opponents fear your challenges and respect your bids.",
+    "rank_master": "The pinnacle. You are among the best Dixo players in the world."
   },
   "howToPlayPage": {
     "title": "How to Play",

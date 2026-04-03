@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { TrendingUp, TrendingDown, Minus, Loader2 } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { profileClient } from "../api/profile-client";
 import type { EloHistoryEntry } from "@/types/api";
 
@@ -51,6 +52,7 @@ interface EloChartProps {
 }
 
 export function EloChart({ elo1v1, elo4p }: EloChartProps) {
+  const t = useTranslations("profile.eloChart");
   const [mode, setMode] = useState<"1v1" | "4p">("1v1");
   const [history, setHistory] = useState<EloHistoryEntry[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -118,12 +120,12 @@ export function EloChart({ elo1v1, elo4p }: EloChartProps) {
           <div>
             <CardTitle className="flex items-center gap-2 text-base">
               {trendIcon}
-              ELO Evolution
+              {t("title")}
             </CardTitle>
             <CardDescription>
               {history.length > 0
-                ? `${history.length} ranked game${history.length > 1 ? "s" : ""}`
-                : "No ranked games yet"}
+                ? t("rankedGames", { count: history.length })
+                : t("noRankedGames")}
             </CardDescription>
           </div>
 
@@ -135,7 +137,7 @@ export function EloChart({ elo1v1, elo4p }: EloChartProps) {
               className="h-7 px-3 text-xs"
               onClick={() => setMode("1v1")}
             >
-              1v1
+              {t("mode1v1")}
             </Button>
             <Button
               variant={mode === "4p" ? "default" : "ghost"}
@@ -143,7 +145,7 @@ export function EloChart({ elo1v1, elo4p }: EloChartProps) {
               className="h-7 px-3 text-xs"
               onClick={() => setMode("4p")}
             >
-              4 players
+              {t("mode4p")}
             </Button>
           </div>
         </div>
@@ -156,7 +158,7 @@ export function EloChart({ elo1v1, elo4p }: EloChartProps) {
         ) : chartData.length === 0 ? (
           <div className="flex h-[200px] flex-col items-center justify-center gap-2 text-muted-foreground">
             <p className="text-sm">
-              Play ranked games in {mode === "1v1" ? "1v1" : "4 players"} mode to see your progress!
+              {t("playRanked", { mode: mode === "1v1" ? t("mode1v1") : t("mode4p") })}
             </p>
             <p className="text-2xl font-bold text-foreground">{currentElo} ELO</p>
           </div>

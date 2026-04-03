@@ -62,7 +62,7 @@ function RankCard({ rank, index, t }: { rank: RankDefinition; index: number; t: 
               {eloRange} ELO
             </span>
           </div>
-          <p className="text-sm text-muted-foreground">{rank.description}</p>
+          <p className="text-sm text-muted-foreground">{t(`rank_${rank.tier}`)}</p>
         </div>
 
         {/* Tier number */}

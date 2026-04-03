@@ -177,7 +177,7 @@ function SkinsPageContent() {
                     )}
                   </div>
                   <span className="text-sm text-muted-foreground">
-                    {skin.description}
+                    {t(skin.descriptionKey)}
                   </span>
                 </div>
 

@@ -5,6 +5,7 @@
 "use client";
 
 import type { UserAchievement } from "@/types/api";
+import { useTranslations } from "next-intl";
 import { Progress } from "@/components/ui/progress";
 import {
   Swords,
@@ -30,6 +31,7 @@ interface AchievementCardProps {
 }
 
 export function AchievementCard({ achievement }: AchievementCardProps) {
+  const t = useTranslations("achievements");
   const Icon = ICON_MAP[achievement.icon] ?? Medal;
   const progress =
     achievement.maxValue > 0
@@ -63,7 +65,7 @@ export function AchievementCard({ achievement }: AchievementCardProps) {
             {achievement.name}
           </span>
           <span className="text-xs text-muted-foreground leading-tight">
-            {achievement.description}
+            {t(`desc_${achievement.achievementId}`)}
           </span>
         </div>
       </div>
@@ -81,11 +83,12 @@ export function AchievementCard({ achievement }: AchievementCardProps) {
       {/* Unlocked date */}
       {achievement.isUnlocked && achievement.unlockedAt && (
         <span className="text-[10px] text-yellow-600 dark:text-yellow-400">
-          Unlocked{" "}
-          {new Date(achievement.unlockedAt).toLocaleDateString("en-US", {
-            day: "numeric",
-            month: "short",
-            year: "numeric",
+          {t("unlocked", {
+            date: new Date(achievement.unlockedAt).toLocaleDateString(undefined, {
+              day: "numeric",
+              month: "short",
+              year: "numeric",
+            }),
           })}
         </span>
       )}

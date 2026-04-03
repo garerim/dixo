@@ -9,10 +9,10 @@
 export interface SkinDefinition {
   /** Unique ID — matches folder name in /public/dices-skins/ (null = default) */
   id: string | null;
-  /** Display name */
+  /** Display name (English, not translated) */
   name: string;
-  /** Short description */
-  description: string;
+  /** i18n key for the short description (under "skins" namespace) */
+  descriptionKey: string;
   /** Preview image path (null = render default DiceFace) */
   preview: string | null;
   /** Price in euros (0 = free / included) */
@@ -29,7 +29,7 @@ export const SKIN_CATALOG: SkinDefinition[] = [
   {
     id: null,
     name: "Classic",
-    description: "Default dice style",
+    descriptionKey: "desc_classic",
     preview: null,
     price: 0,
     stripePriceId: null,
@@ -39,7 +39,7 @@ export const SKIN_CATALOG: SkinDefinition[] = [
   {
     id: "gold-ruby",
     name: "Gold Ruby",
-    description: "Elegant gold dice with ruby dots",
+    descriptionKey: "desc_gold-ruby",
     preview: "/dices-skins/gold-ruby/dice-5.png",
     price: 2.99,
     stripePriceId: process.env.NEXT_PUBLIC_STRIPE_SKIN_GOLD_RUBY_PRICE_ID ?? null,
@@ -49,7 +49,7 @@ export const SKIN_CATALOG: SkinDefinition[] = [
   {
     id: "star-night",
     name: "Star Night",
-    description: "Dark dice with starry night patterns",
+    descriptionKey: "desc_star-night",
     preview: "/dices-skins/star-night/dice-5.png",
     price: 2.99,
     stripePriceId: process.env.NEXT_PUBLIC_STRIPE_SKIN_STAR_NIGHT_PRICE_ID ?? null,
@@ -59,7 +59,7 @@ export const SKIN_CATALOG: SkinDefinition[] = [
   {
     id: "green-jade",
     name: "Green Jade",
-    description: "Carved jade dice with golden inlays",
+    descriptionKey: "desc_green-jade",
     preview: "/dices-skins/green-jade/dice-5.png",
     price: 2.99,
     stripePriceId: process.env.NEXT_PUBLIC_STRIPE_SKIN_GREEN_JADE_PRICE_ID ?? null,
