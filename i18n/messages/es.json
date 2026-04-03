@@ -223,7 +223,10 @@
   "messages": {
     "selectFriend": "Selecciona un amigo para chatear",
     "noMessages": "Sin mensajes. ¡Inicia la conversación!",
-    "placeholder": "Escribe un mensaje..."
+    "placeholder": "Escribe un mensaje...",
+    "today": "a las {time}",
+    "yesterday": "ayer a las {time}",
+    "date": "{date} a las {time}"
   },
   "notifications": {
     "title": "Notificaciones",

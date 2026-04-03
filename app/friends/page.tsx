@@ -19,9 +19,9 @@ export default function FriendsPage() {
   const [selectedFriend, setSelectedFriend] = useState<FriendInfo | null>(null);
 
   return (
-    <div className="flex min-h-svh flex-col">
+    <div className="flex h-svh flex-col overflow-hidden">
       {/* ─── Header ─── */}
-      <header className="flex items-center gap-3 border-b px-4 py-3">
+      <header className="flex shrink-0 items-center gap-3 border-b px-4 py-3">
         <Button variant="ghost" size="icon" onClick={() => router.push("/")}>
           <ArrowLeft className="size-4" />
         </Button>
@@ -32,14 +32,14 @@ export default function FriendsPage() {
       </header>
 
       {/* ─── Contenu ─── */}
-      <main className="flex flex-1 flex-col gap-4 p-4 lg:flex-row">
+      <main className="flex min-h-0 flex-1 flex-col gap-4 p-4 lg:flex-row">
         {/* ── Liste des amis ── */}
-        <div className="w-full lg:max-w-md">
+        <div className="w-full shrink-0 overflow-y-auto lg:max-w-md lg:shrink lg:overflow-y-auto">
           <FriendsList onSelectFriend={setSelectedFriend} />
         </div>
 
         {/* ── Messages ── */}
-        <div className="flex-1">
+        <div className="min-h-0 flex-1">
           <Messages friend={selectedFriend} />
         </div>
       </main>

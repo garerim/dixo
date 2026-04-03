@@ -223,7 +223,10 @@
   "messages": {
     "selectFriend": "Sélectionnez un ami pour discuter",
     "noMessages": "Aucun message. Lancez la conversation !",
-    "placeholder": "Tapez un message..."
+    "placeholder": "Tapez un message...",
+    "today": "à {time}",
+    "yesterday": "hier à {time}",
+    "date": "{date} à {time}"
   },
   "notifications": {
     "title": "Notifications",

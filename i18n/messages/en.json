@@ -223,7 +223,10 @@
   "messages": {
     "selectFriend": "Select a friend to start chatting",
     "noMessages": "No messages. Start the conversation!",
-    "placeholder": "Type a message..."
+    "placeholder": "Type a message...",
+    "today": "at {time}",
+    "yesterday": "yesterday at {time}",
+    "date": "{date} at {time}"
   },
   "notifications": {
     "title": "Notifications",
