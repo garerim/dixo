@@ -59,6 +59,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useAuth } from "@/components/providers/auth-provider";
 import { MainHeader } from "@/components/main-header";
+import { AdBanner } from "@/components/ad-banner";
 import { LanguageSelector } from "@/components/language-selector";
 import { LanguageButton } from "@/components/language-button";
 import { gameClient } from "@/features/game/api/game-client";
@@ -290,6 +291,9 @@ export function HomeClient() {
                 </Button>
               </CardContent>
             </Card>
+
+            {/* Ad between game modes and private section */}
+            <AdBanner slot="ADSENSE_HOME_SLOT" format="horizontal" className="my-2" />
 
             <div className="flex items-center gap-3">
               <Separator className="flex-1" />
