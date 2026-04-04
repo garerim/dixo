@@ -20,6 +20,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/components/providers/auth-provider";
+import { AdBanner } from "@/components/ad-banner";
 import { profileClient } from "@/features/profile/api/profile-client";
 import { useOwnedSkins } from "@/features/shop/hooks/use-owned-skins";
 import { DiceFace } from "@/features/game/components/dice-face";
@@ -108,6 +109,9 @@ function SkinsPageContent() {
             </div>
           </CardContent>
         </Card>
+
+        {/* Ad between preview and skin list */}
+        <AdBanner slot="ADSENSE_SKINS_SLOT" format="horizontal" />
 
         {/* Skin list */}
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">

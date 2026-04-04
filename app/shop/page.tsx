@@ -24,6 +24,7 @@ import {
 } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/components/providers/auth-provider";
+import { AdBanner } from "@/components/ad-banner";
 import { useOwnedSkins } from "@/features/shop/hooks/use-owned-skins";
 import { shopClient } from "@/features/shop/api/shop-client";
 import { DiceFace } from "@/features/game/components/dice-face";
@@ -82,6 +83,9 @@ export default function ShopPage() {
             {t("description")}
           </p>
         </div>
+
+        {/* Ad between intro and skins grid */}
+        <AdBanner slot="ADSENSE_SHOP_SLOT" format="horizontal" />
 
         {/* Skins grid */}
         {purchasableSkins.length === 0 ? (
