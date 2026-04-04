@@ -20,7 +20,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/components/providers/auth-provider";
-import { AdBanner } from "@/components/ad-banner";
+import { AdSidebarLayout } from "@/components/ad-banner";
 import { profileClient } from "@/features/profile/api/profile-client";
 import { useOwnedSkins } from "@/features/shop/hooks/use-owned-skins";
 import { DiceFace } from "@/features/game/components/dice-face";
@@ -90,6 +90,7 @@ function SkinsPageContent() {
     <div className="flex min-h-svh flex-col bg-gradient-to-b from-background to-muted/30">
       <MainHeader />
 
+      <AdSidebarLayout slotLeft="ADSENSE_SKINS_LEFT" slotRight="ADSENSE_SKINS_RIGHT">
       <main className="mx-auto flex w-full max-w-2xl flex-1 flex-col gap-6 p-4">
         {/* Preview */}
         <Card>
@@ -109,9 +110,6 @@ function SkinsPageContent() {
             </div>
           </CardContent>
         </Card>
-
-        {/* Ad between preview and skin list */}
-        <AdBanner slot="ADSENSE_SKINS_SLOT" format="horizontal" />
 
         {/* Skin list */}
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
@@ -197,6 +195,7 @@ function SkinsPageContent() {
           </div>
         )}
       </main>
+      </AdSidebarLayout>
     </div>
   );
 }

@@ -59,7 +59,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useAuth } from "@/components/providers/auth-provider";
 import { MainHeader } from "@/components/main-header";
-import { AdBanner } from "@/components/ad-banner";
+import { AdSidebarLayout } from "@/components/ad-banner";
 import { LanguageSelector } from "@/components/language-selector";
 import { LanguageButton } from "@/components/language-button";
 import { gameClient } from "@/features/game/api/game-client";
@@ -186,6 +186,7 @@ export function HomeClient() {
       <MainHeader />
 
       {/* ─── Contenu ─── */}
+      <AdSidebarLayout slotLeft="ADSENSE_HOME_LEFT" slotRight="ADSENSE_HOME_RIGHT">
       <main className="flex flex-1 flex-col items-center justify-center gap-8 p-4">
         {/* Titre */}
         <div className="flex flex-col items-center gap-2 text-center">
@@ -292,9 +293,6 @@ export function HomeClient() {
               </CardContent>
             </Card>
 
-            {/* Ad between game modes and private section */}
-            <AdBanner slot="ADSENSE_HOME_SLOT" format="horizontal" className="my-2" />
-
             <div className="flex items-center gap-3">
               <Separator className="flex-1" />
               <span className="text-xs text-muted-foreground">
@@ -377,6 +375,7 @@ export function HomeClient() {
           </div>
         )}
       </main>
+      </AdSidebarLayout>
 
       {/* ─── Game code dialog ─── */}
       <Dialog open={showCreateDialog} onOpenChange={setShowCreateDialog}>

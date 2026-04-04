@@ -24,7 +24,7 @@ import {
 } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/components/providers/auth-provider";
-import { AdBanner } from "@/components/ad-banner";
+import { AdSidebarLayout } from "@/components/ad-banner";
 import { useOwnedSkins } from "@/features/shop/hooks/use-owned-skins";
 import { shopClient } from "@/features/shop/api/shop-client";
 import { DiceFace } from "@/features/game/components/dice-face";
@@ -75,6 +75,7 @@ export default function ShopPage() {
     <div className="flex min-h-svh flex-col bg-gradient-to-b from-background to-muted/30">
       <MainHeader />
 
+      <AdSidebarLayout slotLeft="ADSENSE_SHOP_LEFT" slotRight="ADSENSE_SHOP_RIGHT">
       <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col gap-8 p-4 sm:p-6">
         {/* Intro */}
         <div className="text-center">
@@ -83,9 +84,6 @@ export default function ShopPage() {
             {t("description")}
           </p>
         </div>
-
-        {/* Ad between intro and skins grid */}
-        <AdBanner slot="ADSENSE_SHOP_SLOT" format="horizontal" />
 
         {/* Skins grid */}
         {purchasableSkins.length === 0 ? (
@@ -168,6 +166,7 @@ export default function ShopPage() {
           {t("stripeNote")}
         </p>
       </main>
+      </AdSidebarLayout>
     </div>
   );
 }
