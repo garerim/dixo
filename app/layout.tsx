@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import Script from "next/script";
 import { ThemeProvider } from "next-themes";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages } from "next-intl/server";
@@ -89,6 +90,14 @@ export default async function RootLayout({
       <html lang={locale} suppressHydrationWarning>
       <head>
         <link rel="apple-touch-icon" href="/icon-192.png" />
+        {process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID && (
+          <Script
+            async
+            src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID}`}
+            strategy="afterInteractive"
+            crossOrigin="anonymous"
+          />
+        )}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
