@@ -98,7 +98,7 @@ function SkinsPageContent() {
             <span className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
               {t("preview")}
             </span>
-            <div className="flex items-center gap-2">
+            <div className="flex flex-wrap items-center justify-center gap-2">
               {[1, 2, 3, 4, 5, 6].map((v) => (
                 <DiceFace
                   key={v}
