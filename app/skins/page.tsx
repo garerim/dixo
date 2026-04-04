@@ -94,7 +94,7 @@ function SkinsPageContent() {
       <main className="mx-auto flex w-full max-w-2xl flex-1 flex-col gap-6 p-4">
         {/* Preview */}
         <Card>
-          <CardContent className="flex flex-col items-center gap-3 pt-6">
+          <CardContent className="flex flex-col items-center gap-3 pt-6 px-5">
             <span className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
               {t("preview")}
             </span>
