@@ -37,6 +37,7 @@ const PREMIUM_FEATURE_KEYS = [
   "premiumFeatures.gifAvatar",
   "premiumFeatures.fullEloHistory",
   "premiumFeatures.premiumBadge",
+  "premiumFeatures.noAds",
 ] as const;
 
 export function PricingClient() {
