@@ -172,6 +172,10 @@ export function RanksClient() {
           <Link href="/how-to-play" className="hover:text-foreground transition-colors">
             {tc("howToPlay")}
           </Link>
+          <span>·</span>
+          <a href="https://x.com/Gama_dev13" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">
+            @Gama_dev13
+          </a>
         </div>
       </footer>
     </div>

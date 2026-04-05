@@ -401,6 +401,10 @@ export default async function HowToPlayPage() {
           <Link href="/ranks" className="hover:text-foreground transition-colors">
             {tc("ranks")}
           </Link>
+          <span>·</span>
+          <a href="https://x.com/Gama_dev13" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">
+            @Gama_dev13
+          </a>
         </div>
       </footer>
     </div>

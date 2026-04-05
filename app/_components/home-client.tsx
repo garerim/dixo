@@ -408,7 +408,13 @@ export function HomeClient() {
 
       {/* ─── Footer ─── */}
       <footer className="border-t py-4 text-center text-xs text-muted-foreground">
-        Dixo — Online dice bluffing game 🎲
+        <span>Dixo — Online dice bluffing game 🎲</span>
+        <div className="mt-1">
+          Made by{" "}
+          <a href="https://x.com/Gama_dev13" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors underline">
+            @Gama_dev13
+          </a>
+        </div>
       </footer>
     </div>
   );
@@ -731,6 +737,10 @@ function LandingPage() {
           <span>{tc("copyright")}</span>
           <Link href="/how-to-play" className="hover:text-foreground transition-colors">{tc("howToPlay")}</Link>
           <Link href="/pricing" className="hover:text-foreground transition-colors">{tc("pricing")}</Link>
+          <span>·</span>
+          <a href="https://x.com/Gama_dev13" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">
+            @Gama_dev13
+          </a>
         </div>
       </footer>
     </div>
