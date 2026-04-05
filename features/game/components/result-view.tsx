@@ -1,7 +1,7 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { CheckCircle, XCircle, ArrowRight, Flag } from "lucide-react";
+import { CheckCircle, XCircle, ArrowRight, Flag, Target, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -78,14 +78,20 @@ export function ResultView({
 
       {/* ── Résultat du Challenge ── */}
       <div data-tutorial-id="result-panel" className="flex flex-col items-center gap-3 rounded-xl border bg-card p-5 text-center">
-        {challenge.isChallengeCorrect ? (
+        {challenge.isSpotOn ? (
+          <Target className="size-10 text-amber-500" />
+        ) : challenge.isChallengeCorrect ? (
           <CheckCircle className="size-10 text-green-500" />
         ) : (
           <XCircle className="size-10 text-destructive" />
         )}
 
         <h2 className="text-xl font-bold">
-          {challenge.isChallengeCorrect ? t("challengeSuccess") : t("challengeFailed")}
+          {challenge.isSpotOn
+            ? t("spotOn")
+            : challenge.isChallengeCorrect
+              ? t("challengeSuccess")
+              : t("challengeFailed")}
         </h2>
 
         <p className="text-sm text-muted-foreground">
@@ -127,6 +133,21 @@ export function ResultView({
         <Badge variant="destructive" className="mt-2 gap-1 text-sm">
           {t("losesDie", { name: loser?.displayName ?? "" })}
         </Badge>
+
+        {/* Pile Poil : l'enchérisseur récupère un dé */}
+        {challenge.isSpotOn && challenge.bidderGainedDie && (
+          <Badge variant="default" className="gap-1 text-sm bg-amber-500 hover:bg-amber-500/90">
+            <Plus className="size-3" />
+            {t("bidderGainsDie", { name: bidder?.displayName ?? "" })}
+          </Badge>
+        )}
+
+        {/* Pile Poil mais déjà au max */}
+        {challenge.isSpotOn && !challenge.bidderGainedDie && (
+          <span className="text-xs text-muted-foreground">
+            {t("bidderAlreadyMaxDice", { name: bidder?.displayName ?? "" })}
+          </span>
+        )}
       </div>
 
       {/* ── Tous les dés révélés ── */}

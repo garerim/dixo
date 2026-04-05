@@ -456,7 +456,10 @@
       "playerTurn": "Au tour de {name}",
       "yourDice": "Vos dés",
       "currentBid": "Enchère actuelle :",
-      "waitingFor": "En attente de {name}..."
+      "waitingFor": "En attente de {name}...",
+      "hideBidPanel": "Masquer",
+      "showBidPanel": "Enchérir",
+      "totalDice": "dés au total"
     },
     "bidPanel": {
       "currentBid": "Enchère actuelle :",
@@ -468,10 +471,13 @@
     "result": {
       "challengeSuccess": "Challenge réussi !",
       "challengeFailed": "Challenge raté !",
+      "spotOn": "Pile Poil !",
       "bid": "Enchère",
       "reality": "Réalité",
       "revealedDice": "Dés révélés",
       "losesDie": "{name} perd un dé !",
+      "bidderGainsDie": "{name} récupère un dé !",
+      "bidderAlreadyMaxDice": "{name} a déjà tous ses dés",
       "nextRound": "Round suivant"
     },
     "gameOver": {

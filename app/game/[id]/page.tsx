@@ -2,7 +2,7 @@
 
 import { use, useEffect, useCallback, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { Dice5, ArrowLeft, Loader2, MessageSquare } from "lucide-react";
+import { Dice5, ArrowLeft, Loader2, MessageSquare, X } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
@@ -14,13 +14,6 @@ import { ResultView } from "@/features/game/components/result-view";
 import { GameOverView } from "@/features/game/components/game-over-view";
 import { GameChat } from "@/features/game/components/game-chat";
 import { useGameSounds, SoundControls } from "@/features/sound";
-import {
-  Drawer,
-  DrawerContent,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-} from "@/components/ui/drawer";
 
 export default function GamePage({
   params,
@@ -30,6 +23,7 @@ export default function GamePage({
   const { id: gameId } = use(params);
   const { user, isLoading: authLoading } = useAuth();
   const router = useRouter();
+  const [mobileChatOpen, setMobileChatOpen] = useState(false);
 
   // Rediriger si pas connecté
   useEffect(() => {
@@ -64,7 +58,16 @@ export default function GamePage({
           <Dice5 className="size-5 text-primary" />
           <span className="text-lg font-bold tracking-tight">Dixo</span>
         </div>
-        <div className="ml-auto">
+        <div className="ml-auto flex items-center gap-2">
+          {/* Chat button — mobile only */}
+          <Button
+            variant="ghost"
+            size="icon-sm"
+            onClick={() => setMobileChatOpen(true)}
+            className="lg:hidden"
+          >
+            <MessageSquare className="size-4" />
+          </Button>
           <SoundControls />
         </div>
       </header>
@@ -75,11 +78,14 @@ export default function GamePage({
           <Loader2 className="size-8 animate-spin text-muted-foreground" />
         </div>
       ) : (
-        <>
-          <GameContent gameId={gameId} playerId={playerId} router={router} onBackRef={onBackRef} />
-          {/* ── Chat mobile ── */}
-          <MobileChatDrawer gameId={gameId} />
-        </>
+        <GameContent
+          gameId={gameId}
+          playerId={playerId}
+          router={router}
+          onBackRef={onBackRef}
+          mobileChatOpen={mobileChatOpen}
+          onCloseMobileChat={() => setMobileChatOpen(false)}
+        />
       )}
     </div>
   );
@@ -91,11 +97,15 @@ function GameContent({
   playerId,
   router,
   onBackRef,
+  mobileChatOpen,
+  onCloseMobileChat,
 }: {
   gameId: string;
   playerId: string;
   router: ReturnType<typeof useRouter>;
   onBackRef: React.MutableRefObject<(() => void) | null>;
+  mobileChatOpen: boolean;
+  onCloseMobileChat: () => void;
 }) {
   const { gameState, isLoading, error, actions } = useGame({
     gameId,
@@ -232,6 +242,28 @@ function GameContent({
     }
   })();
 
+  // ── Mobile chat: full-screen overlay ──
+  if (mobileChatOpen) {
+    return (
+      <div className="flex flex-1 flex-col min-h-0 lg:hidden">
+        <div className="flex items-center justify-between border-b px-4 py-2">
+          <span className="font-semibold">Chat</span>
+          <Button variant="ghost" size="icon-sm" onClick={onCloseMobileChat}>
+            <X className="size-4" />
+          </Button>
+        </div>
+        <div className="flex-1 overflow-hidden min-h-0">
+          <GameChat
+            gameId={gameId}
+            className="border-0 shadow-none rounded-none h-full"
+            hideHeader={true}
+            fullHeight={true}
+          />
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-1 gap-4 p-4 overflow-hidden min-h-0">
       {/* ── Contenu principal ── */}
@@ -244,34 +276,5 @@ function GameContent({
         <GameChat gameId={gameId} fullHeight />
       </div>
     </div>
-  );
-}
-
-// ─── Chat mobile avec Drawer ───
-function MobileChatDrawer({ gameId }: { gameId: string }) {
-  const [open, setOpen] = useState(false);
-
-  return (
-    <Drawer open={open} onOpenChange={setOpen}>
-      <DrawerTrigger asChild>
-        <button className="fixed bottom-4 right-4 z-50 flex items-center gap-2 rounded-full bg-primary px-4 py-3 shadow-lg transition-all hover:scale-105 lg:hidden">
-          <MessageSquare className="size-5 text-primary-foreground" />
-          <span className="font-medium text-primary-foreground">Chat</span>
-        </button>
-      </DrawerTrigger>
-      <DrawerContent className="max-h-[80vh] flex flex-col">
-        <DrawerHeader className="flex-shrink-0">
-          <DrawerTitle>Chat</DrawerTitle>
-        </DrawerHeader>
-        <div className="flex-1 overflow-hidden min-h-0">
-          <GameChat 
-            gameId={open ? gameId : null} 
-            className="border-0 shadow-none rounded-none h-full" 
-            hideHeader={true}
-            fullHeight={true}
-          />
-        </div>
-      </DrawerContent>
-    </Drawer>
   );
 }

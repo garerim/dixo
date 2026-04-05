@@ -47,6 +47,7 @@ const dotSizeClasses = {
   lg: "size-2.5",
 } as const;
 
+
 export function DiceFace({
   value,
   size = "md",
@@ -106,35 +107,49 @@ export function DiceFace({
         highlighted
           ? "border-primary bg-primary/10 shadow-primary/20 shadow-md"
           : "border-border",
-        value === 1 && "text-red-500",
         className,
       )}
       title={t("title", { value })}
     >
-      {/* Grille 3x3 : 9 cellules, on affiche un point là où il faut */}
-      {Array.from({ length: 9 }).map((_, i) => {
-        const row = Math.floor(i / 3);
-        const col = i % 3;
-        const hasDot = dots.some(([r, c]) => r === row && c === col);
+      {value === 1 ? (
+        /* Dé 1 : 9 cellules vides pour maintenir la taille + logo en absolu */
+        <>
+          {Array.from({ length: 9 }).map((_, i) => (
+            <span key={i} />
+          ))}
+          <Image
+            src="/logo-foxy.png"
+            alt="Dixo"
+            width={skinSizePx[size]}
+            height={skinSizePx[size]}
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 size-[85%] object-contain"
+            draggable={false}
+          />
+        </>
+      ) : (
+        /* Dés 2-6 : points classiques */
+        Array.from({ length: 9 }).map((_, i) => {
+          const row = Math.floor(i / 3);
+          const col = i % 3;
+          const hasDot = dots.some(([r, c]) => r === row && c === col);
 
-        return (
-          <span key={i} className="flex items-center justify-center">
-            {hasDot && (
-              <span
-                className={cn(
-                  "rounded-full",
-                  dotSizeClasses[size],
-                  value === 1
-                    ? "bg-red-500"
-                    : highlighted
+          return (
+            <span key={i} className="flex items-center justify-center">
+              {hasDot && (
+                <span
+                  className={cn(
+                    "rounded-full",
+                    dotSizeClasses[size],
+                    highlighted
                       ? "bg-primary"
                       : "bg-foreground",
-                )}
-              />
-            )}
-          </span>
-        );
-      })}
+                  )}
+                />
+              )}
+            </span>
+          );
+        })
+      )}
     </div>
   );
 }

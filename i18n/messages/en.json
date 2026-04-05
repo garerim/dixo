@@ -456,7 +456,10 @@
       "playerTurn": "{name}'s turn",
       "yourDice": "Your dice",
       "currentBid": "Current bid:",
-      "waitingFor": "Waiting for {name}..."
+      "waitingFor": "Waiting for {name}...",
+      "hideBidPanel": "Hide",
+      "showBidPanel": "Bid",
+      "totalDice": "dice in total"
     },
     "bidPanel": {
       "currentBid": "Current bid:",
@@ -468,10 +471,13 @@
     "result": {
       "challengeSuccess": "Challenge successful!",
       "challengeFailed": "Challenge failed!",
+      "spotOn": "Spot On!",
       "bid": "Bid",
       "reality": "Reality",
       "revealedDice": "Revealed dice",
       "losesDie": "{name} loses a die!",
+      "bidderGainsDie": "{name} gains a die!",
+      "bidderAlreadyMaxDice": "{name} already has all dice",
       "nextRound": "Next round"
     },
     "gameOver": {

@@ -39,6 +39,10 @@ export function resolveChallenge(
   // Challenge correct = le bluff est révélé (il y en a moins)
   const isChallengeCorrect = actualCount < contestedBid.quantity;
 
+  // Pile Poil / Spot On : le nombre annoncé est EXACTEMENT le nombre réel
+  // (le challenge est donc incorrect, l'enchère était pile poil)
+  const isSpotOn = !isChallengeCorrect && actualCount === contestedBid.quantity;
+
   // Qui perd ?
   const loserId = isChallengeCorrect ? contestedBid.playerId : callerId;
 
@@ -57,6 +61,8 @@ export function resolveChallenge(
     actualCount,
     isChallengeCorrect,
     loserId,
+    isSpotOn,
+    bidderGainedDie: false, // Calculé par callChallenge (nécessite maxDice)
     revealedDice,
   };
 }
@@ -82,6 +88,31 @@ export function applyChallengePenalty(
       diceCount: newDiceCount,
       isAlive: newDiceCount > 0,
       diceValues: [], // On vide les dés pour le prochain round
+    };
+  });
+}
+
+/**
+ * Applique la récompense du Pile Poil (Spot On) : ajoute un dé à l'enchérisseur.
+ * Ne s'applique que si le joueur n'a pas déjà le nombre maximum de dés.
+ *
+ * @param players - Liste des joueurs (après pénalité du challenger)
+ * @param bidderId - ID de l'enchérisseur qui a visé juste
+ * @param maxDice - Nombre max de dés (config.initialDiceCount)
+ * @returns Nouvelle liste de joueurs mise à jour
+ */
+export function applySpotOnReward(
+  players: readonly PlayerState[],
+  bidderId: string,
+  maxDice: number,
+): readonly PlayerState[] {
+  return players.map((player) => {
+    if (player.id !== bidderId) return player;
+    if (player.diceCount >= maxDice) return player;
+
+    return {
+      ...player,
+      diceCount: player.diceCount + 1,
     };
   });
 }

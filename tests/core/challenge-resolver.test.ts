@@ -6,6 +6,7 @@ import { describe, it, expect } from "vitest";
 import {
   resolveChallenge,
   applyChallengePenalty,
+  applySpotOnReward,
   getAlivePlayers,
   getWinner,
 } from "@/core/game-engine/challenge-resolver";
@@ -49,6 +50,44 @@ describe("resolveChallenge", () => {
     expect(result.isChallengeCorrect).toBe(false);
     expect(result.loserId).toBe("p2"); // Le caller perd
     expect(result.actualCount).toBe(4);
+    expect(result.isSpotOn).toBe(false); // 4 !== 3
+  });
+
+  it("Pile Poil (Spot On) : l'enchère correspond exactement au nombre réel", () => {
+    // P1 enchérit 3 dés de face 6, et il y en a exactement 3
+    const state = createChallengeState(
+      [
+        createPlayer("p1", [6, 6, 3, 4, 2]),
+        createPlayer("p2", [6, 2, 3, 4, 5]),
+      ],
+      { playerId: "p1", quantity: 3, faceValue: 6 },
+    );
+
+    const result = resolveChallenge(state, "p2");
+
+    // Face 6 : p1 a deux 6, p2 a un 6 → total = 3
+    // 3 === 3 → Challenge incorrect + Pile Poil
+    expect(result.isChallengeCorrect).toBe(false);
+    expect(result.isSpotOn).toBe(true);
+    expect(result.loserId).toBe("p2"); // Le caller perd
+    expect(result.actualCount).toBe(3);
+  });
+
+  it("Pas de Pile Poil quand le challenge est correct (bluff)", () => {
+    // P1 enchérit 5 dés de face 4, mais il n'y en a que 2
+    const state = createChallengeState(
+      [
+        createPlayer("p1", [4, 2, 3, 5, 6]),
+        createPlayer("p2", [4, 2, 3, 5, 6]),
+      ],
+      { playerId: "p1", quantity: 5, faceValue: 4 },
+    );
+
+    const result = resolveChallenge(state, "p2");
+
+    // 2 < 5 → Challenge correct, pas de Pile Poil
+    expect(result.isChallengeCorrect).toBe(true);
+    expect(result.isSpotOn).toBe(false);
   });
 });
 
@@ -85,6 +124,42 @@ describe("applyChallengePenalty", () => {
     ];
 
     const result = applyChallengePenalty(players, "p1");
+
+    expect(result[1]).toEqual(players[1]); // identique
+  });
+});
+
+describe("applySpotOnReward", () => {
+  it("ajoute un dé à l'enchérisseur quand il en a perdu", () => {
+    const players: PlayerState[] = [
+      { ...createPlayer("p1", [1, 2, 3]), diceCount: 3 }, // bidder, a perdu des dés (max = 5)
+      createPlayer("p2", [1, 2, 3, 4, 5]),
+    ];
+
+    const result = applySpotOnReward(players, "p1", 5);
+
+    expect(result[0].diceCount).toBe(4); // 3 → 4
+    expect(result[1].diceCount).toBe(5); // inchangé
+  });
+
+  it("ne dépasse pas le nombre max de dés", () => {
+    const players: PlayerState[] = [
+      createPlayer("p1", [1, 2, 3, 4, 5]), // bidder, déjà au max (5)
+      createPlayer("p2", [1, 2, 3, 4, 5]),
+    ];
+
+    const result = applySpotOnReward(players, "p1", 5);
+
+    expect(result[0].diceCount).toBe(5); // inchangé
+  });
+
+  it("ne modifie pas les autres joueurs", () => {
+    const players: PlayerState[] = [
+      { ...createPlayer("p1", [1, 2, 3]), diceCount: 3 },
+      createPlayer("p2", [1, 2, 3, 4, 5]),
+    ];
+
+    const result = applySpotOnReward(players, "p1", 5);
 
     expect(result[1]).toEqual(players[1]); // identique
   });

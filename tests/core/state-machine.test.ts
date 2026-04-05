@@ -468,6 +468,9 @@ function createResultState() {
       actualCount: 0,
       isChallengeCorrect: true,
       loserId: "p1",
+      isSpotOn: false,
+      bidderGainedDie: false,
+      revealedDice: {},
     },
     players: [
       {

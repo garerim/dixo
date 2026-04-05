@@ -40,6 +40,7 @@ export type { BidValidationResult } from "./bid-validator";
 export {
   resolveChallenge,
   applyChallengePenalty,
+  applySpotOnReward,
   getAlivePlayers,
   getWinner,
 } from "./challenge-resolver";

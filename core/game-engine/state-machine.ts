@@ -17,7 +17,7 @@ import type {
 import { DEFAULT_GAME_CONFIG, GamePhase, GameMode } from "./types";
 import { rollDiceForAllPlayers, type RandomGenerator, defaultRandom } from "./dice";
 import { validateBid, canCallChallenge } from "./bid-validator";
-import { resolveChallenge, applyChallengePenalty, getAlivePlayers, getWinner } from "./challenge-resolver";
+import { resolveChallenge, applyChallengePenalty, applySpotOnReward, getAlivePlayers, getWinner } from "./challenge-resolver";
 import {
   advanceToNextPlayer,
   getStartingPlayerIndex,
@@ -372,8 +372,20 @@ export function callChallenge(
   // Résoudre le Challenge
   const challengeResult: ChallengeResult = resolveChallenge(state, callerId);
 
-  // Appliquer la pénalité
-  const updatedPlayers = applyChallengePenalty(state.players, challengeResult.loserId);
+  // Appliquer la pénalité (le perdant perd un dé)
+  let updatedPlayers = applyChallengePenalty(state.players, challengeResult.loserId);
+
+  // Pile Poil / Spot On : l'enchérisseur récupère un dé s'il en a perdu
+  let bidderGainedDie = false;
+  if (challengeResult.isSpotOn) {
+    const bidder = state.players.find((p) => p.id === challengeResult.bidderId);
+    if (bidder && bidder.diceCount < state.config.initialDiceCount) {
+      updatedPlayers = applySpotOnReward(updatedPlayers, challengeResult.bidderId, state.config.initialDiceCount);
+      bidderGainedDie = true;
+    }
+  }
+
+  const finalChallengeResult: ChallengeResult = { ...challengeResult, bidderGainedDie };
 
   // Vérifier s'il y a un gagnant
   const winner = getWinner(updatedPlayers);
@@ -382,7 +394,7 @@ export function callChallenge(
     ...state,
     players: updatedPlayers,
     phase: winner ? GamePhase.GAME_OVER : GamePhase.RESULT,
-    lastChallengeResult: challengeResult,
+    lastChallengeResult: finalChallengeResult,
     winnerId: winner?.id ?? null,
     currentBid: null,
     updatedAt: new Date().toISOString(),
