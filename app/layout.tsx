@@ -42,9 +42,9 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     siteName: "Dixo",
-    title: "Dixo — Free Online Liar's Dice Game (Perudo)",
+    title: "Dixo — Free Online Liar's Dice Game",
     description:
-      "Play Liar's Dice (Perudo) online for free. Bluff, bid, and outlast 2-6 players in ranked or casual matches. No download required.",
+      "Play Liar's Dice online for free. Bluff, bid, and outlast 2-6 players in ranked or casual matches. No download required.",
     url: BASE_URL,
     images: [
       {
