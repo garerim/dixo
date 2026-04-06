@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
+import { useTheme } from "next-themes";
 import { useTranslations } from "next-intl";
 import { Dice5, ArrowLeft, GraduationCap, Loader2 } from "lucide-react";
 import { toast } from "sonner";
@@ -17,6 +18,17 @@ import { TUTORIAL_STEPS } from "@/features/tutorial/tutorial-steps";
 export default function TutorialPlayPage() {
   const router = useRouter();
   const t = useTranslations("tutorial");
+  const { setTheme, resolvedTheme } = useTheme();
+  const previousThemeRef = useRef<string | null>(null);
+
+  useEffect(() => {
+    previousThemeRef.current = resolvedTheme ?? "light";
+    setTheme("dark");
+    return () => {
+      setTheme(previousThemeRef.current ?? "light");
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const {
     gameState,

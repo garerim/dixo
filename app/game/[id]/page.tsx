@@ -2,6 +2,7 @@
 
 import { use, useEffect, useCallback, useRef } from "react";
 import { useRouter } from "next/navigation";
+import { useTheme } from "next-themes";
 import { Dice5, ArrowLeft, Loader2, MessageSquare, X } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -23,7 +24,19 @@ export default function GamePage({
   const { id: gameId } = use(params);
   const { user, isLoading: authLoading } = useAuth();
   const router = useRouter();
+  const { setTheme, resolvedTheme } = useTheme();
   const [mobileChatOpen, setMobileChatOpen] = useState(false);
+  const previousThemeRef = useRef<string | null>(null);
+
+  // Forcer le dark mode en partie, restaurer le thème en quittant
+  useEffect(() => {
+    previousThemeRef.current = resolvedTheme ?? "light";
+    setTheme("dark");
+    return () => {
+      setTheme(previousThemeRef.current ?? "light");
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // Rediriger si pas connecté
   useEffect(() => {

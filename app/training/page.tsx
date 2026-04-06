@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { motion } from "framer-motion";
 import {
-  Dice5,
   ArrowLeft,
   Bot,
   Zap,
@@ -15,6 +14,7 @@ import {
   Swords,
   Play,
 } from "lucide-react";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -84,7 +84,7 @@ export default function TrainingPage() {
           <ArrowLeft className="size-4" />
         </Button>
         <div className="flex items-center gap-2">
-          <Dice5 className="size-5 text-primary" />
+          <Image src="/logo.png" alt="Dixo" width={28} height={28} className="rounded-md" />
           <span className="text-lg font-bold tracking-tight">Dixo</span>
         </div>
         <Badge variant="secondary" className="ml-2 gap-1">

@@ -130,7 +130,10 @@ export function BiddingView({
         />
 
         {/* ── Center: Turn badge + Current bid ── */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 flex flex-col items-center gap-2">
+        <div
+          className="absolute left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 flex flex-col items-center gap-2"
+          style={{ top: totalPlayers === 2 && !isMobile ? "53%" : "50%" }}
+        >
           <Badge
             variant={isMyTurn ? "default" : "outline"}
             className="gap-1.5"
@@ -147,7 +150,7 @@ export function BiddingView({
           </Badge>
 
           {gameState.currentBid ? (
-            <div className="flex flex-col items-center gap-1.5 rounded-2xl bg-black/50 backdrop-blur-md border border-primary/20 px-5 py-3 shadow-lg shadow-primary/10">
+            <div className="flex flex-col items-center gap-1.5 rounded-2xl bg-black/50 backdrop-blur-md border-2 border-orange-500 px-5 py-3 shadow-lg shadow-orange-500/10">
               <span className="text-[10px] font-medium text-muted-foreground uppercase tracking-widest">
                 {t("currentBid")}
               </span>
@@ -158,16 +161,16 @@ export function BiddingView({
                 <span className="text-xl text-muted-foreground">&times;</span>
                 <DiceFace value={gameState.currentBid.faceValue} size="lg" />
               </div>
-              <span className="text-[10px] text-muted-foreground">
+              <span className="text-sm font-bold text-white">
                 {totalDice} {t("totalDice")}
               </span>
             </div>
           ) : (
-            <div className="flex flex-col items-center gap-1 rounded-2xl bg-black/50 backdrop-blur-md border border-dashed border-muted-foreground/30 px-5 py-3">
+            <div className="flex flex-col items-center gap-1 rounded-2xl bg-black/50 backdrop-blur-md border-2 border-dashed border-orange-500/50 px-5 py-3">
               <span className="text-xs text-muted-foreground">
                 {t("currentBid")}
               </span>
-              <span className="text-[10px] text-muted-foreground">
+              <span className="text-sm font-bold text-white">
                 {totalDice} {t("totalDice")}
               </span>
             </div>
@@ -379,7 +382,10 @@ function TableSeat({
             <Crown className="size-2.5 shrink-0 text-amber-500" />
           )}
         </div>
-        <span className="text-[10px] text-muted-foreground">
+        <span className={cn(
+          "font-bold",
+          player.isAlive ? "text-xs text-white" : "text-[10px] text-muted-foreground",
+        )}>
           {player.isAlive
             ? (player.diceCount > 1
               ? t("diceCount", { count: player.diceCount })
@@ -408,7 +414,7 @@ type Pos = { x: number; y: number };
 const SEAT_POSITIONS: Record<number, Record<string, Pos[]>> = {
   2: {
     desktop: [
-      { x: 50, y: 38 },   // opponent: top center
+      { x: 50, y: 28 },   // opponent: top center
       { x: 50, y: 80 },   // me: bottom center
     ],
     mobile: [

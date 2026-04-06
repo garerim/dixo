@@ -28,6 +28,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useAuth } from "@/components/providers/auth-provider";
 import { LanguageSelector } from "@/components/language-selector";
+import { ThemeToggleMenuItem } from "@/components/theme-toggle";
 import { NotificationBell } from "@/features/notifications";
 
 export function MainHeader() {
@@ -140,6 +141,7 @@ export function MainHeader() {
             )}
             <DropdownMenuSeparator />
             <LanguageSelector />
+            <ThemeToggleMenuItem />
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={signOut} className="text-destructive">
               <LogOut className="mr-2 size-4" />

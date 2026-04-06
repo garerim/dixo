@@ -9,7 +9,7 @@ import Image from "next/image";
 import {
   Plus,
   LogIn,
-  logo2ut,
+  LogOut,
   Copy,
   Loader2,
   Swords,
@@ -62,6 +62,7 @@ import { MainHeader } from "@/components/main-header";
 import { AdSidebarLayout } from "@/components/ad-banner";
 import { LanguageSelector } from "@/components/language-selector";
 import { LanguageButton } from "@/components/language-button";
+import { ThemeToggleButton } from "@/components/theme-toggle";
 import { gameClient } from "@/features/game/api/game-client";
 import { useMatchmaking } from "@/features/matchmaking/hooks/use-matchmaking";
 import { NotificationBell } from "@/features/notifications";
@@ -460,6 +461,7 @@ function LandingPage() {
           <Button variant="ghost" size="sm" className="hidden sm:inline-flex" asChild>
             <Link href="/pricing">{tc("pricing")}</Link>
           </Button>
+          <ThemeToggleButton />
           <LanguageButton />
           <Button size="sm" className="shrink-0" onClick={signInWithGoogle}>
             {tc("signIn")}

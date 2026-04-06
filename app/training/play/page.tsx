@@ -1,9 +1,11 @@
 "use client";
 
-import { useEffect, useMemo, Suspense } from "react";
+import { useEffect, useRef, useMemo, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { useTheme } from "next-themes";
 import { useTranslations } from "next-intl";
-import { Dice5, ArrowLeft, Bot, Loader2 } from "lucide-react";
+import { ArrowLeft, Bot, Loader2 } from "lucide-react";
+import Image from "next/image";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -137,6 +139,17 @@ function TrainingPlayContent() {
 export default function TrainingPlayPage() {
   const router = useRouter();
   const t = useTranslations("training");
+  const { setTheme, resolvedTheme } = useTheme();
+  const previousThemeRef = useRef<string | null>(null);
+
+  useEffect(() => {
+    previousThemeRef.current = resolvedTheme ?? "light";
+    setTheme("dark");
+    return () => {
+      setTheme(previousThemeRef.current ?? "light");
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className="flex min-h-svh flex-col bg-gradient-to-b from-background to-muted/30">
@@ -150,7 +163,7 @@ export default function TrainingPlayPage() {
           <ArrowLeft className="size-4" />
         </Button>
         <div className="flex items-center gap-2">
-          <Dice5 className="size-5 text-primary" />
+          <Image src="/logo.png" alt="Dixo" width={28} height={28} className="rounded-md" />
           <span className="text-lg font-bold tracking-tight">Dixo</span>
         </div>
         <Badge variant="secondary" className="ml-2 gap-1">
