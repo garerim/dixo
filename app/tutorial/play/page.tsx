@@ -151,9 +151,11 @@ export default function TutorialPlayPage() {
     }
   })();
 
+  const isFullscreenPhase = gameState.phase === "BIDDING" || gameState.phase === "ROLLING";
+
   return (
     <TutorialLayout onBack={() => router.push("/")}>
-      <div className="flex flex-1 flex-col overflow-y-auto p-4">
+      <div className={`flex flex-1 flex-col min-h-0 ${isFullscreenPhase ? "" : "overflow-y-auto p-4"}`}>
         {content}
       </div>
 

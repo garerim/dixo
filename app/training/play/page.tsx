@@ -24,7 +24,8 @@ function TrainingPlayContent() {
   const t = useTranslations("training");
 
   // Parse search params
-  const botCount = (Number(searchParams.get("bots")) === 3 ? 3 : 1) as 1 | 3;
+  const rawBots = Number(searchParams.get("bots")) || 1;
+  const botCount = (rawBots >= 1 && rawBots <= 5 ? rawBots : 1) as 1 | 2 | 3 | 4 | 5;
   const difficulty = (searchParams.get("difficulty") ?? "medium") as BotDifficulty;
   const diceCount = Number(searchParams.get("dice")) || 5;
   const pacosWild = searchParams.get("pacos") !== "false";
@@ -129,8 +130,10 @@ function TrainingPlayContent() {
     }
   })();
 
+  const isFullscreenPhase = gameState.phase === "BIDDING" || gameState.phase === "ROLLING";
+
   return (
-    <div className="flex flex-1 flex-col overflow-y-auto p-4">
+    <div className={`flex flex-1 flex-col min-h-0 ${isFullscreenPhase ? "" : "overflow-y-auto p-4"}`}>
       {content}
     </div>
   );

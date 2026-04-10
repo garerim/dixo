@@ -55,12 +55,12 @@ const NAME_POOLS: Record<BotDifficulty, readonly string[]> = {
 /**
  * Generates a list of bot profiles.
  *
- * @param count - Number of bots to create (1 or 3)
+ * @param count - Number of bots to create (1 to 5)
  * @param difficulty - AI difficulty for all bots
  * @returns Array of BotProfile with unique names
  */
 export function createBotProfiles(
-  count: 1 | 3,
+  count: 1 | 2 | 3 | 4 | 5,
   difficulty: BotDifficulty,
 ): BotProfile[] {
   const pool = [...NAME_POOLS[difficulty]];

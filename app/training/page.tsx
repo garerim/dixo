@@ -28,7 +28,7 @@ import { Switch } from "@/components/ui/switch";
 import { cn } from "@/lib/utils";
 import type { BotDifficulty } from "@/core/bot";
 
-type BotCount = 1 | 3;
+type BotCount = 1 | 2 | 3 | 4 | 5;
 type DiceCount = 3 | 5 | 7;
 
 export default function TrainingPage() {
@@ -112,32 +112,28 @@ export default function TrainingPage() {
           <Card>
             <CardHeader className="pb-3">
               <CardTitle className="text-base">{t("mode")}</CardTitle>
+              <CardDescription>{t("modeDesc")}</CardDescription>
             </CardHeader>
-            <CardContent className="grid grid-cols-2 gap-3">
-              <button
-                onClick={() => setBotCount(1)}
-                className={cn(
-                  "flex flex-col items-center gap-2 rounded-lg border p-4 transition-all",
-                  botCount === 1
-                    ? "border-primary bg-primary/5"
-                    : "border-border hover:border-primary/30",
-                )}
-              >
-                <Swords className="size-6 text-primary" />
-                <span className="text-sm font-medium">{t("1v1")}</span>
-              </button>
-              <button
-                onClick={() => setBotCount(3)}
-                className={cn(
-                  "flex flex-col items-center gap-2 rounded-lg border p-4 transition-all",
-                  botCount === 3
-                    ? "border-primary bg-primary/5"
-                    : "border-border hover:border-primary/30",
-                )}
-              >
-                <Users className="size-6 text-primary" />
-                <span className="text-sm font-medium">{t("4players")}</span>
-              </button>
+            <CardContent className="grid grid-cols-5 gap-2">
+              {([1, 2, 3, 4, 5] as BotCount[]).map((n) => (
+                <button
+                  key={n}
+                  onClick={() => setBotCount(n)}
+                  className={cn(
+                    "flex flex-col items-center gap-1.5 rounded-lg border p-3 transition-all",
+                    botCount === n
+                      ? "border-primary bg-primary/5"
+                      : "border-border hover:border-primary/30",
+                  )}
+                >
+                  {n === 1 ? (
+                    <Swords className="size-5 text-primary" />
+                  ) : (
+                    <Users className="size-5 text-primary" />
+                  )}
+                  <span className="text-xs font-medium">{t("botCount", { count: n })}</span>
+                </button>
+              ))}
             </CardContent>
           </Card>
 

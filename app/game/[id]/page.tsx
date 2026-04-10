@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
 import { Dice5, ArrowLeft, Loader2, MessageSquare, X } from "lucide-react";
 import { toast } from "sonner";
+import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { useAuth } from "@/components/providers/auth-provider";
@@ -277,15 +278,17 @@ function GameContent({
     );
   }
 
+  const isFullscreenPhase = gameState.phase === "BIDDING" || gameState.phase === "ROLLING";
+
   return (
-    <div className="flex flex-1 gap-4 p-4 overflow-hidden min-h-0">
+    <div className={cn("flex flex-1 overflow-hidden min-h-0", isFullscreenPhase ? "gap-0" : "gap-4 p-4")}>
       {/* ── Contenu principal ── */}
-      <div className="flex flex-1 flex-col overflow-y-auto min-h-0">
+      <div className={cn("flex flex-1 flex-col min-h-0", !isFullscreenPhase && "overflow-y-auto")}>
         {content}
       </div>
 
       {/* ── Chat (sur le côté desktop) ── */}
-      <div className="hidden lg:flex lg:w-80 lg:flex-col min-h-0">
+      <div className={cn("hidden lg:flex lg:w-80 lg:flex-col min-h-0", isFullscreenPhase && "pr-4 py-4")}>
         <GameChat gameId={gameId} fullHeight />
       </div>
     </div>

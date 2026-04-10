@@ -129,10 +129,12 @@ export function BiddingView({
           draggable={false}
         />
 
-        {/* ── Center: Turn badge + Current bid ── */}
+        {/* ── Turn badge (top center on mobile) ── */}
         <div
-          className="absolute left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 flex flex-col items-center gap-2"
-          style={{ top: totalPlayers === 2 && !isMobile ? "53%" : "50%" }}
+          className={cn(
+            "absolute left-1/2 -translate-x-1/2 z-20",
+            isMobile ? "top-2" : "hidden"
+          )}
         >
           <Badge
             variant={isMyTurn ? "default" : "outline"}
@@ -148,6 +150,29 @@ export function BiddingView({
               ? t("yourTurn")
               : t("playerTurn", { name: currentPlayer?.displayName ?? "..." })}
           </Badge>
+        </div>
+
+        {/* ── Center: Turn badge (desktop) + Current bid ── */}
+        <div
+          className="absolute left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 flex flex-col items-center gap-2"
+          style={{ top: totalPlayers === 2 && !isMobile ? "53%" : totalPlayers === 4 && !isMobile ? "42%" : totalPlayers === 4 && isMobile ? "44%" : totalPlayers === 6 && isMobile ? "44%" : "50%" }}
+        >
+          {!isMobile && (
+            <Badge
+              variant={isMyTurn ? "default" : "outline"}
+              className="gap-1.5"
+            >
+              {!isMyTurn && (
+                <span className="relative flex size-2">
+                  <span className="absolute inline-flex size-full animate-ping rounded-full bg-primary opacity-75" />
+                  <span className="relative inline-flex size-2 rounded-full bg-primary" />
+                </span>
+              )}
+              {isMyTurn
+                ? t("yourTurn")
+                : t("playerTurn", { name: currentPlayer?.displayName ?? "..." })}
+            </Badge>
+          )}
 
           {gameState.currentBid ? (
             <div className="flex flex-col items-center gap-1.5 rounded-2xl bg-black/50 backdrop-blur-md border-2 border-orange-500 px-5 py-3 shadow-lg shadow-orange-500/10">
@@ -234,7 +259,7 @@ export function BiddingView({
                     skin={me.diceSkin}
                     duration={1200}
                     onComplete={handleComplete}
-                    className="gap-0.5"
+                    className={cn("gap-0.5", isMobile && "grid grid-cols-3 justify-items-center")}
                   />
                 ) : (
                   <DiceRow
@@ -242,6 +267,7 @@ export function BiddingView({
                     size="sm"
                     highlightFace={highlightFace}
                     skin={me.diceSkin}
+                    className={isMobile ? "grid grid-cols-3 justify-items-center gap-1" : undefined}
                   />
                 )}
               </button>
@@ -402,7 +428,7 @@ const SEAT_COLORS: Record<number, string[]> = {
   2: ["border-red-500", "border-blue-500"],
   3: ["border-red-500", "border-blue-500", "border-green-500"],
   4: ["border-orange-500", "border-purple-500", "border-red-500", "border-green-500"],
-  5: ["border-green-500", "border-orange-500", "border-purple-500", "border-blue-500", "border-red-500"],
+  5: ["border-orange-500", "border-green-500", "border-purple-500", "border-blue-500", "border-red-500"],
   6: ["border-red-500", "border-yellow-500", "border-orange-500", "border-purple-500", "border-blue-500", "border-green-500"],
 };
 
@@ -429,8 +455,8 @@ const SEAT_POSITIONS: Record<number, Record<string, Pos[]>> = {
       { x: 50, y: 80 },   // me: bottom center
     ],
     mobile: [
-      { x: 35, y: 30 },   // opponent: top-left
-      { x: 65, y: 30 },   // opponent: top-right
+      { x: 28, y: 30 },   // opponent: top-left
+      { x: 72, y: 30 },   // opponent: top-right
       { x: 50, y: 72 },   // me: bottom center
     ],
   },
@@ -438,48 +464,48 @@ const SEAT_POSITIONS: Record<number, Record<string, Pos[]>> = {
     desktop: [
       { x: 37, y: 28 },   // opponent: top-left
       { x: 63, y: 28 },   // opponent: top-right
-      { x: 65, y: 68 },   // opponent: bottom-right
-      { x: 35, y: 68 },   // me: bottom-left
+      { x: 65, y: 62 },   // opponent: bottom-right
+      { x: 35, y: 62 },   // me: bottom-left
     ],
     mobile: [
-      { x: 35, y: 25 },   // opponent: top-left
-      { x: 65, y: 25 },   // opponent: top-right
-      { x: 63, y: 65 },   // opponent: bottom-right
-      { x: 37, y: 65 },   // me: bottom-left
+      { x: 28, y: 25 },   // opponent: top-left
+      { x: 72, y: 25 },   // opponent: top-right
+      { x: 72, y: 62 },   // opponent: bottom-right
+      { x: 28, y: 67 },   // me: bottom-left
     ],
   },
   5: {
     desktop: [
-      { x: 22, y: 48 },   // opponent: left
-      { x: 40, y: 22 },   // opponent: top-left
-      { x: 65, y: 22 },   // opponent: top-right
-      { x: 78, y: 48 },   // opponent: right
-      { x: 50, y: 80 },   // me: bottom center
+      { x: 50, y: 16 },   // opponent: top center (orange)
+      { x: 28, y: 42 },   // opponent: left (green)
+      { x: 72, y: 42 },   // opponent: right (purple)
+      { x: 68, y: 76 },   // opponent: bottom-right (blue)
+      { x: 32, y: 76 },   // me: bottom-left (red)
     ],
     mobile: [
-      { x: 22, y: 45 },   // opponent: left
-      { x: 38, y: 22 },   // opponent: top-left
-      { x: 62, y: 22 },   // opponent: top-right
-      { x: 78, y: 45 },   // opponent: right
-      { x: 50, y: 75 },   // me: bottom center
+      { x: 50, y: 20 },   // opponent: top center (orange)
+      { x: 18, y: 35 },   // opponent: left (green)
+      { x: 82, y: 35 },   // opponent: right (purple)
+      { x: 75, y: 68 },   // opponent: bottom-right (blue)
+      { x: 25, y: 68 },   // me: bottom-left (red)
     ],
   },
   6: {
     desktop: [
-      { x: 22, y: 55 },   // opponent: left
-      { x: 28, y: 25 },   // opponent: top-left
-      { x: 55, y: 18 },   // opponent: top
-      { x: 75, y: 30 },   // opponent: top-right
-      { x: 75, y: 62 },   // opponent: right
-      { x: 50, y: 82 },   // me: bottom center
+      { x: 30, y: 56 },   // opponent: left (red)
+      { x: 33, y: 22 },   // opponent: top-left (yellow)
+      { x: 55, y: 15 },   // opponent: top (orange)
+      { x: 72, y: 27 },   // opponent: top-right (purple)
+      { x: 72, y: 60 },   // opponent: bottom-right (blue)
+      { x: 50, y: 82 },   // me: bottom center (green)
     ],
     mobile: [
-      { x: 22, y: 52 },   // opponent: left
-      { x: 28, y: 25 },   // opponent: top-left
-      { x: 55, y: 18 },   // opponent: top
-      { x: 73, y: 28 },   // opponent: top-right
-      { x: 73, y: 58 },   // opponent: right
-      { x: 50, y: 78 },   // me: bottom center
+      { x: 16, y: 59 },   // opponent: mid-left (red)
+      { x: 22, y: 27 },   // opponent: top-left (yellow)
+      { x: 50, y: 20 },   // opponent: top center (orange)
+      { x: 78, y: 27 },   // opponent: top-right (purple)
+      { x: 84, y: 59 },   // opponent: mid-right (blue)
+      { x: 50, y: 75 },   // me: bottom center (green)
     ],
   },
 };
