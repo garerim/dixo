@@ -67,9 +67,9 @@ export function GameChat({ gameId, className, hideHeader = false, fullHeight = f
   }
 
   return (
-    <Card className={`flex ${fullHeight ? 'h-full' : 'h-[300px]'} flex-col overflow-hidden ${className}`}>
+    <Card className={`flex ${fullHeight ? 'h-full max-h-[calc(100vh-100px)]' : 'h-[300px]'} flex-col overflow-hidden ${className}`}>
       {!hideHeader && (
-        <CardHeader className="flex flex-row items-center justify-between border-b pb-3 flex-shrink-0">
+        <CardHeader className="flex flex-row items-center justify-between border-b pb-3 shrink-0">
           <CardTitle className="flex items-center gap-2 text-base">
             <MessageSquare className="size-4" />
             {t("title")}

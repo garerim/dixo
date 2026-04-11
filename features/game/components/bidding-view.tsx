@@ -299,7 +299,7 @@ export function BiddingView({
       {isMyTurn && me?.isAlive && !bidPanelOpen && (
         <Button
           onClick={() => setBidPanelOpen(true)}
-          className="fixed bottom-4 left-1/2 -translate-x-1/2 lg:translate-x-0 lg:left-auto lg:right-[22rem] z-50 gap-2 shadow-lg shadow-primary/20 px-5 py-3 h-auto text-base"
+          className="fixed bottom-4 left-1/2 -translate-x-1/2 lg:translate-x-0 lg:left-4 z-50 gap-2 shadow-lg shadow-primary/20 px-5 py-3 h-auto text-base"
         >
           <ChevronUp className="size-4" />
           {t("showBidPanel")}
@@ -310,7 +310,7 @@ export function BiddingView({
       {isMyTurn && me?.isAlive && bidPanelOpen && (
         <div
           data-tutorial-id="bid-panel"
-          className="fixed bottom-4 left-1/2 -translate-x-1/2 lg:translate-x-0 lg:left-auto lg:right-[22rem] z-50 w-96 max-w-[calc(100vw-2rem)]"
+          className="fixed bottom-4 left-1/2 -translate-x-1/2 lg:translate-x-0 lg:left-4 z-50 w-96 max-w-[calc(100vw-2rem)]"
         >
           <Button
             variant="outline"
@@ -334,7 +334,7 @@ export function BiddingView({
 
       {/* ── Waiting indicator ── */}
       {!isMyTurn && gameState.currentBid && (
-        <div data-tutorial-id="current-bid" className="fixed bottom-4 left-1/2 -translate-x-1/2 lg:translate-x-0 lg:left-auto lg:right-[22rem] z-50">
+        <div data-tutorial-id="current-bid" className="fixed bottom-4 left-1/2 -translate-x-1/2 lg:translate-x-0 lg:left-4 z-50">
           <div className="flex items-center gap-2 rounded-xl bg-card/95 backdrop-blur-sm border px-4 py-3 shadow-xl shadow-black/30">
             <span className="relative flex size-2">
               <span className="absolute inline-flex size-full animate-ping rounded-full bg-primary opacity-75" />
