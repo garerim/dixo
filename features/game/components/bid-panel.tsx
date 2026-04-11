@@ -5,7 +5,7 @@ import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
 import { Loader2, Minus, Plus, AlertTriangle } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { DiceFace } from "./dice-face";
+import { DiceFace, DiceRow } from "./dice-face";
 import type { Bid } from "@/core/game-engine";
 
 interface BidPanelProps {
@@ -16,6 +16,10 @@ interface BidPanelProps {
   canChallenge: boolean;
   disabled?: boolean;
   className?: string;
+  /** Player's own dice values to display */
+  myDice?: number[];
+  /** Player's dice skin */
+  myDiceSkin?: string;
 }
 
 export function BidPanel({
@@ -26,6 +30,8 @@ export function BidPanel({
   canChallenge,
   disabled = false,
   className,
+  myDice,
+  myDiceSkin,
 }: BidPanelProps) {
   const t = useTranslations("game.bidPanel");
   const minQuantity = currentBid ? currentBid.quantity : 1;
@@ -54,15 +60,17 @@ export function BidPanel({
         className,
       )}
     >
-      {/* ── Enchère actuelle (affichée au centre de la table) ──
-      {currentBid && (
-        <div className="flex items-center gap-2 rounded-lg bg-muted px-3 py-2 text-sm">
-          <span className="text-muted-foreground">{t("currentBid")}</span>
-          <span className="font-bold">{currentBid.quantity} &times;</span>
-          <DiceFace value={currentBid.faceValue} size="sm" />
+      {/* ── Mes dés ── */}
+      {myDice && myDice.length > 0 && (
+        <div className="flex items-center justify-center gap-1.5 rounded-lg bg-muted/60 px-3 py-2">
+          <DiceRow
+            values={[...myDice]}
+            size="sm"
+            highlightFace={faceValue}
+            skin={myDiceSkin}
+          />
         </div>
       )}
-      */}
 
       {/* ── Sélection quantité ── */}
       <div className="flex flex-col gap-2">

@@ -328,6 +328,8 @@ export function BiddingView({
             onCallChallenge={onCallChallenge}
             canChallenge={canChallenge}
             className="shadow-xl shadow-black/30 border-primary/20"
+            myDice={me?.diceValues ? [...me.diceValues] : undefined}
+            myDiceSkin={me?.diceSkin}
           />
         </div>
       )}
