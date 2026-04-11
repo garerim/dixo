@@ -130,13 +130,23 @@ export default function TutorialPlayPage() {
       case "CHALLENGE":
       case "RESULT":
         return (
-          <ResultView
-            gameState={gameState}
-            playerId={PLAYER_ID}
-            onNextRound={isFreePlay ? async () => { actions.nextRound(); } : async () => {}}
-            onSurrender={async () => {}}
-            isRanked={false}
-          />
+          <>
+            <BiddingView
+              gameState={gameState}
+              playerId={PLAYER_ID}
+              onPlaceBid={async (q, f) => { actions.placeBid(q, f); }}
+              onCallChallenge={async () => { actions.callChallenge(); }}
+              onSurrender={async () => {}}
+              isRanked={false}
+            />
+            <ResultView
+              gameState={gameState}
+              playerId={PLAYER_ID}
+              onNextRound={isFreePlay ? async () => { actions.nextRound(); } : async () => {}}
+              onSurrender={async () => {}}
+              isRanked={false}
+            />
+          </>
         );
 
       case "GAME_OVER":
@@ -151,7 +161,7 @@ export default function TutorialPlayPage() {
     }
   })();
 
-  const isFullscreenPhase = gameState.phase === "BIDDING" || gameState.phase === "ROLLING";
+  const isFullscreenPhase = gameState.phase === "BIDDING" || gameState.phase === "ROLLING" || gameState.phase === "CHALLENGE" || gameState.phase === "RESULT";
 
   return (
     <TutorialLayout onBack={() => router.push("/")}>

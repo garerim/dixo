@@ -233,13 +233,23 @@ function GameContent({
       case "CHALLENGE":
       case "RESULT":
         return (
-          <ResultView
-            gameState={gameState}
-            playerId={playerId}
-            onNextRound={actions.nextRound}
-            onSurrender={handleSurrender}
-            isRanked={gameState.gameMode === "RANKED"}
-          />
+          <>
+            <BiddingView
+              gameState={gameState}
+              playerId={playerId}
+              onPlaceBid={actions.placeBid}
+              onCallChallenge={actions.callChallenge}
+              onSurrender={handleSurrender}
+              isRanked={gameState.gameMode === "RANKED"}
+            />
+            <ResultView
+              gameState={gameState}
+              playerId={playerId}
+              onNextRound={actions.nextRound}
+              onSurrender={handleSurrender}
+              isRanked={gameState.gameMode === "RANKED"}
+            />
+          </>
         );
 
       case "GAME_OVER":
@@ -278,7 +288,7 @@ function GameContent({
     );
   }
 
-  const isFullscreenPhase = gameState.phase === "BIDDING" || gameState.phase === "ROLLING";
+  const isFullscreenPhase = gameState.phase === "BIDDING" || gameState.phase === "ROLLING" || gameState.phase === "CHALLENGE" || gameState.phase === "RESULT";
 
   return (
     <div className={cn("flex flex-1 overflow-hidden min-h-0", isFullscreenPhase ? "gap-0" : "gap-4 p-4")}>

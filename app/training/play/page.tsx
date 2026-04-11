@@ -105,13 +105,23 @@ function TrainingPlayContent() {
       case "CHALLENGE":
       case "RESULT":
         return (
-          <ResultView
-            gameState={gameState}
-            playerId={playerInfo.id}
-            onNextRound={actions.nextRound}
-            onSurrender={handleSurrender}
-            isRanked={false}
-          />
+          <>
+            <BiddingView
+              gameState={gameState}
+              playerId={playerInfo.id}
+              onPlaceBid={actions.placeBid}
+              onCallChallenge={actions.callChallenge}
+              onSurrender={handleSurrender}
+              isRanked={false}
+            />
+            <ResultView
+              gameState={gameState}
+              playerId={playerInfo.id}
+              onNextRound={actions.nextRound}
+              onSurrender={handleSurrender}
+              isRanked={false}
+            />
+          </>
         );
 
       case "GAME_OVER":
@@ -130,7 +140,7 @@ function TrainingPlayContent() {
     }
   })();
 
-  const isFullscreenPhase = gameState.phase === "BIDDING" || gameState.phase === "ROLLING";
+  const isFullscreenPhase = gameState.phase === "BIDDING" || gameState.phase === "ROLLING" || gameState.phase === "CHALLENGE" || gameState.phase === "RESULT";
 
   return (
     <div className={`flex flex-1 flex-col min-h-0 ${isFullscreenPhase ? "" : "overflow-y-auto p-4"}`}>
