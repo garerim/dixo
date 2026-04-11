@@ -27,11 +27,11 @@ const BASE_URL = "https://dixo-game.com";
 export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),
   title: {
-    default: "Dixo — Free Online Liar's Dice Game (Perudo)",
+    default: "Dixo — Free Online Liar's Dice Game",
     template: "%s | Dixo",
   },
   description:
-    "Play Liar's Dice (Perudo) online for free. Bluff, bid, and outlast 2-6 players in ranked or casual matches. No download required — play instantly in your browser.",
+    "Play Liar's Dice online for free. Bluff, bid, and outlast 2-6 players in ranked or casual matches. No download required — play instantly in your browser.",
   manifest: "/manifest.json",
   themeColor: "#09090b",
   appleWebApp: {
@@ -110,7 +110,7 @@ export default async function RootLayout({
                   url: BASE_URL,
                   name: "Dixo",
                   description:
-                    "Free online multiplayer Liar's Dice (Perudo) game. Bluff your opponents or get caught.",
+                    "Free online multiplayer Liar's Dice game. Bluff your opponents or get caught.",
                   inLanguage: ["en", "fr", "es"],
                 },
                 {
@@ -130,11 +130,11 @@ export default async function RootLayout({
                   "@id": `${BASE_URL}/#game`,
                   name: "Dixo",
                   alternateName: [
-                    "Liar's Dice Online",
-                    "Perudo Online",
+                    "Dixo Game",
+                    "Dixo Dice",
                   ],
                   description:
-                    "Dixo is a free online multiplayer Liar's Dice game (Perudo). Bluff your opponents about the dice on the table, call their bluffs, and be the last player standing. Play ranked or casual games with friends or strangers.",
+                    "Dixo is a free online multiplayer Liar's Dice game. Bluff your opponents about the dice on the table, call their bluffs, and be the last player standing. Play ranked or casual games with friends or strangers.",
                   url: BASE_URL,
                   image: {
                     "@type": "ImageObject",

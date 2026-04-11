@@ -1,5 +1,5 @@
 // =============================================================================
-// PAGE — /how-to-play — Règles complètes du Perudo / Dixo
+// PAGE — /how-to-play — Rules for Dixo
 // =============================================================================
 
 import type { Metadata } from "next";
@@ -10,16 +10,16 @@ import Image from "next/image";
 const BASE_URL = "https://dixo-game.com";
 
 export const metadata: Metadata = {
-  title: "How to Play Liar's Dice (Perudo) — Rules & Strategy Guide",
+  title: "How to Play Liar's Dice — Rules & Strategy Guide",
   description:
-    "Complete rules for Dixo (Liar's Dice / Perudo): bidding, the Paco wild die, challenge resolution, game modes, ELO ranking, and strategy tips. 2-6 players, 5-15 min per game.",
+    "Complete rules for Dixo (Liar's Dice): bidding, the Paco wild die, challenge resolution, game modes, ELO ranking, and strategy tips. 2-6 players, 5-15 min per game.",
   alternates: {
     canonical: `${BASE_URL}/how-to-play`,
   },
   openGraph: {
     title: "How to Play Dixo — Liar's Dice Rules & Strategy Guide",
     description:
-      "Learn to play Dixo (Liar's Dice / Perudo). Complete rules covering bidding, Paco wild dice, challenge resolution, and winning strategies.",
+      "Learn to play Dixo (Liar's Dice). Complete rules covering bidding, Paco wild dice, challenge resolution, and winning strategies.",
     url: `${BASE_URL}/how-to-play`,
     images: [{ url: "/icon-512.png", width: 512, height: 512, alt: "Dixo" }],
   },
@@ -133,7 +133,7 @@ const howToPlayJsonLd = {
   "@id": `${BASE_URL}/how-to-play#article`,
   headline: "How to Play Dixo — Liar's Dice Rules and Strategy Guide",
   description:
-    "Complete rules for Dixo (Liar's Dice / Perudo): learn how bidding works, the Paco wild die rule, challenge resolution, game modes, and strategy tips.",
+    "Complete rules for Dixo (Liar's Dice): learn how bidding works, the Paco wild die rule, challenge resolution, game modes, and strategy tips.",
   url: `${BASE_URL}/how-to-play`,
   image: {
     "@type": "ImageObject",
