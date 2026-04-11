@@ -95,6 +95,10 @@
     "heading": "Login",
     "description": "Sign in to create or join a game",
     "continueWithGoogle": "Continue with Google",
+    "webviewBlocked": "Google sign-in doesn't work from {app}.",
+    "webviewOpenBrowser": "Open in browser",
+    "webviewCopied": "Link copied!",
+    "webviewCopy": "Copy link",
     "fairPlay": "By signing in, you agree to play fair 🎲"
   },
   "profile": {

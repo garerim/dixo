@@ -95,6 +95,10 @@
     "heading": "Connexion",
     "description": "Connectez-vous pour créer ou rejoindre une partie",
     "continueWithGoogle": "Continuer avec Google",
+    "webviewBlocked": "La connexion Google ne fonctionne pas depuis {app}.",
+    "webviewOpenBrowser": "Ouvrir dans le navigateur",
+    "webviewCopied": "Lien copié !",
+    "webviewCopy": "Copier le lien",
     "fairPlay": "En vous connectant, vous acceptez de jouer fair-play 🎲"
   },
   "profile": {

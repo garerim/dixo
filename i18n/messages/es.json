@@ -95,6 +95,10 @@
     "heading": "Iniciar sesión",
     "description": "Inicia sesión para crear o unirte a una partida",
     "continueWithGoogle": "Continuar con Google",
+    "webviewBlocked": "La conexión con Google no funciona desde {app}.",
+    "webviewOpenBrowser": "Abrir en el navegador",
+    "webviewCopied": "Enlace copiado!",
+    "webviewCopy": "Copiar enlace",
     "fairPlay": "Al iniciar sesión, aceptas jugar limpio 🎲"
   },
   "profile": {
