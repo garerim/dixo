@@ -200,30 +200,14 @@ export function useBotGame({
           if (result.success) {
             setFullState(result.state);
 
-            // If result phase, auto-advance after delay
+            // If result or game over phase, stop bot processing and let the
+            // player see the result. The player clicks "Next round" (or the
+            // 7-second auto-advance timer in the UI handles it).
             if (
               result.state.phase === GamePhase.RESULT ||
               result.state.phase === GamePhase.GAME_OVER
             ) {
               isProcessingRef.current = false;
-              if (result.state.phase === GamePhase.RESULT) {
-                const nextTimeout = setTimeout(() => {
-                  setFullState((prev) => {
-                    if (!prev || prev.phase !== GamePhase.RESULT) return prev;
-                    const nextResult = engineStartNextRound(prev);
-                    if (nextResult.success) {
-                      // Schedule next bot turn via ref to avoid circular dep
-                      setTimeout(
-                        () => scheduleBotTurnsRef.current(nextResult.state),
-                        50,
-                      );
-                      return nextResult.state;
-                    }
-                    return prev;
-                  });
-                }, 2500);
-                timeoutsRef.current.push(nextTimeout);
-              }
               return;
             }
 
@@ -299,18 +283,6 @@ export function useBotGame({
 
     if (result.success) {
       setFullState(result.state);
-
-      // Auto-advance from RESULT after delay
-      if (result.state.phase === GamePhase.RESULT) {
-        const timeout = setTimeout(() => {
-          setFullState((prev) => {
-            if (!prev || prev.phase !== GamePhase.RESULT) return prev;
-            const nextResult = engineStartNextRound(prev);
-            return nextResult.success ? nextResult.state : prev;
-          });
-        }, 2500);
-        timeoutsRef.current.push(timeout);
-      }
     } else {
       setError(result.error ?? "Cannot challenge.");
     }
@@ -323,6 +295,8 @@ export function useBotGame({
     const result = engineStartNextRound(fullState);
     if (result.success) {
       setFullState(result.state);
+      // Schedule bot turns for the new round
+      setTimeout(() => scheduleBotTurnsRef.current(result.state), 50);
     } else {
       setError(result.error ?? "Cannot start next round.");
     }

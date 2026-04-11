@@ -248,6 +248,7 @@ function GameContent({
               onNextRound={actions.nextRound}
               onSurrender={handleSurrender}
               isRanked={gameState.gameMode === "RANKED"}
+              autoAdvanceDelay={7000}
             />
           </>
         );

@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
-import { CheckCircle, XCircle, ArrowRight, Flag, Target, Plus, Swords } from "lucide-react";
+import { CheckCircle, XCircle, ArrowRight, Flag, Target, Plus, Swords, Timer } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -27,6 +27,8 @@ interface ResultViewProps {
   onNextRound: () => Promise<void>;
   onSurrender: () => Promise<void>;
   isRanked: boolean;
+  /** Auto-advance delay in ms (e.g. 7000). If omitted, no auto-advance. */
+  autoAdvanceDelay?: number;
 }
 
 export function ResultView({
@@ -35,6 +37,7 @@ export function ResultView({
   onNextRound,
   onSurrender,
   isRanked,
+  autoAdvanceDelay,
 }: ResultViewProps) {
   const t = useTranslations("game.result");
   const tSurrender = useTranslations("game.surrender");
@@ -47,6 +50,44 @@ export function ResultView({
   const [showResult, setShowResult] = useState(false);
   const [showDice, setShowDice] = useState(false);
   const [showActions, setShowActions] = useState(false);
+
+  // Auto-advance timer
+  const [timeLeft, setTimeLeft] = useState(autoAdvanceDelay ?? 0);
+  const [shouldAdvance, setShouldAdvance] = useState(false);
+  const hasAdvancedRef = useRef(false);
+
+  useEffect(() => {
+    if (!challenge) return;
+    setTimeLeft(autoAdvanceDelay ?? 0);
+    setShouldAdvance(false);
+    hasAdvancedRef.current = false;
+  }, [challenge, autoAdvanceDelay]);
+
+  useEffect(() => {
+    if (!autoAdvanceDelay || !challenge || hasAdvancedRef.current) return;
+    if (!showActions) return;
+
+    const interval = setInterval(() => {
+      setTimeLeft((prev) => {
+        if (prev <= 100) {
+          clearInterval(interval);
+          setShouldAdvance(true);
+          return 0;
+        }
+        return prev - 100;
+      });
+    }, 100);
+
+    return () => clearInterval(interval);
+  }, [autoAdvanceDelay, challenge, showActions]);
+
+  // Trigger advance outside of render
+  useEffect(() => {
+    if (shouldAdvance && !hasAdvancedRef.current) {
+      hasAdvancedRef.current = true;
+      onNextRound();
+    }
+  }, [shouldAdvance, onNextRound]);
 
   useEffect(() => {
     if (!challenge) return;
@@ -244,9 +285,22 @@ export function ResultView({
             showActions ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4",
           )}
         >
-          <Button size="lg" className="w-full gap-2" onClick={onNextRound}>
-            <ArrowRight className="size-4" />
-            {t("nextRound")}
+          <Button size="lg" className="w-full gap-2 relative overflow-hidden" onClick={() => { hasAdvancedRef.current = true; onNextRound(); }}>
+            {autoAdvanceDelay && timeLeft > 0 && (
+              <div
+                className="absolute inset-0 bg-white/15 origin-left transition-none"
+                style={{ transform: `scaleX(${1 - timeLeft / autoAdvanceDelay})` }}
+              />
+            )}
+            <ArrowRight className="size-4 relative z-10" />
+            <span className="relative z-10">
+              {t("nextRound")}
+              {autoAdvanceDelay && timeLeft > 0 && (
+                <span className="ml-2 text-xs opacity-70">
+                  ({Math.ceil(timeLeft / 1000)}s)
+                </span>
+              )}
+            </span>
           </Button>
         </div>
       </div>

@@ -120,6 +120,7 @@ function TrainingPlayContent() {
               onNextRound={actions.nextRound}
               onSurrender={handleSurrender}
               isRanked={false}
+              autoAdvanceDelay={7000}
             />
           </>
         );

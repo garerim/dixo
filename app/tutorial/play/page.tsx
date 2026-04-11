@@ -145,6 +145,7 @@ export default function TutorialPlayPage() {
               onNextRound={isFreePlay ? async () => { actions.nextRound(); } : async () => {}}
               onSurrender={async () => {}}
               isRanked={false}
+              autoAdvanceDelay={7000}
             />
           </>
         );
