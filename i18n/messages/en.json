@@ -99,6 +99,8 @@
     "webviewOpenBrowser": "Open in browser",
     "webviewCopied": "Link copied!",
     "webviewCopy": "Copy link",
+    "webviewTrouble": "Sign-in not working?",
+    "webviewCopyFallback": "Copy the link and open it in your browser",
     "fairPlay": "By signing in, you agree to play fair 🎲"
   },
   "profile": {

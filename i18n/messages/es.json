@@ -99,6 +99,8 @@
     "webviewOpenBrowser": "Abrir en el navegador",
     "webviewCopied": "Enlace copiado!",
     "webviewCopy": "Copiar enlace",
+    "webviewTrouble": "No funciona?",
+    "webviewCopyFallback": "Copia el enlace y ábrelo en tu navegador",
     "fairPlay": "Al iniciar sesión, aceptas jugar limpio 🎲"
   },
   "profile": {
