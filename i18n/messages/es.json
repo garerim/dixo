@@ -456,7 +456,10 @@
       "playerTurn": "Turno de {name}",
       "yourDice": "Tus dados",
       "currentBid": "Apuesta actual:",
-      "waitingFor": "Esperando a {name}..."
+      "waitingFor": "Esperando a {name}...",
+      "hideBidPanel": "Ocultar",
+      "showBidPanel": "Apostar",
+      "totalDice": "dados en total"
     },
     "bidPanel": {
       "currentBid": "Apuesta actual:",
@@ -468,10 +471,13 @@
     "result": {
       "challengeSuccess": "¡Challenge exitoso!",
       "challengeFailed": "¡Challenge fallido!",
+      "spotOn": "¡Justo!",
       "bid": "Apuesta",
       "reality": "Realidad",
       "revealedDice": "Dados revelados",
       "losesDie": "¡{name} pierde un dado!",
+      "bidderGainsDie": "¡{name} recupera un dado!",
+      "bidderAlreadyMaxDice": "{name} ya tiene todos sus dados",
       "nextRound": "Siguiente ronda"
     },
     "gameOver": {
@@ -569,8 +575,8 @@
     "title": "Modo Entrenamiento",
     "subtitle": "Practica contra bots para mejorar tus habilidades.",
     "mode": "Modo de juego",
-    "1v1": "1 contra 1 Bot",
-    "4players": "1 contra 3 Bots",
+    "modeDesc": "Elige el número de oponentes",
+    "botCount": "{count, plural, one {1 bot} other {# bots}}",
     "difficulty": "Dificultad",
     "easy": "Fácil",
     "easyDesc": "Juega por instinto, rara vez fanfarronea.",

@@ -37,7 +37,7 @@ export default function LoginPage() {
   return (
     <div className="flex min-h-svh flex-col items-center justify-center bg-gradient-to-b from-background to-muted/30 p-4">
       <div className="mb-8 flex flex-col items-center gap-3">
-        <Image src="/logo-dixo.png" alt="Dixo" width={64} height={64} className="size-16 drop-shadow-lg" />
+        <Image src="/logo.png" alt="Dixo" width={64} height={64} className="size-16 drop-shadow-lg" />
         <h1 className="text-4xl font-bold tracking-tight">{t("title")}</h1>
         <p className="text-muted-foreground text-center max-w-xs">
           {t("subtitle")}

@@ -54,7 +54,7 @@ export function BidPanel({
         className,
       )}
     >
-      {/* ── Enchère actuelle ── */}
+      {/* ── Enchère actuelle (affichée au centre de la table) ──
       {currentBid && (
         <div className="flex items-center gap-2 rounded-lg bg-muted px-3 py-2 text-sm">
           <span className="text-muted-foreground">{t("currentBid")}</span>
@@ -62,6 +62,7 @@ export function BidPanel({
           <DiceFace value={currentBid.faceValue} size="sm" />
         </div>
       )}
+      */}
 
       {/* ── Sélection quantité ── */}
       <div className="flex flex-col gap-2">
@@ -98,7 +99,7 @@ export function BidPanel({
           {t("diceFace")}
         </label>
         <div className="flex items-center gap-2">
-          {[1, 2, 3, 4, 5, 6].map((face) => (
+          {[2, 3, 4, 5, 6].map((face) => (
             <button
               key={face}
               onClick={() => setFaceValue(face)}

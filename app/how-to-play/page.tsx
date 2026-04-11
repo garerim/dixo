@@ -5,6 +5,7 @@
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import Link from "next/link";
+import Image from "next/image";
 
 const BASE_URL = "https://dixo-game.com";
 
@@ -179,7 +180,7 @@ export default async function HowToPlayPage() {
           </Link>
         </Button>
         <div className="flex items-center gap-2">
-          <Dice5 className="size-5 text-primary" />
+          <Image src="/logo.png" alt="Dixo" width={28} height={28} className="rounded-md" />
           <span className="text-lg font-bold tracking-tight">{t("title")}</span>
         </div>
       </header>

@@ -28,6 +28,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useAuth } from "@/components/providers/auth-provider";
 import { LanguageSelector } from "@/components/language-selector";
+import { ThemeToggleMenuItem } from "@/components/theme-toggle";
 import { NotificationBell } from "@/features/notifications";
 
 export function MainHeader() {
@@ -45,7 +46,7 @@ export function MainHeader() {
   return (
     <header className="flex shrink-0 items-center justify-between border-b px-4 py-3 sm:px-6">
       <Link href="/" className="flex items-center gap-2">
-        <Image src="/logo-dixo.png" alt="Dixo" width={28} height={28} className="size-7" />
+        <Image src="/logo.png" alt="Dixo" width={28} height={28} className="size-7" />
         <span className="text-lg font-bold tracking-tight">{t("title")}</span>
       </Link>
 
@@ -140,6 +141,7 @@ export function MainHeader() {
             )}
             <DropdownMenuSeparator />
             <LanguageSelector />
+            <ThemeToggleMenuItem />
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={signOut} className="text-destructive">
               <LogOut className="mr-2 size-4" />

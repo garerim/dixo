@@ -42,8 +42,8 @@ export interface UseBotGameOptions {
     subscription?: string;
     diceSkin?: string;
   };
-  /** Number of bots (1 for 1v1, 3 for 4-player) */
-  botCount: 1 | 3;
+  /** Number of bots (1 to 5) */
+  botCount: 1 | 2 | 3 | 4 | 5;
   /** Bot difficulty */
   difficulty: BotDifficulty;
   /** Game configuration overrides */

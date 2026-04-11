@@ -62,6 +62,7 @@ import { MainHeader } from "@/components/main-header";
 import { AdSidebarLayout } from "@/components/ad-banner";
 import { LanguageSelector } from "@/components/language-selector";
 import { LanguageButton } from "@/components/language-button";
+import { ThemeToggleButton } from "@/components/theme-toggle";
 import { gameClient } from "@/features/game/api/game-client";
 import { useMatchmaking } from "@/features/matchmaking/hooks/use-matchmaking";
 import { NotificationBell } from "@/features/notifications";
@@ -191,7 +192,7 @@ export function HomeClient() {
         {/* Titre */}
         <div className="flex flex-col items-center gap-2 text-center">
           <div className="flex size-20 items-center justify-center">
-            <Image src="/logo-dixo.png" alt="Dixo" width={80} height={80} className="size-20 drop-shadow-xl" />
+            <Image src="/logo.png" alt="Dixo" width={80} height={80} className="size-20 drop-shadow-xl" />
           </div>
           <h1 className="mt-2 text-3xl font-bold tracking-tight sm:text-4xl">
             {t("title")}
@@ -450,7 +451,7 @@ function LandingPage() {
         className="flex items-center justify-between border-b px-4 py-3 sm:px-8"
       >
         <div className="flex items-center gap-2">
-          <Image src="/logo-dixo.png" alt="Dixo" width={28} height={28} className="size-7" />
+          <Image src="/logo.png" alt="Dixo" width={28} height={28} className="size-7" />
           <span className="text-lg font-bold tracking-tight">{t("title")}</span>
         </div>
         <div className="flex items-center gap-1 sm:gap-2">
@@ -460,6 +461,7 @@ function LandingPage() {
           <Button variant="ghost" size="sm" className="hidden sm:inline-flex" asChild>
             <Link href="/pricing">{tc("pricing")}</Link>
           </Button>
+          <ThemeToggleButton />
           <LanguageButton />
           <Button size="sm" className="shrink-0" onClick={signInWithGoogle}>
             {tc("signIn")}
@@ -476,7 +478,7 @@ function LandingPage() {
           transition={{ type: "spring", stiffness: 200, damping: 15, delay: 0.2 }}
           className="relative flex size-24 items-center justify-center"
         >
-          <Image src="/logo-dixo.png" alt="Dixo" width={96} height={96} className="size-24 drop-shadow-2xl" />
+          <Image src="/logo.png" alt="Dixo" width={96} height={96} className="size-24 drop-shadow-2xl" />
           <motion.span
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
@@ -642,7 +644,7 @@ function LandingPage() {
               step: "1",
               title: t("step1Title"),
               desc: t("step1Desc"),
-              icon: <Image src="/logo-dixo.png" alt="" width={24} height={24} className="size-6" />,
+              icon: <Image src="/logo.png" alt="" width={24} height={24} className="size-6" />,
             },
             {
               step: "2",

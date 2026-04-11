@@ -69,6 +69,10 @@ export interface ChallengeResult {
   readonly isChallengeCorrect: boolean;
   /** ID du joueur qui perd un dé */
   readonly loserId: string;
+  /** Le nombre annoncé correspondait exactement au nombre réel (Pile Poil / Spot On) */
+  readonly isSpotOn: boolean;
+  /** L'enchérisseur a récupéré un dé grâce au Pile Poil */
+  readonly bidderGainedDie: boolean;
   /** Snapshot des dés de chaque joueur au moment du challenge (avant pénalité) */
   readonly revealedDice: Record<string, readonly number[]>;
 }

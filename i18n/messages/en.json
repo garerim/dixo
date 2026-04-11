@@ -456,7 +456,10 @@
       "playerTurn": "{name}'s turn",
       "yourDice": "Your dice",
       "currentBid": "Current bid:",
-      "waitingFor": "Waiting for {name}..."
+      "waitingFor": "Waiting for {name}...",
+      "hideBidPanel": "Hide",
+      "showBidPanel": "Bid",
+      "totalDice": "dice in total"
     },
     "bidPanel": {
       "currentBid": "Current bid:",
@@ -468,10 +471,13 @@
     "result": {
       "challengeSuccess": "Challenge successful!",
       "challengeFailed": "Challenge failed!",
+      "spotOn": "Spot On!",
       "bid": "Bid",
       "reality": "Reality",
       "revealedDice": "Revealed dice",
       "losesDie": "{name} loses a die!",
+      "bidderGainsDie": "{name} gains a die!",
+      "bidderAlreadyMaxDice": "{name} already has all dice",
       "nextRound": "Next round"
     },
     "gameOver": {
@@ -569,8 +575,8 @@
     "title": "Training Mode",
     "subtitle": "Practice against bots to sharpen your skills.",
     "mode": "Game Mode",
-    "1v1": "1 vs 1 Bot",
-    "4players": "1 vs 3 Bots",
+    "modeDesc": "Choose the number of opponents",
+    "botCount": "{count, plural, one {1 bot} other {# bots}}",
     "difficulty": "Difficulty",
     "easy": "Easy",
     "easyDesc": "Plays by instinct, rarely bluffs.",

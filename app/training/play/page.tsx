@@ -1,9 +1,11 @@
 "use client";
 
-import { useEffect, useMemo, Suspense } from "react";
+import { useEffect, useRef, useMemo, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { useTheme } from "next-themes";
 import { useTranslations } from "next-intl";
-import { Dice5, ArrowLeft, Bot, Loader2 } from "lucide-react";
+import { ArrowLeft, Bot, Loader2 } from "lucide-react";
+import Image from "next/image";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -22,7 +24,8 @@ function TrainingPlayContent() {
   const t = useTranslations("training");
 
   // Parse search params
-  const botCount = (Number(searchParams.get("bots")) === 3 ? 3 : 1) as 1 | 3;
+  const rawBots = Number(searchParams.get("bots")) || 1;
+  const botCount = (rawBots >= 1 && rawBots <= 5 ? rawBots : 1) as 1 | 2 | 3 | 4 | 5;
   const difficulty = (searchParams.get("difficulty") ?? "medium") as BotDifficulty;
   const diceCount = Number(searchParams.get("dice")) || 5;
   const pacosWild = searchParams.get("pacos") !== "false";
@@ -102,13 +105,23 @@ function TrainingPlayContent() {
       case "CHALLENGE":
       case "RESULT":
         return (
-          <ResultView
-            gameState={gameState}
-            playerId={playerInfo.id}
-            onNextRound={actions.nextRound}
-            onSurrender={handleSurrender}
-            isRanked={false}
-          />
+          <>
+            <BiddingView
+              gameState={gameState}
+              playerId={playerInfo.id}
+              onPlaceBid={actions.placeBid}
+              onCallChallenge={actions.callChallenge}
+              onSurrender={handleSurrender}
+              isRanked={false}
+            />
+            <ResultView
+              gameState={gameState}
+              playerId={playerInfo.id}
+              onNextRound={actions.nextRound}
+              onSurrender={handleSurrender}
+              isRanked={false}
+            />
+          </>
         );
 
       case "GAME_OVER":
@@ -127,8 +140,10 @@ function TrainingPlayContent() {
     }
   })();
 
+  const isFullscreenPhase = gameState.phase === "BIDDING" || gameState.phase === "ROLLING" || gameState.phase === "CHALLENGE" || gameState.phase === "RESULT";
+
   return (
-    <div className="flex flex-1 flex-col overflow-y-auto p-4">
+    <div className={`flex flex-1 flex-col min-h-0 ${isFullscreenPhase ? "" : "overflow-y-auto p-4"}`}>
       {content}
     </div>
   );
@@ -137,6 +152,17 @@ function TrainingPlayContent() {
 export default function TrainingPlayPage() {
   const router = useRouter();
   const t = useTranslations("training");
+  const { setTheme, resolvedTheme } = useTheme();
+  const previousThemeRef = useRef<string | null>(null);
+
+  useEffect(() => {
+    previousThemeRef.current = resolvedTheme ?? "light";
+    setTheme("dark");
+    return () => {
+      setTheme(previousThemeRef.current ?? "light");
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className="flex min-h-svh flex-col bg-gradient-to-b from-background to-muted/30">
@@ -150,7 +176,7 @@ export default function TrainingPlayPage() {
           <ArrowLeft className="size-4" />
         </Button>
         <div className="flex items-center gap-2">
-          <Dice5 className="size-5 text-primary" />
+          <Image src="/logo.png" alt="Dixo" width={28} height={28} className="rounded-md" />
           <span className="text-lg font-bold tracking-tight">Dixo</span>
         </div>
         <Badge variant="secondary" className="ml-2 gap-1">

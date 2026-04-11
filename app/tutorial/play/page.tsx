@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
+import { useTheme } from "next-themes";
 import { useTranslations } from "next-intl";
 import { Dice5, ArrowLeft, GraduationCap, Loader2 } from "lucide-react";
 import { toast } from "sonner";
@@ -17,6 +18,17 @@ import { TUTORIAL_STEPS } from "@/features/tutorial/tutorial-steps";
 export default function TutorialPlayPage() {
   const router = useRouter();
   const t = useTranslations("tutorial");
+  const { setTheme, resolvedTheme } = useTheme();
+  const previousThemeRef = useRef<string | null>(null);
+
+  useEffect(() => {
+    previousThemeRef.current = resolvedTheme ?? "light";
+    setTheme("dark");
+    return () => {
+      setTheme(previousThemeRef.current ?? "light");
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const {
     gameState,
@@ -118,13 +130,23 @@ export default function TutorialPlayPage() {
       case "CHALLENGE":
       case "RESULT":
         return (
-          <ResultView
-            gameState={gameState}
-            playerId={PLAYER_ID}
-            onNextRound={isFreePlay ? async () => { actions.nextRound(); } : async () => {}}
-            onSurrender={async () => {}}
-            isRanked={false}
-          />
+          <>
+            <BiddingView
+              gameState={gameState}
+              playerId={PLAYER_ID}
+              onPlaceBid={async (q, f) => { actions.placeBid(q, f); }}
+              onCallChallenge={async () => { actions.callChallenge(); }}
+              onSurrender={async () => {}}
+              isRanked={false}
+            />
+            <ResultView
+              gameState={gameState}
+              playerId={PLAYER_ID}
+              onNextRound={isFreePlay ? async () => { actions.nextRound(); } : async () => {}}
+              onSurrender={async () => {}}
+              isRanked={false}
+            />
+          </>
         );
 
       case "GAME_OVER":
@@ -139,9 +161,11 @@ export default function TutorialPlayPage() {
     }
   })();
 
+  const isFullscreenPhase = gameState.phase === "BIDDING" || gameState.phase === "ROLLING" || gameState.phase === "CHALLENGE" || gameState.phase === "RESULT";
+
   return (
     <TutorialLayout onBack={() => router.push("/")}>
-      <div className="flex flex-1 flex-col overflow-y-auto p-4">
+      <div className={`flex flex-1 flex-col min-h-0 ${isFullscreenPhase ? "" : "overflow-y-auto p-4"}`}>
         {content}
       </div>
 
