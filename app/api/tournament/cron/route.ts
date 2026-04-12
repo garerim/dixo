@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { TournamentService } from "@/services/tournament-service";
 
-export async function POST(request: NextRequest) {
+async function handleCron(request: NextRequest) {
   // Verify cron secret
   const authHeader = request.headers.get("authorization");
   const cronSecret = process.env.CRON_SECRET;
@@ -27,4 +27,13 @@ export async function POST(request: NextRequest) {
       started: startResult.success ? startResult.data : 0,
     },
   });
+}
+
+// Vercel Cron uses GET requests
+export async function GET(request: NextRequest) {
+  return handleCron(request);
+}
+
+export async function POST(request: NextRequest) {
+  return handleCron(request);
 }
