@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { TournamentService } from "@/services/tournament-service";
 
 async function handleCron(request: NextRequest) {
+  console.log("Cron job started");
+  
   // Verify cron secret
   const authHeader = request.headers.get("authorization");
   const cronSecret = process.env.CRON_SECRET;

@@ -1,12 +1,12 @@
 "use client";
 
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import {
   ArrowLeft,
   Check,
-  Dice5,
   Loader2,
   Star,
   Zap,
@@ -37,7 +37,6 @@ const PREMIUM_FEATURE_KEYS = [
   "premiumFeatures.gifAvatar",
   "premiumFeatures.fullEloHistory",
   "premiumFeatures.premiumBadge",
-  "premiumFeatures.noAds",
 ] as const;
 
 export function PricingClient() {
@@ -64,7 +63,7 @@ export function PricingClient() {
           <ArrowLeft className="size-4" />
         </Button>
         <div className="flex items-center gap-2">
-          <Dice5 className="size-5 text-primary" />
+          <Image src="/logo.png" alt="Dixo" width={28} height={28} className="size-7" />
           <span className="text-lg font-bold tracking-tight">{t("title")}</span>
         </div>
       </header>
