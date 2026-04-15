@@ -23,6 +23,8 @@ export interface SkinDefinition {
   free: boolean;
   /** If false, skin can only be earned (e.g. tournament reward), not purchased */
   purchasable: boolean;
+  /** If true, skin is exclusively granted to Premium subscribers */
+  premiumOnly?: boolean;
 }
 
 export const SKIN_CATALOG: SkinDefinition[] = [
@@ -35,6 +37,17 @@ export const SKIN_CATALOG: SkinDefinition[] = [
     stripePriceId: null,
     free: true,
     purchasable: true,
+  },
+  {
+    id: "premium-royal",
+    name: "Royal Premium",
+    descriptionKey: "desc_premium-royal",
+    preview: "/dices-skins/premium-royal/dice-5.png",
+    price: 0,
+    stripePriceId: null,
+    free: false,
+    purchasable: false,
+    premiumOnly: true,
   },
   {
     id: "gold-ruby",
@@ -78,7 +91,12 @@ export function getShopSkins(): SkinDefinition[] {
   return SKIN_CATALOG.filter((s) => s.purchasable && !s.free && s.id !== null);
 }
 
-/** Get all tournament-exclusive skins */
+/** Get all tournament-exclusive skins (not purchasable, not premium-only) */
 export function getTournamentSkins(): SkinDefinition[] {
-  return SKIN_CATALOG.filter((s) => !s.purchasable && !s.free);
+  return SKIN_CATALOG.filter((s) => !s.purchasable && !s.free && !s.premiumOnly);
+}
+
+/** Get all premium-exclusive skins */
+export function getPremiumSkins(): SkinDefinition[] {
+  return SKIN_CATALOG.filter((s) => s.premiumOnly === true);
 }

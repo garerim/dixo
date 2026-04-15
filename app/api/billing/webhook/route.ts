@@ -11,6 +11,7 @@ import { stripe } from "@/lib/stripe/server";
 import { getSupabaseAdminClient } from "@/lib/supabase/server";
 import { ProfileRepository } from "@/lib/database/profile-repository";
 import { UserSkinRepository } from "@/lib/database/user-skin-repository";
+import { getPremiumSkins } from "@/lib/skins/catalog";
 
 export async function POST(request: NextRequest) {
   const sig = request.headers.get("stripe-signature");
@@ -35,6 +36,36 @@ export async function POST(request: NextRequest) {
 
   const supabase = getSupabaseAdminClient();
   const profileRepo = new ProfileRepository(supabase);
+  const skinRepoForPremium = new UserSkinRepository(supabase);
+
+  // Helpers for granting/revoking premium-exclusive skins
+  const grantPremiumSkins = async (userId: string) => {
+    for (const skin of getPremiumSkins()) {
+      if (!skin.id) continue;
+      try {
+        await skinRepoForPremium.grantSkin(userId, skin.id);
+      } catch (e) {
+        console.error(`Failed to grant premium skin ${skin.id} to ${userId}:`, e);
+      }
+    }
+  };
+  const revokePremiumSkins = async (userId: string, resetDiceSkin: boolean) => {
+    for (const skin of getPremiumSkins()) {
+      if (!skin.id) continue;
+      try {
+        await skinRepoForPremium.revokeSkin(userId, skin.id);
+        // If the user had this skin selected, reset to default
+        if (resetDiceSkin) {
+          const profile = await profileRepo.findById(userId);
+          if (profile && profile.dice_skin === skin.id) {
+            await profileRepo.update(userId, { dice_skin: null });
+          }
+        }
+      } catch (e) {
+        console.error(`Failed to revoke premium skin ${skin.id} from ${userId}:`, e);
+      }
+    }
+  };
 
   try {
     switch (event.type) {
@@ -66,6 +97,9 @@ export async function POST(request: NextRequest) {
 
         await profileRepo.updateSubscription(userId, "premium", expiresAt);
 
+        // Grant the exclusive Premium skin(s)
+        await grantPremiumSkins(userId);
+
         // Associer le customer_id si pas encore fait
         if (session.customer) {
           await profileRepo.updateStripeCustomerId(userId, session.customer as string);
@@ -87,8 +121,10 @@ export async function POST(request: NextRequest) {
 
         if (isActive) {
           await profileRepo.updateSubscription(profile.id, "premium", expiresAt);
+          await grantPremiumSkins(profile.id);
         } else if (["canceled", "unpaid", "incomplete_expired"].includes(subscription.status)) {
           await profileRepo.updateSubscription(profile.id, "free", null);
+          await revokePremiumSkins(profile.id, true);
         }
         break;
       }
@@ -101,6 +137,7 @@ export async function POST(request: NextRequest) {
         if (!profile) break;
 
         await profileRepo.updateSubscription(profile.id, "free", null);
+        await revokePremiumSkins(profile.id, true);
         break;
       }
     }

@@ -272,6 +272,13 @@ export class ProfileService {
               return { success: false, error: "You do not own this skin." };
             }
           }
+          // Premium-only skins require an active Premium subscription
+          if (skinDef.premiumOnly) {
+            const profile = await this.repository.findById(userId);
+            if (!profile || profile.subscription !== "premium") {
+              return { success: false, error: "This skin requires a Premium subscription." };
+            }
+          }
         }
         updateData.dice_skin = data.diceSkin;
       }

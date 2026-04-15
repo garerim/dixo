@@ -267,6 +267,7 @@
       "gifAvatar": "Support des avatars GIF",
       "fullEloHistory": "Historique ELO complet (200+ entrées)",
       "premiumBadge": "Badge Premium sur votre profil et en jeu",
+      "exclusiveSkin": "Skin de dés exclusif Premium",
       "noAds": "Aucune publicité"
     }
   },
@@ -325,7 +326,9 @@
     "desc_classic": "Style de dés par défaut",
     "desc_gold-ruby": "Dés dorés élégants avec des points rubis",
     "desc_star-night": "Dés sombres avec des motifs de nuit étoilée",
-    "desc_green-jade": "Dés en jade sculptés avec des incrustations dorées"
+    "desc_green-jade": "Dés en jade sculptés avec des incrustations dorées",
+    "name_premium-royal": "Royal Premium",
+    "desc_premium-royal": "Skin exclusif réservé aux abonnés Premium"
   },
   "leaderboard": {
     "title": "Classement",

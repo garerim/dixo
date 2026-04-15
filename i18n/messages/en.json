@@ -267,6 +267,7 @@
       "gifAvatar": "GIF avatar support",
       "fullEloHistory": "Full ELO history (200+ entries)",
       "premiumBadge": "Premium badge on your profile & in-game",
+      "exclusiveSkin": "Exclusive Premium dice skin",
       "noAds": "No ads"
     }
   },
@@ -325,7 +326,9 @@
     "desc_classic": "Default dice style",
     "desc_gold-ruby": "Elegant gold dice with ruby dots",
     "desc_star-night": "Dark dice with starry night patterns",
-    "desc_green-jade": "Carved jade dice with golden inlays"
+    "desc_green-jade": "Carved jade dice with golden inlays",
+    "name_premium-royal": "Royal Premium",
+    "desc_premium-royal": "Exclusive skin reserved for Premium subscribers"
   },
   "leaderboard": {
     "title": "Leaderboard",

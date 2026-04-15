@@ -267,6 +267,7 @@
       "gifAvatar": "Soporte de avatares GIF",
       "fullEloHistory": "Historial ELO completo (200+ entradas)",
       "premiumBadge": "Insignia Premium en tu perfil y en partida",
+      "exclusiveSkin": "Skin de dados exclusivo Premium",
       "noAds": "Sin publicidad"
     }
   },
@@ -325,7 +326,9 @@
     "desc_classic": "Estilo de dados por defecto",
     "desc_gold-ruby": "Dados dorados elegantes con puntos de rubí",
     "desc_star-night": "Dados oscuros con patrones de noche estrellada",
-    "desc_green-jade": "Dados de jade tallados con incrustaciones doradas"
+    "desc_green-jade": "Dados de jade tallados con incrustaciones doradas",
+    "name_premium-royal": "Royal Premium",
+    "desc_premium-royal": "Skin exclusivo reservado para suscriptores Premium"
   },
   "leaderboard": {
     "title": "Clasificación",

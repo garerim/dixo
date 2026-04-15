@@ -51,4 +51,17 @@ export class UserSkinRepository {
       throw new Error(`Error granting skin: ${error.message}`);
     }
   }
+
+  /** Revoke a skin from a user (idempotent — no-op if not owned) */
+  async revokeSkin(userId: string, skinId: string): Promise<void> {
+    const { error } = await this.supabase
+      .from("user_skins")
+      .delete()
+      .eq("user_id", userId)
+      .eq("skin_id", skinId);
+
+    if (error) {
+      throw new Error(`Error revoking skin: ${error.message}`);
+    }
+  }
 }

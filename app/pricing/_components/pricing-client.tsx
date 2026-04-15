@@ -37,6 +37,7 @@ const PREMIUM_FEATURE_KEYS = [
   "premiumFeatures.gifAvatar",
   "premiumFeatures.fullEloHistory",
   "premiumFeatures.premiumBadge",
+  "premiumFeatures.exclusiveSkin",
 ] as const;
 
 export function PricingClient() {
@@ -118,6 +119,15 @@ export function PricingClient() {
                   {t("premium")}
                 </CardTitle>
                 <Badge>{t("popular")}</Badge>
+              </div>
+              <div className="flex justify-center py-2">
+                <Image
+                  src="/dices-skins/premium-royal/dice-1.png"
+                  alt="Royal Premium dice"
+                  width={96}
+                  height={96}
+                  className="size-24 drop-shadow-[0_0_12px_rgba(250,204,21,0.35)]"
+                />
               </div>
               <CardDescription>{t("premiumDesc")}</CardDescription>
               <p className="text-3xl font-bold">
