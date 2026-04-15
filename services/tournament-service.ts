@@ -309,7 +309,7 @@ export class TournamentService {
           completed_at: null,
           bracket: {},
           current_round: 0,
-          created_by: "00000000-0000-0000-0000-000000000000", // system user
+          created_by: null,
           winner_id: null,
           reward_skin_id: rewardSkinId,
           elo_bonus_winner: 50,

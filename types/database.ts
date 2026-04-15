@@ -226,7 +226,7 @@ export type TournamentRow = {
   completed_at: string | null;
   bracket: Record<string, unknown>;
   current_round: number;
-  created_by: string;
+  created_by: string | null;
   winner_id: string | null;
   reward_skin_id: string | null;
   elo_bonus_winner: number;
