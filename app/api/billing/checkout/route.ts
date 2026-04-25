@@ -44,6 +44,7 @@ export async function POST(request: NextRequest) {
       customer: stripeCustomerId,
       mode: "subscription",
       line_items: [{ price: priceId, quantity: 1 }],
+      allow_promotion_codes: true,
       success_url: `${origin}/profile?upgraded=1`,
       cancel_url: `${origin}/pricing`,
       metadata: { userId: user.id },

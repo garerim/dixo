@@ -75,6 +75,7 @@ export async function POST(request: NextRequest) {
       customer: stripeCustomerId,
       mode: "payment",
       line_items: [{ price: skin.stripePriceId, quantity: 1 }],
+      allow_promotion_codes: true,
       success_url: `${origin}/skins?purchased=${skinId}`,
       cancel_url: `${origin}/shop`,
       metadata: {
