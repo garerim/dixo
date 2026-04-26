@@ -51,6 +51,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { useAuth } from "@/components/providers/auth-provider";
+import { LegalFooter } from "@/components/legal-footer";
 import { useProfile } from "@/features/profile/hooks/use-profile";
 import { EloChart } from "@/features/profile/components/elo-chart";
 import { profileClient } from "@/features/profile/api/profile-client";
@@ -687,6 +688,7 @@ function ProfileContent() {
           </CardContent>
         </Card>
       </main>
+      <LegalFooter />
     </div>
   );
 }

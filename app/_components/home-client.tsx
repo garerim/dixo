@@ -59,6 +59,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useAuth } from "@/components/providers/auth-provider";
 import { MainHeader } from "@/components/main-header";
+import { LegalFooter } from "@/components/legal-footer";
 import { AdSidebarLayout } from "@/components/ad-banner";
 import { LanguageSelector } from "@/components/language-selector";
 import { LanguageButton } from "@/components/language-button";
@@ -407,16 +408,7 @@ export function HomeClient() {
         </DialogContent>
       </Dialog>
 
-      {/* ─── Footer ─── */}
-      <footer className="border-t py-4 text-center text-xs text-muted-foreground">
-        <span>Dixo — Online dice bluffing game 🎲</span>
-        <div className="mt-1">
-          Made by{" "}
-          <a href="https://x.com/Gama_dev13" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors underline">
-            @Gama_dev13
-          </a>
-        </div>
-      </footer>
+      <LegalFooter />
     </div>
   );
 }
@@ -733,18 +725,7 @@ function LandingPage() {
         </Button>
       </motion.section>
 
-      {/* ─── Footer ─── */}
-      <footer className="border-t px-4 py-6 text-center text-xs text-muted-foreground">
-        <div className="flex flex-wrap items-center justify-center gap-4">
-          <span>{tc("copyright")}</span>
-          <Link href="/how-to-play" className="hover:text-foreground transition-colors">{tc("howToPlay")}</Link>
-          <Link href="/pricing" className="hover:text-foreground transition-colors">{tc("pricing")}</Link>
-          <span>·</span>
-          <a href="https://x.com/Gama_dev13" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">
-            @Gama_dev13
-          </a>
-        </div>
-      </footer>
+      <LegalFooter />
     </div>
   );
 }

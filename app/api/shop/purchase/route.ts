@@ -76,6 +76,16 @@ export async function POST(request: NextRequest) {
       mode: "payment",
       line_items: [{ price: skin.stripePriceId, quantity: 1 }],
       allow_promotion_codes: true,
+      // Recueil du consentement (CGV + renoncement exprès au droit de rétractation
+      // — art. L.221-28, 13° du Code de la consommation, exécution immédiate du
+      // contenu numérique).
+      consent_collection: { terms_of_service: "required" },
+      custom_text: {
+        terms_of_service_acceptance: {
+          message:
+            "J'accepte les [Conditions Générales de Vente](https://www.dixo-game.com/legal/terms-of-sale) et je renonce expressément à mon droit de rétractation de 14 jours en raison de l'exécution immédiate du contenu numérique (déblocage instantané du skin).",
+        },
+      },
       success_url: `${origin}/skins?purchased=${skinId}`,
       cancel_url: `${origin}/shop`,
       metadata: {

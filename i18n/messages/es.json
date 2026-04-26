@@ -23,6 +23,20 @@
     "play": "Jugar ahora",
     "signIn": "Iniciar sesión"
   },
+  "footer": {
+    "tagline": "El juego de farol con dados en línea.",
+    "madeBy": "Hecho por",
+    "product": "Producto",
+    "legal": "Legal",
+    "legalNotice": "Aviso legal",
+    "termsOfSale": "Condiciones de venta",
+    "termsOfUse": "Condiciones de uso",
+    "privacy": "Privacidad",
+    "rllEu": "RLL UE",
+    "rllEuTitle": "Plataforma europea de Resolución de Litigios en Línea",
+    "editedBy": "editado por Gama EI",
+    "allRightsReserved": "Todos los derechos reservados"
+  },
   "nav": {
     "myAccount": "Mi cuenta",
     "profile": "Perfil",

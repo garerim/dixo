@@ -23,6 +23,20 @@
     "play": "Play now",
     "signIn": "Sign in"
   },
+  "footer": {
+    "tagline": "The online dice bluffing game.",
+    "madeBy": "Made by",
+    "product": "Product",
+    "legal": "Legal",
+    "legalNotice": "Legal notice",
+    "termsOfSale": "Terms of Sale",
+    "termsOfUse": "Terms of Use",
+    "privacy": "Privacy",
+    "rllEu": "EU ODR",
+    "rllEuTitle": "European Online Dispute Resolution platform",
+    "editedBy": "published by Gama EI",
+    "allRightsReserved": "All rights reserved"
+  },
   "nav": {
     "myAccount": "My Account",
     "profile": "Profile",

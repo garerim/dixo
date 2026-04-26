@@ -23,6 +23,20 @@
     "play": "Jouer maintenant",
     "signIn": "Se connecter"
   },
+  "footer": {
+    "tagline": "Le jeu de bluff aux dés en ligne.",
+    "madeBy": "Made by",
+    "product": "Produit",
+    "legal": "Légal",
+    "legalNotice": "Mentions légales",
+    "termsOfSale": "CGV",
+    "termsOfUse": "CGU",
+    "privacy": "Confidentialité",
+    "rllEu": "RLL UE",
+    "rllEuTitle": "Plateforme européenne de Règlement en Ligne des Litiges",
+    "editedBy": "édité par Gama EI",
+    "allRightsReserved": "Tous droits réservés"
+  },
   "nav": {
     "myAccount": "Mon compte",
     "profile": "Profil",

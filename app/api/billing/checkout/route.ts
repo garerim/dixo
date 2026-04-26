@@ -45,6 +45,16 @@ export async function POST(request: NextRequest) {
       mode: "subscription",
       line_items: [{ price: priceId, quantity: 1 }],
       allow_promotion_codes: true,
+      // Recueil du consentement (CGV + renoncement exprès au droit de rétractation
+      // — art. L.221-28, 13° du Code de la consommation, exécution immédiate du
+      // contenu numérique).
+      consent_collection: { terms_of_service: "required" },
+      custom_text: {
+        terms_of_service_acceptance: {
+          message:
+            "J'accepte les [Conditions Générales de Vente](https://www.dixo-game.com/legal/terms-of-sale) et je renonce expressément à mon droit de rétractation de 14 jours en raison de l'activation immédiate de l'abonnement Premium.",
+        },
+      },
       success_url: `${origin}/profile?upgraded=1`,
       cancel_url: `${origin}/pricing`,
       metadata: { userId: user.id },
