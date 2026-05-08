@@ -117,7 +117,7 @@ function ProfileContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const t = useTranslations("profile");
-  const { isLoading: billingLoading, openPortal } = useBilling();
+  const { isLoading: billingLoading, openPortal, cancelSubscription } = useBilling();
   const { achievements, unlockedCount, totalCount } = useAchievements();
 
   const [isEditingPseudo, setIsEditingPseudo] = useState(false);
@@ -127,6 +127,25 @@ function ProfileContent() {
   const [isDeletingAccount, setIsDeletingAccount] = useState(false);
   const [deleteConfirmText, setDeleteConfirmText] = useState("");
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [cancelDialogOpen, setCancelDialogOpen] = useState(false);
+  const [isCancellingSub, setIsCancellingSub] = useState(false);
+
+  // Résilier l'abonnement Premium (conforme L.215-1-1, 2 clics : bouton + confirm)
+  async function handleCancelSubscription() {
+    setIsCancellingSub(true);
+    const result = await cancelSubscription();
+    setIsCancellingSub(false);
+    setCancelDialogOpen(false);
+    if (result.success) {
+      if (result.data?.alreadyScheduled) {
+        toast.info(t("subscription.alreadyCancelled"));
+      } else {
+        toast.success(t("subscription.cancelSuccess"));
+      }
+    } else {
+      toast.error(result.error ?? t("subscription.cancelError"));
+    }
+  }
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Redirection si pas connecté
@@ -538,18 +557,55 @@ function ProfileContent() {
                     </p>
                   )}
                 </div>
-                <Button
-                  variant="outline"
-                  onClick={openPortal}
-                  disabled={billingLoading}
-                >
-                  {billingLoading ? (
-                    <Loader2 className="mr-2 size-4 animate-spin" />
-                  ) : (
-                    <ExternalLink className="mr-2 size-4" />
-                  )}
-                  {t("subscription.manage")}
-                </Button>
+                <div className="flex flex-wrap items-center gap-2">
+                  <Button
+                    variant="outline"
+                    onClick={openPortal}
+                    disabled={billingLoading}
+                  >
+                    {billingLoading ? (
+                      <Loader2 className="mr-2 size-4 animate-spin" />
+                    ) : (
+                      <ExternalLink className="mr-2 size-4" />
+                    )}
+                    {t("subscription.manage")}
+                  </Button>
+                  <AlertDialog
+                    open={cancelDialogOpen}
+                    onOpenChange={setCancelDialogOpen}
+                  >
+                    <AlertDialogTrigger asChild>
+                      <Button variant="destructive" disabled={isCancellingSub}>
+                        {t("subscription.cancel")}
+                      </Button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>
+                          {t("subscription.cancelDialogTitle")}
+                        </AlertDialogTitle>
+                        <AlertDialogDescription>
+                          {t("subscription.cancelDialogDescription")}
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel disabled={isCancellingSub}>
+                          {t("subscription.cancelKeep")}
+                        </AlertDialogCancel>
+                        <Button
+                          variant="destructive"
+                          onClick={handleCancelSubscription}
+                          disabled={isCancellingSub}
+                        >
+                          {isCancellingSub ? (
+                            <Loader2 className="mr-2 size-4 animate-spin" />
+                          ) : null}
+                          {t("subscription.cancelConfirm")}
+                        </Button>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
+                </div>
               </div>
             )}
           </CardContent>

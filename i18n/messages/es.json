@@ -148,7 +148,15 @@
       "upgrade": "Pasar a Premium",
       "premium": "Premium",
       "renewsOn": "Se renueva el {date}",
-      "manage": "Gestionar suscripción"
+      "manage": "Gestionar suscripción",
+      "cancel": "Cancelar suscripción",
+      "cancelDialogTitle": "¿Cancelar tu suscripción Premium?",
+      "cancelDialogDescription": "Conservarás el acceso Premium hasta el final de tu período de facturación actual. No se realiza ningún reembolso por el período iniciado. Puedes volver a suscribirte en cualquier momento.",
+      "cancelKeep": "Mantener mi suscripción",
+      "cancelConfirm": "Confirmar cancelación",
+      "cancelSuccess": "Suscripción cancelada. El acceso Premium permanece activo hasta el final de tu período actual.",
+      "alreadyCancelled": "Tu suscripción ya está programada para cancelación.",
+      "cancelError": "Error al cancelar. Intenta de nuevo o contacta con soporte."
     },
     "ranking": {
       "title": "Clasificación",

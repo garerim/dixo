@@ -7,6 +7,7 @@
 import type { Metadata } from "next";
 import { MainHeader } from "@/components/main-header";
 import { LegalFooter } from "@/components/legal-footer";
+import { LegalArticle } from "@/components/legal-article";
 
 export const metadata: Metadata = {
   title: "Conditions Générales de Vente — Dixo",
@@ -19,10 +20,10 @@ export default function TermsOfSalePage() {
     <div className="flex min-h-svh flex-col bg-gradient-to-b from-background to-muted/30">
       <MainHeader />
       <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-8 sm:py-12">
-        <article className="prose prose-invert max-w-none prose-headings:scroll-mt-24">
+        <LegalArticle>
           <h1>Conditions Générales de Vente</h1>
-          <p className="text-sm text-muted-foreground">
-            En vigueur au 1<sup>er</sup> mai 2026.
+          <p className="!mb-8 text-xs uppercase tracking-wider text-muted-foreground/70">
+            En vigueur au 1<sup>er</sup> mai 2026
           </p>
 
           <h2>1. Identification du vendeur</h2>
@@ -33,8 +34,9 @@ export default function TermsOfSalePage() {
           <ul>
             <li>
               D’une part, <strong>Mathéo GARERI</strong>, entrepreneur individuel exerçant sous le nom
-              commercial «&nbsp;Gama EI&nbsp;», SIREN 103&nbsp;100&nbsp;061, immatriculé au RNE le
-              31&nbsp;mars&nbsp;2026, contact&nbsp;:{" "}
+              commercial «&nbsp;Gama EI&nbsp;», dont le siège est situé 225 rue du Grand Miceau,
+              73660 Saint-Rémy-de-Maurienne, France — SIREN 103&nbsp;100&nbsp;061, immatriculé au RNE
+              le 31&nbsp;mars&nbsp;2026, contact&nbsp;:{" "}
               <a href="mailto:gama.studiodev@gmail.com">gama.studiodev@gmail.com</a> (ci-après
               «&nbsp;l’Éditeur&nbsp;»).
             </li>
@@ -254,7 +256,7 @@ export default function TermsOfSalePage() {
             compétentes, conformément aux règles de droit commun applicables en matière de
             consommation.
           </p>
-        </article>
+        </LegalArticle>
       </main>
       <LegalFooter />
     </div>

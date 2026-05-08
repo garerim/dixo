@@ -148,7 +148,15 @@
       "upgrade": "Passer Premium",
       "premium": "Premium",
       "renewsOn": "Renouvellement le {date}",
-      "manage": "Gérer l'abonnement"
+      "manage": "Gérer l'abonnement",
+      "cancel": "Résilier",
+      "cancelDialogTitle": "Résilier votre abonnement Premium ?",
+      "cancelDialogDescription": "Vous garderez l'accès Premium jusqu'à la fin de votre période de facturation en cours. Aucun remboursement n'est effectué pour la période entamée. Vous pourrez vous réabonner à tout moment.",
+      "cancelKeep": "Garder mon abonnement",
+      "cancelConfirm": "Confirmer la résiliation",
+      "cancelSuccess": "Abonnement résilié. L'accès Premium reste actif jusqu'à la fin de votre période en cours.",
+      "alreadyCancelled": "Votre abonnement est déjà programmé pour résiliation.",
+      "cancelError": "Erreur lors de la résiliation. Réessayez ou contactez le support."
     },
     "ranking": {
       "title": "Classement",

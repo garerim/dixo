@@ -148,7 +148,15 @@
       "upgrade": "Upgrade",
       "premium": "Premium",
       "renewsOn": "Renews on {date}",
-      "manage": "Manage subscription"
+      "manage": "Manage subscription",
+      "cancel": "Cancel subscription",
+      "cancelDialogTitle": "Cancel your Premium subscription?",
+      "cancelDialogDescription": "You will keep Premium access until the end of your current billing period. No refund is issued for the started period. You may resubscribe at any time.",
+      "cancelKeep": "Keep my subscription",
+      "cancelConfirm": "Confirm cancellation",
+      "cancelSuccess": "Subscription cancelled. Premium access remains active until the end of your current period.",
+      "alreadyCancelled": "Your subscription is already scheduled for cancellation.",
+      "cancelError": "Cancellation failed. Try again or contact support."
     },
     "ranking": {
       "title": "Ranking",

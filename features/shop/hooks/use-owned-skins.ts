@@ -1,12 +1,11 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { shopClient } from "../api/shop-client";
 
 export function useOwnedSkins() {
   const [ownedSkinIds, setOwnedSkinIds] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [initialized, setInitialized] = useState(false);
 
   const refresh = useCallback(async () => {
     setIsLoading(true);
@@ -17,11 +16,11 @@ export function useOwnedSkins() {
     setIsLoading(false);
   }, []);
 
-  // Lazy initialization on first render
-  if (!initialized) {
-    setInitialized(true);
+  // Client-only fetch on mount — avoids SSR crash from fetch("/api/...")
+  // with a relative URL on the server (Node fetch rejects relative URLs).
+  useEffect(() => {
     refresh();
-  }
+  }, [refresh]);
 
   return { ownedSkinIds, isLoading, refresh };
 }

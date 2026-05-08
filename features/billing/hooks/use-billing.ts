@@ -32,5 +32,12 @@ export function useBilling() {
     return result;
   }
 
-  return { isLoading, checkout, openPortal };
+  async function cancelSubscription() {
+    setIsLoading(true);
+    const result = await billingClient.cancelSubscription();
+    setIsLoading(false);
+    return result;
+  }
+
+  return { isLoading, checkout, openPortal, cancelSubscription };
 }

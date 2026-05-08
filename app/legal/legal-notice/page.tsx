@@ -6,6 +6,7 @@
 import type { Metadata } from "next";
 import { MainHeader } from "@/components/main-header";
 import { LegalFooter } from "@/components/legal-footer";
+import { LegalArticle } from "@/components/legal-article";
 
 export const metadata: Metadata = {
   title: "Mentions légales — Dixo",
@@ -18,10 +19,10 @@ export default function LegalNoticePage() {
     <div className="flex min-h-svh flex-col bg-gradient-to-b from-background to-muted/30">
       <MainHeader />
       <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-8 sm:py-12">
-        <article className="prose prose-invert max-w-none prose-headings:scroll-mt-24">
+        <LegalArticle>
           <h1>Mentions légales</h1>
-          <p className="text-sm text-muted-foreground">
-            En vigueur au 1<sup>er</sup> mai 2026.
+          <p className="!mb-8 text-xs uppercase tracking-wider text-muted-foreground/70">
+            En vigueur au 1<sup>er</sup> mai 2026
           </p>
 
           <h2>1. Éditeur du site</h2>
@@ -33,6 +34,9 @@ export default function LegalNoticePage() {
             <li>
               <strong>Mathéo GARERI</strong>, entrepreneur individuel exerçant sous le nom commercial
               «&nbsp;Gama EI&nbsp;».
+            </li>
+            <li>
+              Adresse&nbsp;: 225 rue du Grand Miceau, 73660 Saint-Rémy-de-Maurienne, France.
             </li>
             <li>
               Immatriculé au Registre National des Entreprises (RNE) — date d’immatriculation&nbsp;:
@@ -111,7 +115,7 @@ export default function LegalNoticePage() {
             écrivez à&nbsp;:{" "}
             <a href="mailto:gama.studiodev@gmail.com">gama.studiodev@gmail.com</a>.
           </p>
-        </article>
+        </LegalArticle>
       </main>
       <LegalFooter />
     </div>

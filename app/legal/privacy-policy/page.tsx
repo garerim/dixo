@@ -7,6 +7,7 @@
 import type { Metadata } from "next";
 import { MainHeader } from "@/components/main-header";
 import { LegalFooter } from "@/components/legal-footer";
+import { LegalArticle } from "@/components/legal-article";
 
 export const metadata: Metadata = {
   title: "Politique de confidentialité — Dixo",
@@ -20,10 +21,10 @@ export default function PrivacyPolicyPage() {
     <div className="flex min-h-svh flex-col bg-gradient-to-b from-background to-muted/30">
       <MainHeader />
       <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-8 sm:py-12">
-        <article className="prose prose-invert max-w-none prose-headings:scroll-mt-24">
+        <LegalArticle>
           <h1>Politique de confidentialité</h1>
-          <p className="text-sm text-muted-foreground">
-            En vigueur au 1<sup>er</sup> mai 2026.
+          <p className="!mb-8 text-xs uppercase tracking-wider text-muted-foreground/70">
+            En vigueur au 1<sup>er</sup> mai 2026
           </p>
 
           <p>
@@ -38,8 +39,9 @@ export default function PrivacyPolicyPage() {
           <p>
             Le responsable du traitement des données est&nbsp;:{" "}
             <strong>Mathéo GARERI</strong>, entrepreneur individuel exerçant sous le nom commercial
-            «&nbsp;Gama EI&nbsp;», SIREN 103&nbsp;100&nbsp;061. Contact pour toute question relative
-            à la protection des données&nbsp;:{" "}
+            «&nbsp;Gama EI&nbsp;», dont le siège est situé 225 rue du Grand Miceau,
+            73660 Saint-Rémy-de-Maurienne, France — SIREN 103&nbsp;100&nbsp;061. Contact pour toute
+            question relative à la protection des données&nbsp;:{" "}
             <a href="mailto:gama.studiodev@gmail.com">gama.studiodev@gmail.com</a>.
           </p>
           <p>
@@ -306,7 +308,7 @@ export default function PrivacyPolicyPage() {
             écrivez à&nbsp;:{" "}
             <a href="mailto:gama.studiodev@gmail.com">gama.studiodev@gmail.com</a>.
           </p>
-        </article>
+        </LegalArticle>
       </main>
       <LegalFooter />
     </div>
