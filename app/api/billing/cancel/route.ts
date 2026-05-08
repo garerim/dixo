@@ -37,11 +37,18 @@ export async function POST() {
       return errorResponse("No active subscription to cancel.", 404);
     }
 
+    // L'API Stripe 2026-02-25.clover a déplacé `current_period_end` au niveau
+    // SubscriptionItem ; on cast pour rester compatible avec le legacy field
+    // au runtime (cf. webhook handler qui fait pareil).
+    const periodEnd =
+      (activeSub as unknown as { current_period_end?: number })
+        .current_period_end ?? null;
+
     // Si déjà programmé pour annulation : no-op
     if (activeSub.cancel_at_period_end) {
       return successResponse({
         alreadyScheduled: true,
-        cancelAt: activeSub.current_period_end ?? null,
+        cancelAt: periodEnd,
       });
     }
 
@@ -53,8 +60,9 @@ export async function POST() {
 
     return successResponse({
       alreadyScheduled: false,
-      cancelAt: (updated as unknown as { current_period_end?: number })
-        .current_period_end ?? null,
+      cancelAt:
+        (updated as unknown as { current_period_end?: number })
+          .current_period_end ?? null,
     });
   } catch (err) {
     return errorResponse(
