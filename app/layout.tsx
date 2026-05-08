@@ -22,16 +22,16 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-const BASE_URL = "https://dixo-game.com";
+const BASE_URL = "https://www.dixo-game.com";
 
 export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),
   title: {
-    default: "Dixo — Free Online Liar's Dice Game",
+    default: "Dixo — Free Online Dice Bluffing Game",
     template: "%s | Dixo",
   },
   description:
-    "Play Liar's Dice online for free. Bluff, bid, and outlast 2-6 players in ranked or casual matches. No download required — play instantly in your browser.",
+    "Play Dixo online for free. Bluff, bid, and outlast 2-6 players in ranked or casual matches. No download required — play instantly in your browser.",
   manifest: "/manifest.json",
   themeColor: "#09090b",
   appleWebApp: {
@@ -42,16 +42,16 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     siteName: "Dixo",
-    title: "Dixo — Free Online Liar's Dice Game",
+    title: "Dixo — Free Online Dice Bluffing Game",
     description:
-      "Play Liar's Dice online for free. Bluff, bid, and outlast 2-6 players in ranked or casual matches. No download required.",
+      "Play Dixo online for free. Bluff, bid, and outlast 2-6 players in ranked or casual matches. No download required.",
     url: BASE_URL,
     images: [
       {
         url: "/icon-512.png",
         width: 512,
         height: 512,
-        alt: "Dixo — Online Liar's Dice Game",
+        alt: "Dixo — Online Dice Bluffing Game",
       },
     ],
     locale: "en",
@@ -59,9 +59,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary",
-    title: "Dixo — Free Online Liar's Dice Game",
+    title: "Dixo — Free Online Dice Bluffing Game",
     description:
-      "Play Liar's Dice online for free. Bluff your opponents, climb the ELO leaderboard, and become the ultimate dice bluffer.",
+      "Play Dixo online for free. Bluff your opponents, climb the ELO leaderboard, and become the ultimate dice bluffer.",
     images: ["/icon-512.png"],
   },
   alternates: {
@@ -110,7 +110,7 @@ export default async function RootLayout({
                   url: BASE_URL,
                   name: "Dixo",
                   description:
-                    "Free online multiplayer Liar's Dice game. Bluff your opponents or get caught.",
+                    "Free online multiplayer Dice Bluffing game. Bluff your opponents or get caught.",
                   inLanguage: ["en", "fr", "es"],
                 },
                 {
@@ -134,7 +134,7 @@ export default async function RootLayout({
                     "Dixo Dice",
                   ],
                   description:
-                    "Dixo is a free online multiplayer Liar's Dice game. Bluff your opponents about the dice on the table, call their bluffs, and be the last player standing. Play ranked or casual games with friends or strangers.",
+                    "Dixo is a free online multiplayer Dice Bluffing game. Bluff your opponents about the dice on the table, call their bluffs, and be the last player standing. Play ranked or casual games with friends or strangers.",
                   url: BASE_URL,
                   image: {
                     "@type": "ImageObject",

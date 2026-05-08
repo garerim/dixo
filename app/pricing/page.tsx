@@ -34,7 +34,7 @@ const pricingJsonLd = {
         url: `${BASE_URL}/pricing`,
         image: `${BASE_URL}/icon-512.png`,
         description:
-          "Free access to Dixo online Liar's Dice. Includes ranked and casual games, friends, chat, ELO ranking, and avatar customisation.",
+          "Free access to Dixo online. Includes ranked and casual games, friends, chat, ELO ranking, and avatar customisation.",
         brand: { "@type": "Brand", name: "Dixo" },
         offers: {
           "@type": "Offer",

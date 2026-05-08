@@ -6,7 +6,7 @@ const BASE_URL = "https://dixo-game.com";
 export const metadata: Metadata = {
   title: "ELO Rank Tiers — Bronze to Diamond",
   description:
-    "Explore all Dixo ELO rank tiers from Bronze to Diamond. Learn how the dual ELO system works for 1v1 and 4-player ranked Liar's Dice matches.",
+    "Explore all Dixo ELO rank tiers from Bronze to Diamond. Learn how the dual ELO system works for 1v1 and 4-player ranked matches.",
   alternates: {
     canonical: `${BASE_URL}/ranks`,
   },
