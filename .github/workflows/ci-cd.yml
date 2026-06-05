@@ -1,13 +1,14 @@
 name: CI/CD
 
 # GitHub Actions pilote tout le pipeline :
-#   1. Lint + tests (Vitest)         -> job `test`
-#   2. Déploiement Vercel via la CLI -> jobs `deploy-*` (uniquement si `test` passe)
+#   1. Lint + tests unitaires (Vitest)   -> job `test`
+#   2. Tests end-to-end (Playwright)      -> job `e2e`
+#   3. Déploiement Vercel via la CLI      -> jobs `deploy-*`
 #
+# Les déploiements ne se lancent QUE si `test` ET `e2e` passent (quality gate).
 # Le déploiement automatique de Vercel (Git integration) est désactivé via
 # `git.deploymentEnabled: false` dans vercel.json : GitHub Actions est la seule
-# source de déploiement, ce qui garantit qu'aucun code ne part en prod sans
-# avoir passé les tests.
+# source de déploiement.
 
 on:
   push:
@@ -54,12 +55,62 @@ jobs:
         run: npm test
 
   # ---------------------------------------------------------------------------
-  # 2a. Déploiement PREVIEW — sur chaque Pull Request.
+  # 2. Tests E2E : build l'app, la démarre et la teste dans un vrai navigateur.
+  #    Les variables d'env (Supabase…) viennent de `vercel pull` -> aucun
+  #    secret supplémentaire à configurer.
+  # ---------------------------------------------------------------------------
+  e2e:
+    name: Tests E2E (Playwright)
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright (Chromium + deps)
+        run: npx playwright install --with-deps chromium
+
+      - name: Install Vercel CLI
+        run: npm i -g vercel@latest
+
+      - name: Pull Vercel env (preview)
+        run: vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }}
+
+      # `next build` / `next start` chargent automatiquement `.env.local`.
+      - name: Prepare environment variables
+        run: cp .vercel/.env.preview.local .env.local
+
+      - name: Build app
+        run: npm run build
+
+      # Playwright démarre `npm run start` (config: webServer en mode CI).
+      - name: Run E2E tests
+        run: npm run test:e2e
+
+      - name: Upload Playwright report
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 7
+
+  # ---------------------------------------------------------------------------
+  # 3a. Déploiement PREVIEW — sur chaque Pull Request.
   # ---------------------------------------------------------------------------
   deploy-preview:
     name: Deploy Preview
     runs-on: ubuntu-latest
-    needs: test
+    needs: [test, e2e]
     if: github.event_name == 'pull_request'
     environment:
       name: preview
@@ -91,12 +142,12 @@ jobs:
           echo "Preview déployée : $url"
 
   # ---------------------------------------------------------------------------
-  # 2b. Déploiement PRODUCTION — sur push vers main.
+  # 3b. Déploiement PRODUCTION — sur push vers main.
   # ---------------------------------------------------------------------------
   deploy-production:
     name: Deploy Production
     runs-on: ubuntu-latest
-    needs: test
+    needs: [test, e2e]
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     environment:
       name: production
