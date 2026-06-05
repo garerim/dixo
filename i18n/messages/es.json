@@ -105,6 +105,7 @@
   },
   "login": {
     "title": "Dixo",
+    "loading": "Cargando…",
     "subtitle": "El juego de farol con dados en línea — ¡Engaña, apuesta, sobrevive!",
     "heading": "Iniciar sesión",
     "description": "Inicia sesión para crear o unirte a una partida",
