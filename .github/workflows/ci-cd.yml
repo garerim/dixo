@@ -51,8 +51,18 @@ jobs:
         run: npm run lint
         continue-on-error: true
 
-      - name: Tests (Vitest)
-        run: npm test
+      # Lance les tests unitaires AVEC couverture de code.
+      # Échoue si la couverture passe sous les seuils définis dans vitest.config.
+      - name: Tests + couverture (Vitest)
+        run: npm run test:coverage
+
+      - name: Upload coverage report
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: coverage/
+          retention-days: 7
 
   # ---------------------------------------------------------------------------
   # 2. Tests E2E : build l'app, la démarre et la teste dans un vrai navigateur.
