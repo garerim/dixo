@@ -105,6 +105,7 @@
   },
   "login": {
     "title": "Dixo",
+    "loading": "Loading…",
     "subtitle": "The online dice bluffing game — Bluff, bid, survive!",
     "heading": "Login",
     "description": "Sign in to create or join a game",
