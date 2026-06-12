@@ -23,7 +23,11 @@ export default defineConfig({
   retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 1 : undefined,
 
-  reporter: process.env.CI ? "github" : "html",
+  // En CI : annotations dans les logs GitHub + rapport HTML (uploadé en
+  // artefact). En local : rapport HTML uniquement.
+  reporter: process.env.CI
+    ? [["github"], ["html", { open: "never" }]]
+    : [["html", { open: "never" }]],
 
   // Le 1er rendu d'une route en dev (compilation Turbopack) peut être lent.
   timeout: 60_000,
