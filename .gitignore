@@ -20,6 +20,9 @@
 # production
 /build
 
+#ynov
+/ynov/
+
 # misc
 .DS_Store
 *.pem
