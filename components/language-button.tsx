@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -22,6 +22,7 @@ const LOCALE_LABELS: Record<Locale, string> = {
 export function LanguageButton() {
   const currentLocale = useLocale() as Locale;
   const router = useRouter();
+  const t = useTranslations("settings");
 
   function handleChange(locale: Locale) {
     setLocale(locale);
@@ -31,7 +32,7 @@ export function LanguageButton() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="sm" className="gap-1.5">
+        <Button variant="ghost" size="sm" className="gap-1.5" aria-label={t("language")}>
           <Flag locale={currentLocale} className="size-4 rounded-sm" />
         </Button>
       </DropdownMenuTrigger>

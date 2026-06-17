@@ -17,6 +17,7 @@ const LEGAL_LINKS = [
   { href: "/legal/terms-of-sale", labelKey: "termsOfSale" },
   { href: "/legal/terms-of-use", labelKey: "termsOfUse" },
   { href: "/legal/privacy-policy", labelKey: "privacy" },
+  { href: "/accessibility", labelKey: "accessibility" },
 ] as const;
 
 export function LegalFooter() {

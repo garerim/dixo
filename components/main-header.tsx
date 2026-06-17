@@ -91,7 +91,10 @@ export function MainHeader() {
         {/* Dropdown Menu */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <button className="flex items-center gap-2 rounded-lg px-2 py-1 transition-colors hover:bg-muted">
+            <button
+              aria-label={tn("myAccount")}
+              className="flex items-center gap-2 rounded-lg px-2 py-1 transition-colors hover:bg-muted"
+            >
               <Avatar className="size-8">
                 <AvatarImage src={avatarUrl} alt={displayName} />
                 <AvatarFallback>

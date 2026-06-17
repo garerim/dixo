@@ -1,5 +1,6 @@
 {
   "common": {
+    "skipToContent": "Skip to main content",
     "loading": "Loading...",
     "cancel": "Cancel",
     "save": "Save",
@@ -32,6 +33,7 @@
     "termsOfSale": "Terms of Sale",
     "termsOfUse": "Terms of Use",
     "privacy": "Privacy",
+    "accessibility": "Accessibility",
     "rllEu": "EU ODR",
     "rllEuTitle": "European Online Dispute Resolution platform",
     "editedBy": "published by Gama EI",

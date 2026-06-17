@@ -3,7 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import Script from "next/script";
 import { ThemeProvider } from "next-themes";
 import { NextIntlClientProvider } from "next-intl";
-import { getLocale, getMessages } from "next-intl/server";
+import { getLocale, getMessages, getTranslations } from "next-intl/server";
 import { Toaster } from "@/components/ui/sonner";
 import { AuthProvider } from "@/components/providers/auth-provider";
 import { InviteProvider } from "@/components/providers/invite-provider";
@@ -85,6 +85,7 @@ export default async function RootLayout({
 }>) {
   const locale = await getLocale();
   const messages = await getMessages();
+  const t = await getTranslations("common");
 
   return (
       <html lang={locale} suppressHydrationWarning>
@@ -175,6 +176,12 @@ export default async function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[9999] focus:rounded-md focus:bg-background focus:px-4 focus:py-2 focus:text-foreground focus:shadow-lg focus:outline-none focus:ring-2 focus:ring-ring"
+        >
+          {t("skipToContent")}
+        </a>
         <ThemeProvider
           attribute="class"
           defaultTheme="light"
@@ -186,7 +193,9 @@ export default async function RootLayout({
               <NotificationProvider>
                 <InviteProvider>
                   <SoundProvider>
-                    {children}
+                    <div id="main-content" tabIndex={-1} className="outline-none">
+                      {children}
+                    </div>
                   </SoundProvider>
                 </InviteProvider>
               </NotificationProvider>

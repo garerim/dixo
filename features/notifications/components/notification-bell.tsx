@@ -1,6 +1,7 @@
 "use client";
 
 import { Bell } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import {
   Popover,
@@ -12,11 +13,17 @@ import { NotificationPanel } from "./notification-panel";
 
 export function NotificationBell() {
   const { unreadCount } = useNotificationContext();
+  const t = useTranslations("notifications");
 
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button variant="ghost" size="icon-sm" className="relative">
+        <Button
+          variant="ghost"
+          size="icon-sm"
+          className="relative"
+          aria-label={t("title")}
+        >
           <Bell className="size-4" />
           {unreadCount > 0 && (
             <span className="absolute -right-0.5 -top-0.5 flex size-4 items-center justify-center rounded-full bg-destructive text-[10px] font-bold text-destructive-foreground">

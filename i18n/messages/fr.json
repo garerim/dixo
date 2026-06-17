@@ -1,5 +1,6 @@
 {
   "common": {
+    "skipToContent": "Aller au contenu principal",
     "loading": "Chargement...",
     "cancel": "Annuler",
     "save": "Enregistrer",
@@ -32,6 +33,7 @@
     "termsOfSale": "CGV",
     "termsOfUse": "CGU",
     "privacy": "Confidentialité",
+    "accessibility": "Accessibilité",
     "rllEu": "RLL UE",
     "rllEuTitle": "Plateforme européenne de Règlement en Ligne des Litiges",
     "editedBy": "édité par Gama EI",
