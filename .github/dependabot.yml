@@ -1,0 +1,35 @@
+# =============================================================================
+# Dependabot — mises à jour automatiques des dépendances
+# =============================================================================
+# Chaque PR ouverte par Dependabot passe par la quality gate CI (lint, tests
+# unitaires + couverture, tests E2E) avant de pouvoir être fusionnée : une mise
+# à jour ne peut donc pas casser l'application silencieusement.
+# =============================================================================
+version: 2
+updates:
+  # Dépendances npm (runtime + dev)
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "08:00"
+      timezone: "Europe/Paris"
+    open-pull-requests-limit: 5
+    groups:
+      # Grouper les patchs/minors pour limiter le bruit ; les majors restent
+      # en PR individuelles (revue d'impact obligatoire).
+      minor-and-patch:
+        update-types: ["minor", "patch"]
+    labels: ["dependencies"]
+    commit-message:
+      prefix: "chore(deps)"
+
+  # Actions GitHub utilisées par le pipeline CI/CD
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+    labels: ["dependencies", "ci"]
+    commit-message:
+      prefix: "ci(deps)"
