@@ -16,9 +16,10 @@ function getStripe(): Stripe {
     if (!apiKey) {
       throw new Error("STRIPE_SECRET_KEY manquante. Ajoutez-la dans .env.local.");
     }
-    _stripe = new Stripe(apiKey, {
-      apiVersion: "2026-02-25.clover",
-    });
+    // Pas d'apiVersion explicite : le SDK utilise la version d'API épinglée
+    // dans sa propre release, ce qui reste compatible lors des montées de
+    // version majeures du paquet (l'épinglage en dur cassait le type-check).
+    _stripe = new Stripe(apiKey);
   }
   return _stripe;
 }
