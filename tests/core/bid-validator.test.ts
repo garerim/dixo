@@ -11,7 +11,7 @@ import {
   canCallChallenge,
 } from "@/core/game-engine/bid-validator";
 import type { Bid, GameState, PlayerState } from "@/core/game-engine/types";
-import { GamePhase, DEFAULT_GAME_CONFIG } from "@/core/game-engine/types";
+import { GamePhase, GameMode, DEFAULT_GAME_CONFIG } from "@/core/game-engine/types";
 
 describe("isValidFaceValue", () => {
   it("accepte les faces 1-6", () => {
@@ -182,6 +182,7 @@ function createGameState(
   return {
     id: "test-game",
     joinCode: "ABC123",
+    gameMode: GameMode.PRIVATE,
     config: DEFAULT_GAME_CONFIG,
     players: [createPlayer("p1", 0), createPlayer("p2", 1)],
     currentPlayerIndex,

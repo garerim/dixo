@@ -336,7 +336,11 @@ export interface Database {
       };
       user_achievements: {
         Row: UserAchievementRow;
-        Insert: Omit<UserAchievementRow, "id" | "created_at" | "updated_at">;
+        // updated_at optionnel : la colonne a un défaut, mais l'upsert la
+        // rafraîchit explicitement lors d'une mise à jour de progression.
+        Insert: Omit<UserAchievementRow, "id" | "created_at" | "updated_at"> & {
+          updated_at?: string;
+        };
         Update: Partial<UserAchievementRow>;
         Relationships: [];
       };

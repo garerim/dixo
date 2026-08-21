@@ -12,7 +12,7 @@ import {
   getPlayerIndex,
 } from "@/core/game-engine/turn-manager";
 import type { GameState, PlayerState } from "@/core/game-engine/types";
-import { GamePhase, DEFAULT_GAME_CONFIG } from "@/core/game-engine/types";
+import { GamePhase, GameMode, DEFAULT_GAME_CONFIG } from "@/core/game-engine/types";
 
 describe("getNextAlivePlayerIndex", () => {
   it("retourne le joueur suivant vivant", () => {
@@ -121,6 +121,7 @@ function createState(
   return {
     id: "test",
     joinCode: "ABC123",
+    gameMode: GameMode.PRIVATE,
     config: DEFAULT_GAME_CONFIG,
     players,
     currentPlayerIndex,

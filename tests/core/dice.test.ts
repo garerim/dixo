@@ -11,7 +11,7 @@ import {
   getTotalDiceInPlay,
 } from "@/core/game-engine/dice";
 import type { GameState, PlayerState } from "@/core/game-engine/types";
-import { GamePhase, DEFAULT_GAME_CONFIG } from "@/core/game-engine/types";
+import { GamePhase, GameMode, DEFAULT_GAME_CONFIG } from "@/core/game-engine/types";
 
 // Générateur aléatoire déterministe pour les tests
 function createDeterministicRandom(values: number[]): () => number {
@@ -66,6 +66,7 @@ describe("rollDiceForAllPlayers", () => {
     const state: GameState = {
       id: "test",
       joinCode: "ABC123",
+      gameMode: GameMode.PRIVATE,
       config: DEFAULT_GAME_CONFIG,
       players: [
         createPlayer("p1", 3, [], true),
@@ -96,6 +97,7 @@ describe("rollDiceForAllPlayers", () => {
     const state: GameState = {
       id: "test",
       joinCode: "ABC123",
+      gameMode: GameMode.PRIVATE,
       config: DEFAULT_GAME_CONFIG,
       players: [createPlayer("p1", 5, [], true)],
       currentPlayerIndex: 0,

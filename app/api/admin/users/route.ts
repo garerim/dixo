@@ -75,7 +75,7 @@ export async function PATCH(request: NextRequest) {
     return errorResponse("Cannot remove your own admin rights.");
   }
 
-  const updateData: Record<string, unknown> = {};
+  const updateData: { is_admin?: boolean } = {};
   if (isAdmin !== undefined) updateData.is_admin = isAdmin;
 
   const { data: updated, error } = await adminClient
